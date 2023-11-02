@@ -12,7 +12,7 @@ axios.interceptors.request.use(async (config) => {
     ...config,
     headers: {
       "Content-Type": "application/json",
-      accessToken: `Bearer ${accessToken}`,
+      accessToken: `${accessToken}`,
     },
   };
 })
@@ -23,7 +23,7 @@ axios.interceptors.response.use(
   },
   (error) => {
     if (!error.response) {
-      return alert(error);
+      return alert(error);  
     }
     throw error.response;
   }
