@@ -17,7 +17,7 @@ const userSchema = new moongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['WAREHOUE_MANAGER', 'WAREHOUSE_EMPLOYEE', 'TRANSACTION_MANAGER', 'TRANSACTION_EMPLOYEE', 'DELIVER', 'GUEST'],
+    enum: ['DIRECTOR', 'WAREHOUE_MANAGER', 'WAREHOUSE_EMPLOYEE', 'TRANSACTION_MANAGER', 'TRANSACTION_EMPLOYEE', 'DELIVER', 'GUEST'],
     default: 'user'
   },
 
