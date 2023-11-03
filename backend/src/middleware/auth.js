@@ -28,26 +28,22 @@ exports.authWarehouseManager = async (req, res, next) => {
   const token = req.headers.access_token
   if (!token)
     return response.response_fail(res, response.UNAUTHORIZED, 'unauthorized')
-  try {
-    let user = undefined
-    jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
-      try {
-        if (!err) user = payload
-        if (user?.role != role.WAREHOUSE_MANAGER) {
-          return response.response_fail(res, response.FORBIDDEN, 'forbidden request')
-        }
-        // check if this user can access to warehouse or not
-        const warehouse = await Warehouse.findById(req.params.warehouse_id)
-        if (warehouse.warehouse_manager != user._id) {
-          return response.response_fail(res, response.FORBIDDEN, 'forbidden request')
-        }
-        req.user = user
-        next()
-      } catch (err) {
-        console.log(err)
+  let user = undefined
+  jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
+    try {
+      if (!err) user = payload
+      if (user?.role != role.WAREHOUSE_MANAGER) {
+        return response.response_fail(res, response.FORBIDDEN, 'forbidden request')
       }
-    })
-  } catch (error) {
-    return response.response_error(res, response.INTERNAL_SERVER_ERROR, error)
-  }
+      // check if this user can access to warehouse or not
+      const warehouse = await Warehouse.findById(req.params.warehouse_id)
+      if (warehouse.warehouse_manager != user._id) {
+        return response.response_fail(res, response.FORBIDDEN, 'forbidden request')
+      }
+      req.user = user
+      next()
+    } catch (err) {
+      response.response_error(res, response.INTERNAL_SERVER_ERROR, err)
+    }
+  })
 }
