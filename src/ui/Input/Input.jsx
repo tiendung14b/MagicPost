@@ -8,14 +8,9 @@ const Input = ({
   type = "text",
 }) => {
   return (
-    <label htmlFor={id}>
+    <label htmlFor={id} style={style}>
       {labelText}
-      <input
-        type={type}
-        style={style}
-        placeholder={placeholder}
-        id={id}
-      ></input>
+      <input type={type} placeholder={placeholder} id={id}></input>
     </label>
   );
 };

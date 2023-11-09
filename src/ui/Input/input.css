@@ -1,6 +1,5 @@
 input {
-  width: 282px;
-  padding: 12px 20px;
+  padding: 12px 15px;
   align-items: flex-start;
   border-radius: 6px;
   border: 1px solid #dfe3e8;
@@ -16,6 +15,7 @@ input::placeholder {
 }
 
 label {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 5px;
