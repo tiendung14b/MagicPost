@@ -1,10 +1,7 @@
-.button {
-  background-color: #4caf50;
+button {
+  padding: 12px 18px;
+  border-radius: 5px;
   border: none;
-  border-radius: 2px;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
+  background-color: #ff6969;
+  color: #fff;
 }
