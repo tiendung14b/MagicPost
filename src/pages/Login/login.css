@@ -31,7 +31,14 @@
 }
 
 .logo {
-  width: 175px;
+  width: 200px;
+}
+
+.submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
 
 p {

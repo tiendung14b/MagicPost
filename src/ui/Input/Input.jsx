@@ -6,9 +6,10 @@ const Input = ({
   placeholder = "",
   style = {},
   type = "text",
+  onChange = () => {},
 }) => {
   return (
-    <label htmlFor={id} style={style}>
+    <label htmlFor={id} style={style} onChange={onChange}>
       {labelText}
       <input type={type} placeholder={placeholder} id={id}></input>
     </label>
