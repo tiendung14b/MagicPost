@@ -4,4 +4,9 @@ button {
   border: none;
   background-color: #ff6969;
   color: #fff;
+  min-width: 100px;
+}
+
+button:hover {
+  background-color: #ff7f7f;
 }

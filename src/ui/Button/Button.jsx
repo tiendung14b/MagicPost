@@ -1,8 +1,18 @@
 import "./button.css";
 
-const Button = ({ text, className = "", onClick = () => {}, style = {} }) => {
+const Button = ({ text, onClick, style = {}, colorHover = "" }) => {
   return (
-    <button type="button" onClick={onClick} style={style}>
+    <button
+      type="button"
+      onClick={onClick}
+      style={style}
+      onMouseEnter={(e) => {
+        e.target.style.backgroundColor = colorHover;
+      }}
+      onMouseLeave={(e) => {
+        e.target.style.backgroundColor = style.backgroundColor;
+      }}
+    >
       {text}
     </button>
   );

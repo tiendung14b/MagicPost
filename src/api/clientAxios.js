@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-toastify';
 
 const clientAxios = axios.create({
   baseURL: 'http://localhost:8000/api/',
@@ -7,14 +8,18 @@ const clientAxios = axios.create({
 });
 
 axios.interceptors.request.use(async (config) => {
-  const accessToken = localStorage.getItem("accessToken");
-  return {
-    ...config,
-    headers: {
-      "Content-Type": "application/json",
-      accessToken: `${accessToken}`,
-    },
-  };
+  try {
+    const access_token = localStorage.getItem("access_token");
+    return {
+      ...config,
+      headers: {
+        "Content-Type": "application/json",
+        access_token: `${access_token}`,
+      },
+    };
+  } catch (error) {
+    throw error;
+  }
 })
 
 axios.interceptors.response.use(
@@ -22,10 +27,7 @@ axios.interceptors.response.use(
     return response?.data;
   },
   (error) => {
-    if (!error.response) {
-      return alert(error);  
-    }
-    throw error.response;
+    toast.error(error.message);
   }
 )
 

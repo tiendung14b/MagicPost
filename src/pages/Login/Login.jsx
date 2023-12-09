@@ -9,32 +9,49 @@ import { ToastContainer, toast } from "react-toastify";
 import { useState } from "react";
 import clientAxios from "../../api/clientAxios";
 import Toast from "../../ui/Toast/Toast";
-import { decodeToken, isExpired } from "react-jwt";
-
-const onSubmit = async (loginInfo, loginPassword) => {
-  try {
-    const response = await clientAxios.post("/user/get_token", {
-      phone_number: loginInfo,
-      password: loginPassword,
-    });
-    const access_token = response?.data?.result?.access_token;
-    if (access_token) {
-      const user = decodeToken(access_token);
-      sessionStorage.setItem("user", user);
-      Toast.success("Đăng nhập thành công", toast);
-    } else {
-      Toast.fail("get token fail", toast);
-    }
-  } catch (err) {
-    if (err.response) Toast.error(err.response?.data?.message, toast);
-    else Toast.error("API error", toast);
-  }
-};
+import { decodeToken } from "react-jwt";
+import Loading from "../../ui/Loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { height, width } = useWindowDimensions();
-  const [loginInfo, setLoginInfo] = useState();
-  const [loginPassword, setLoginPassword] = useState();
+  const { width } = useWindowDimensions();
+  // const [loginInfo, setLoginInfo] = useState();
+  const [loginInfo, setLoginInfo] = useState({});
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const onSubmit = async (loginInfo) => {
+    try {
+      setLoading(true);
+      const response = await clientAxios.post("/user/get_token", loginInfo);
+      const access_token = response?.data?.result?.access_token;
+      if (!access_token) {
+        return Toast.fail("get token fail", toast);
+      }
+      const user = decodeToken(access_token);
+      console.log(user);
+      sessionStorage.setItem("access_token", access_token);
+      sessionStorage.setItem("user", JSON.stringify(user));
+      if (user.workplace.role == "DIRECTOR") {
+        return navigate("/director");
+      } else {
+        Toast.warn("Chức năng này đang được phát triển", toast);
+      }
+      setLoading(false);
+    } catch (err) {
+      if (!err.response) {
+        Toast.error("API error", toast);
+        return setLoading(false);
+      }
+      const res = err.response.data;
+      if (res.status == "fail") {
+        Toast.warn(err.response?.data?.message, toast);
+      } else {
+        Toast.error(err.response?.data?.message, toast);
+      }
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="login">
@@ -53,7 +70,9 @@ const Login = () => {
           style={{ width: "57%" }}
           id="login_info"
           type="tel"
-          onChange={(e) => setLoginInfo(e.target.value)}
+          onChange={(e) =>
+            setLoginInfo({ ...loginInfo, phone_number: e.target.value })
+          }
         />
         <Input
           labelText={"Mật khẩu"}
@@ -62,24 +81,25 @@ const Login = () => {
           style={{ width: "57%" }}
           id="login_password"
           onChange={(e) => {
-            setLoginPassword(e.target.value);
+            setLoginInfo({ ...loginInfo, password: e.target.value });
           }}
         />
         <div className="submit">
           <Button
             text={"Đăng nhập"}
             onClick={() => {
-              if (!loginInfo || !loginPassword) {
-                Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
-              } else {
-                onSubmit(loginInfo, loginPassword);
+              if (!loginInfo.phone_number || !loginInfo.password) {
+                return Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
               }
+              onSubmit(loginInfo);
             }}
           />
           <Button
             text={"Lấy lại mật khẩu"}
-            style={{
-              backgroundColor: "#016A70",
+            style={{ backgroundColor: "#016a70" }}
+            colorHover="#017b82"
+            onClick={() => {
+              Toast.warn("Chức năng này đang được phát triển", toast);
             }}
           />
         </div>
@@ -88,6 +108,7 @@ const Login = () => {
         </p>
       </div>
       <ToastContainer />
+      {loading ? <Loading /> : <></>}
     </div>
   );
 };

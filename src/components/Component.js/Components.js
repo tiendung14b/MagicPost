@@ -5,9 +5,7 @@ const Component = () => {
   return (
     <div className='component'>
       <p>Sample component</p>
-      <Button onClick={() => {alert('button clicked')}}>
-        Sample UI
-      </Button>
+      <Button onClick={() => {alert('button clicked')}} text={"Click here"} />
     </div>
   )
 }

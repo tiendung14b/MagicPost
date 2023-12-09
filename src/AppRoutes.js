@@ -1,20 +1,29 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import Sample from './pages/Sample/Sample';
 import Login from './pages/Login/Login';
 import { isExpired } from 'react-jwt';
+import { useState } from 'react';
+
+const LoginNavigate = ({ children }) => {
+  // const token = sessionStorage.getItem('token')
+  const [token, setToken] = useState(sessionStorage.getItem('token'))
+  return (
+    token ? {children} : <Navigate to={'/login'} />
+  )
+}
 
 const AppRouter = () => {
-  const user = sessionStorage.getItem('user') 
-  if (!user || isExpired(user.access_token)) {
-    <Navigate to="/login" replace={true} />
-  }
+  const token = sessionStorage.getItem('token')
+  if (!token) <Link to={'/login'} />
   return (
     <Routes>
-      <Route path='/' element={<Login />} />
-      <Route path='/samplepath' element={<Sample />}>
-        {/* samplepath/dir */}
-        <Route path='./dir' element={<Sample />} /> 
-      </Route>
+      <Route path='/' element={
+        <LoginNavigate>
+          <Sample />
+        </LoginNavigate>
+      } />
+      <Route path='/login' element={<Login />} />
+      <Route path='/director' element={<Sample />} />
     </Routes>
   )
 }
