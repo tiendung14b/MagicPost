@@ -19,6 +19,7 @@ const Login = () => {
   // const [loginInfo, setLoginInfo] = useState();
   const [loginInfo, setLoginInfo] = useState({});
   const [loading, setLoading] = useState(false);
+  let load = false;
   const navigate = useNavigate();
 
   const onSubmit = async (loginInfo) => {
@@ -104,7 +105,7 @@ const Login = () => {
             }}
           />
         </div>
-        <p style={{ color: "#777" }}>
+        <p className="login__notice" style={{ color: "#777" }}>
           Không có tài khoản? Hãy liên hệ với admin tại nơi bạn làm việc.
         </p>
       </div>
@@ -112,12 +113,14 @@ const Login = () => {
       {loading ? <Loading /> : <></>}
       <Popup title={"Hello"} popup_id={"test"}>
         <p>This is popup</p>
-        <Button
-          text={"Close"}
-          className={"action"}
-          onClick={() => {
-            window["test"].close();
-          }}
+        <Input
+          labelText={"Số điện thoại"}
+          placeholder={"Số điện thoại"}
+          id="login_info"
+          type="tel"
+          onChange={(e) =>
+            setLoginInfo({ ...loginInfo, phone_number: e.target.value })
+          }
         />
       </Popup>
     </div>
