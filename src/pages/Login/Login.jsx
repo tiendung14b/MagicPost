@@ -12,6 +12,7 @@ import Toast from "../../ui/Toast/Toast";
 import { decodeToken } from "react-jwt";
 import Loading from "../../ui/Loading/Loading";
 import { useNavigate } from "react-router-dom";
+import Popup from "../../ui/Popup/Popup";
 
 const Login = () => {
   const { width } = useWindowDimensions();
@@ -87,6 +88,7 @@ const Login = () => {
         <div className="submit">
           <Button
             text={"Đăng nhập"}
+            className={"submit"}
             onClick={() => {
               if (!loginInfo.phone_number || !loginInfo.password) {
                 return Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
@@ -96,10 +98,9 @@ const Login = () => {
           />
           <Button
             text={"Lấy lại mật khẩu"}
-            style={{ backgroundColor: "#016a70" }}
-            colorHover="#017b82"
+            className={"action"}
             onClick={() => {
-              Toast.warn("Chức năng này đang được phát triển", toast);
+              window["test"].showModal();
             }}
           />
         </div>
@@ -109,6 +110,16 @@ const Login = () => {
       </div>
       <ToastContainer />
       {loading ? <Loading /> : <></>}
+      <Popup title={"Hello"} popup_id={"test"}>
+        <p>This is popup</p>
+        <Button
+          text={"Close"}
+          className={"action"}
+          onClick={() => {
+            window["test"].close();
+          }}
+        />
+      </Popup>
     </div>
   );
 };

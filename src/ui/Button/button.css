@@ -1,12 +1,43 @@
-button {
+.button {
   padding: 12px 18px;
   border-radius: 5px;
   border: none;
-  background-color: #ff6969;
   color: #fff;
   min-width: 100px;
 }
 
-button:hover {
-  background-color: #ff7f7f;
+.button.submit {
+  background-color: #fa5a5a;
+}
+
+.button.submit:hover {
+  background-color: #ff6969;
+}
+
+.button.action {
+  background-color: #016a70;
+}
+
+.button.action:hover {
+  background-color: #017b82;
+}
+
+.button.disabled {
+  background-color: #bfbfbf;
+}
+
+.button.disabled:hover {
+  background-color: #bfbfbf;
+}
+
+.button.danger {
+  border: 1px solid #fa5a5a;
+  padding: 11px 17px;
+  background-color: transparent;
+  color: #fa5a5a;
+}
+
+.button.danger:hover {
+  background-color: #fa5a5a;
+  color: white;
 }
