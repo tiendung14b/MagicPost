@@ -1,0 +1,11 @@
+.dashboard__row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 20px 20px;
+}
+
+.dashboard__row.title {
+    background-color: #D9D9D9;
+}
+

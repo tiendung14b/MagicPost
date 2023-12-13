@@ -1,0 +1,30 @@
+.main-director {
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.sidebar-content {
+    width: 20%;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-around;
+}
+
+.dashboard-content {
+    border-radius: 5%;
+}
+
+
+
+

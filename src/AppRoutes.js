@@ -1,6 +1,8 @@
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import Sample from './pages/Sample/Sample';
 import Login from './pages/Login/Login';
+import Director from './pages/Director/Director';
+import SideBar from './ui/SideBar/SideBar';
 import { isExpired } from 'react-jwt';
 import { useState } from 'react';
 
@@ -21,11 +23,12 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path='/login' element={<Login />} />
-      <Route path='/director' element={
+      <Route path='/director/*' element={
         <LoginNavigate>
-          <Sample />
+          <Director />
         </LoginNavigate>
       } />
+      <Route path='/sidebar' element={<SideBar />} />
     </Routes>
   )
 }
