@@ -11,11 +11,16 @@ import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
 
 const ManagerPage = () => {
-  const { userLoading, listManager, getListManager, createManager } = useUser();
+  const { userLoading, listManager, deleteInfo, getListManager, createManager, deleteUser } = useUser();
   const [newUser, setNewUser] = useState({});
 
   const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  };
+
+  const handleDelete = () => {
+    deleteUser();
+    getListManager();
   };
 
   useEffect(() => {
@@ -52,11 +57,37 @@ const ManagerPage = () => {
               {manager?.workplace?.name || "Chưa có"}
             </p>
             <div className="row__item manager__edit">
-              <Button text={"Xem chi tiết"} className={"action"} />
+              <Button
+                text={"Xem chi tiết"}
+                className={"action"}
+                onClick={() => {
+                  window["manager_popup"].showModal();
+                }}
+              />
             </div>
           </Row>
         ))}
       </DashBoard>
+      <Popup
+        className="manager_popup"
+        popup_id={"manager_popup"}
+        title={"Thông tin quản lý"}
+      >
+        <div className="popup__body__content">
+          <p className="warn" id="add_manager_warn">
+            Xoá người dùng
+          </p>
+          <Button
+            text={"Xoá người dùng này"}
+            className={"action"}
+            onClick={() => {
+              window["manager_popup"].close();
+              handleDelete();
+              Toast.success("Xoá người dùng thành công", toast);
+            }}
+          />
+        </div>
+      </Popup>
       <Popup
         className="add_manager_popup"
         popup_id={"add_manager_popup"}

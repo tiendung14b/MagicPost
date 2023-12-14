@@ -16,6 +16,7 @@
 
 .manager__todo {
   width: 100%;
+  display: flex;
 }
 
 .manager_phone_search {

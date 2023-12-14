@@ -8,6 +8,7 @@ import React from "react";
 const useUser = () => {
   const [listManager, setListManager] = useState([]);
   const [userInfo, setUserInfo] = useState({});
+  const [deleteInfo, deleteUserInfo] = useState({})
   const [userloading, setUserLoading] = useState(true);
 
   const getUserInfo = async () => {
@@ -35,7 +36,18 @@ const useUser = () => {
     try {
       const response = await clientAxios.post('/user/manager', data)
       Toast.success("Thêm mới thành công", toast);
-      getListManager()
+      getListManager(response?.result)
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  const deleteUser = async () => {
+    try {
+      const response = await clientAxios.delete('/user/user', {data: deleteInfo})
+      Toast.success("Xóa thành công", toast);
+      getUserInfo(response?.result)
+      deleteUserInfo(response?.result)
     } catch(err) {
       console.log(err)
     }
@@ -44,10 +56,12 @@ const useUser = () => {
   return {
     userloading,
     listManager,
-    getListManager,
     userInfo,
+    deleteInfo,
+    getListManager,
     getUserInfo,
-    createManager
+    createManager,
+    deleteUser,
   };
 };
 
