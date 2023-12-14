@@ -1,55 +1,54 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 import NavBar from "./NavBar/NavBar";
-import SideBar from "../../ui/SideBar/SideBar";
-import Page1 from "./PageManage/Page1";
-import Page2 from "./PageManage/Page2";
-import Page3 from "./PageManage/Page3";
+import SideBar from "../../components/SideBar/SideBar";
 import DashBoard from "../../components/DashBoard/DashBoard";
 import Row from "../../components/DashBoard/Row";
+import human from "../../assets/human.svg";
+import truck from "../../assets/truck.png";
+import stock from "../../assets/stock.png";
+import transaction from "../../assets/transaction.svg";
 
 import useUser from "../../hooks/useUser";
 
 import "./Director.css";
+import Layout from "../../components/Layout/Layout";
 
 function Director() {
-
-  const {loading, listManager, getListManager} = useUser()
+  const { loading, listManager, getListManager } = useUser();
 
   useEffect(() => {
-    getListManager()
-  },[])
-
+    getListManager();
+  }, []);
 
   return (
-    <div className="main-director">
-      <div className="sidebar-content">
-        <SideBar />
-      </div>
-      <div className="main-content">
-        <div className="navbar-content">
-          <NavBar />
+    <Layout>
+      <SideBar title="Director">
+        <div className="sidebar__item box" title="Quản lý nhân sự" id="1">
+          <img className="sidebar__icon" src={human} alt="Hello" />
+          <p className="sidebar__item__text">Quản lý nhân sự</p>
         </div>
-        <div className="dashboard-content">
-          <DashBoard>
-            <Row className="title">
-              <p>First Name</p>
-              <p>Last Name</p>
-              <p>Phone Number</p>
-            </Row>
-            {listManager.map(item => 
-              <Row>
-                <p>{item.first_name}</p>
-                <p>{item.last_name}</p>
-                <p>{item.phone_number}</p>
-              </Row>
-            )}
-          </DashBoard>
+        <div
+          className="sidebar__item box"
+          title="Quản lý điểm giao dịch"
+          id="2"
+        >
+          <img className="sidebar__icon" src={transaction} alt="" />
+          <p className="sidebar__item__text">Quản lý điểm giao dịch</p>
         </div>
+        <div className="sidebar__item box" title="Quản lý kho" id="3">
+          <img className="sidebar__icon" src={stock} alt="" />
+          <p className="sidebar__item__text">Quản lý kho</p>
+        </div>
+        <div className="sidebar__item box" title="Thống kê logistic" id="4">
+          <img className="sidebar__icon" src={truck} alt="" />
+          <p className="sidebar__item__text">Thống kê logistic</p>
+        </div>
+      </SideBar>
+      <div className="container">
+        <h1>Dashboard</h1>
       </div>
-    </div>
+    </Layout>
   );
 }
 

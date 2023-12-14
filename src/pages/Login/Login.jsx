@@ -19,19 +19,18 @@ const Login = () => {
   // const [loginInfo, setLoginInfo] = useState();
   const [loginInfo, setLoginInfo] = useState({});
   const [loading, setLoading] = useState(false);
-  let load = false;
   const navigate = useNavigate();
 
   const onSubmit = async (loginInfo) => {
     try {
       setLoading(true);
       const response = await clientAxios.post("/user/get_token", loginInfo);
-      const access_token = response?.data?.result?.access_token;
+      const access_token = response?.result?.access_token;
       if (!access_token) {
+        setLoading(false);
         return Toast.fail("get token fail", toast);
       }
       const user = decodeToken(access_token);
-      console.log(user);
       sessionStorage.setItem("access_token", access_token);
       sessionStorage.setItem("user", JSON.stringify(user));
       if (user.workplace.role == "DIRECTOR") {
@@ -42,7 +41,8 @@ const Login = () => {
       setLoading(false);
     } catch (err) {
       if (!err.response) {
-        Toast.error("API error", toast);
+        Toast.error(`API error + ${err}`, toast);
+        console.log(err);
         return setLoading(false);
       }
       const res = err.response.data;
