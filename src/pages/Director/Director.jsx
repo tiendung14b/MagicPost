@@ -13,6 +13,7 @@ import useUser from "../../hooks/useUser";
 
 import "./Director.css";
 import Layout from "../../components/Layout/Layout";
+import ManagerPage from "./HumanManagement/ManagerPage";
 
 function Director() {
   const { loading, listManager, getListManager } = useUser();
@@ -32,7 +33,7 @@ function Director() {
     <Layout>
       <SideBar title="Director">
         <div
-          className="sidebar__item box"
+          className="sidebar__item box clicked"
           title="Quản lý nhân sự"
           id="director__human"
           onClick={() => handleChooseItem("director__human")}
@@ -69,7 +70,7 @@ function Director() {
         </div>
       </SideBar>
       <div className="container">
-        <h1>Dashboard</h1>
+        {itemChoosen === "director__human" && <ManagerPage />}
       </div>
     </Layout>
   );

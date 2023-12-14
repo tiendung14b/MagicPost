@@ -28,7 +28,7 @@ const Login = () => {
       const access_token = response?.result?.access_token;
       if (!access_token) {
         setLoading(false);
-        return Toast.fail("get token fail", toast);
+        return Toast.warn("get token fail", toast);
       }
       const user = decodeToken(access_token);
       sessionStorage.setItem("access_token", access_token);

@@ -52,7 +52,6 @@
 
 .sidebar__item {
   position: relative;
-  min-width: 260px;
   width: 100%;
   display: flex;
   padding: 12px 12px;
@@ -68,7 +67,7 @@
   align-items: flex-end;
 }
 
-.sidebar__item:not(.user).clicked {
+.sidebar__item.clicked {
   color: #fa5a5a;
   background-color: white;
 }

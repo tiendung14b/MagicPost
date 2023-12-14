@@ -2,8 +2,8 @@ import React from "react";
 import "./popup.css";
 import xsymbol from "../../assets/x-symbol.svg";
 
-const Popup = ({ children, title, popup_id, ...props }) => (
-  <dialog className="popup__orverlay" id={popup_id}>
+const Popup = ({ children, title, popup_id, className, ...props }) => (
+  <dialog className={`popup__orverlay ${className}`} id={popup_id}>
     <div className="popup__content">
       <div className="popup__header">
         <h2 className="popup__title">{title}</h2>

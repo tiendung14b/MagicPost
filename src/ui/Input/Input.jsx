@@ -1,6 +1,8 @@
 import "./input.css";
 
 const Input = ({
+  name = "",
+  className = "",
   labelText = "",
   id = "",
   placeholder = "",
@@ -9,9 +11,9 @@ const Input = ({
   onChange = () => {},
 }) => {
   return (
-    <label htmlFor={id} style={style} onChange={onChange}>
+    <label htmlFor={id} style={style} onChange={onChange} className={className}>
       {labelText}
-      <input type={type} placeholder={placeholder} id={id}></input>
+      <input type={type} placeholder={placeholder} id={id} name={name}></input>
     </label>
   );
 };

@@ -1,11 +1,14 @@
 .dashboard__row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 20px 20px;
+  display: flex;
+  flex-direction: row;
+  padding: 10px 25px;
+  font-size: 14px;
+  align-items: center;
 }
 
 .dashboard__row.title {
-    background-color: #D9D9D9;
+  font-weight: 600;
+  color: #016a70;
+  border-bottom: 1px solid #e8eff9;
+  padding-bottom: 15px;
 }
-

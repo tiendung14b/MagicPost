@@ -1,13 +1,14 @@
 import { useState } from "react";
 import clientAxios from "../api/clientAxios";
 import Toast from "../ui/Toast/Toast";
+import { toast } from "react-toastify";
 
 import React from "react";
 
 const useUser = () => {
   const [listManager, setListManager] = useState([]);
   const [userInfo, setUserInfo] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [userloading, setUserLoading] = useState(true);
 
   const getUserInfo = async () => {
     try {
@@ -23,19 +24,30 @@ const useUser = () => {
   const getListManager = async () => {
     try {
       const response = await clientAxios.get('/user/get_list_manager')
-      setLoading(false)
+      setUserLoading(false)
       setListManager(response?.result)
     } catch(err) {
       console.log(err)
     }
   };
 
+  const createManager = async (data) => {
+    try {
+      const response = await clientAxios.post('/user/manager', data)
+      Toast.success("Thêm mới thành công", toast);
+      getListManager()
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
   return {
-    loading,
+    userloading,
     listManager,
     getListManager,
     userInfo,
-    getUserInfo
+    getUserInfo,
+    createManager
   };
 };
 

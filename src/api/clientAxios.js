@@ -13,7 +13,7 @@ clientAxios.interceptors.request.use(
     config.headers = {
       'X-Custom-Header': 'foobar',
       'Content-Type': 'application/json',
-      'access_token': sessionStorage.getItem('access_token'),
+      access_token: sessionStorage.getItem('access_token'),
     }
     return config;
   },
