@@ -42,6 +42,10 @@
   opacity: 0;
 }
 
+.sidebar__item__text.clicked {
+  color: #fa5a5a;
+}
+
 .sidebar.close .sidebar__item {
   justify-content: center;
 }

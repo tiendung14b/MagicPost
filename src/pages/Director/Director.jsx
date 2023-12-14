@@ -16,6 +16,13 @@ import Layout from "../../components/Layout/Layout";
 
 function Director() {
   const { loading, listManager, getListManager } = useUser();
+  const [itemChoosen, setItemChoosen] = React.useState("director__human");
+
+  const handleChooseItem = (id) => {
+    document.getElementById(itemChoosen).classList.remove("clicked");
+    setItemChoosen(id);
+    document.getElementById(id).classList.add("clicked");
+  };
 
   useEffect(() => {
     getListManager();
@@ -24,23 +31,39 @@ function Director() {
   return (
     <Layout>
       <SideBar title="Director">
-        <div className="sidebar__item box" title="Quản lý nhân sự" id="1">
+        <div
+          className="sidebar__item box"
+          title="Quản lý nhân sự"
+          id="director__human"
+          onClick={() => handleChooseItem("director__human")}
+        >
           <img className="sidebar__icon" src={human} alt="Hello" />
           <p className="sidebar__item__text">Quản lý nhân sự</p>
         </div>
         <div
           className="sidebar__item box"
           title="Quản lý điểm giao dịch"
-          id="2"
+          id="director__transaction"
+          onClick={() => handleChooseItem("director__transaction")}
         >
           <img className="sidebar__icon" src={transaction} alt="" />
           <p className="sidebar__item__text">Quản lý điểm giao dịch</p>
         </div>
-        <div className="sidebar__item box" title="Quản lý kho" id="3">
+        <div
+          className="sidebar__item box"
+          title="Quản lý kho"
+          id="director__warehouse"
+          onClick={() => handleChooseItem("director__warehouse")}
+        >
           <img className="sidebar__icon" src={stock} alt="" />
           <p className="sidebar__item__text">Quản lý kho</p>
         </div>
-        <div className="sidebar__item box" title="Thống kê logistic" id="4">
+        <div
+          className="sidebar__item box"
+          title="Thống kê logistic"
+          id="director__stat"
+          onClick={() => handleChooseItem("director__stat")}
+        >
           <img className="sidebar__icon" src={truck} alt="" />
           <p className="sidebar__item__text">Thống kê logistic</p>
         </div>
