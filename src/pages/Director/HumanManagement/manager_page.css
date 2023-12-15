@@ -38,7 +38,7 @@
 .add_manager_popup__input {
   min-width: 40vw;
 }
-
+  
 .popup__body__content {
   display: flex;
   flex-direction: column;
