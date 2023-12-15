@@ -11,14 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
 
 const ManagerPage = () => {
-  const {
-    userLoading,
-    listManager,
-    deleteInfo,
-    getListManager,
-    createManager,
-    deleteUser,
-  } = useUser();
+  const { userLoading, listManager, deleteInfo, getListManager, createManager, deleteUser } = useUser();
   const [newUser, setNewUser] = useState({});
   
   const [sortedColumn, setSortedColumn] = useState(null);
@@ -213,7 +206,7 @@ const ManagerPage = () => {
           </p>
           <Button
             text={"Thêm quản lý"}
-            className={"action"}
+            className={"submit"}
             onClick={() => {
               console.log(newUser.workplace);
               if (

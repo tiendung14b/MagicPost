@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import React from "react";
 
-const useUser = () => {
+const useUser = (toast) => {
   const [listManager, setListManager] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [deleteInfo, deleteUserInfo] = useState({})
@@ -28,7 +28,7 @@ const useUser = () => {
       setUserLoading(false)
       setListManager(response?.result)
     } catch(err) {
-      console.log(err)
+      Toast.error("Lỗi hệ thống", toast);
     }
   };
 
