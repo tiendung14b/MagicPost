@@ -1,32 +1,39 @@
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
-import Sample from './pages/Sample/Sample';
+import { Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom'
 import Login from './pages/Login/Login';
 import Director from './pages/Director/Director';
-import { isExpired } from 'react-jwt';
-import { useState } from 'react';
+import role from './util/role';
 
-const LoginNavigate = ({ children }) => {
-  // const token = sessionStorage.getItem('token')
-  const [token, setToken] = useState(sessionStorage.getItem('token'))
-  const navigate = useNavigate()
-  if (isExpired(token)) {
-    sessionStorage.removeItem('token')
-    navigate('/login')
+const RedirectHandler = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(sessionStorage.getItem('user'));
+  if (!user) {
+    return <Navigate to="/login" />;
   }
-  return children
+  if (user.workplace?.role == role.DIRECTOR) {
+    return <Navigate to="/director" />;
+  }
+  return <Login />;
+}
+
+const ProtectRoute = ({children, role}) => {
+  const user = JSON.parse(sessionStorage.getItem('user'));
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+  if (user.workplace?.role == role) {
+    return children;
+  }
+  return <Login />;
 }
 
 const AppRouter = () => {
-  const token = sessionStorage.getItem('token')
-  if (!token) <Link to={'/login'} />
   return (
     <Routes>
-      <Route path='/login' element={<Login />} />
-      <Route path='/director/*' element={
-        <LoginNavigate>
-          <Director />
-        </LoginNavigate>
+      <Route path="/" element={<Navigate to={'/login'} />} />
+      <Route path="/login" element={
+        sessionStorage.getItem('user') ? <RedirectHandler /> : <Login />
       } />
+      <Route path='/director' element={<ProtectRoute role={role.DIRECTOR}><Director /></ProtectRoute>} />
     </Routes>
   )
 }

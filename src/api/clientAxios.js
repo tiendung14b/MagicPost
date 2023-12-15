@@ -1,4 +1,18 @@
 import axios from 'axios'
+import Toast from '../ui/Toast/Toast'
+
+const response = {
+  UNAUTHORIZED: 401,
+  INTERNAL_SERVER_ERROR: 500,
+  OK: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  BAD_REQUEST: 400,
+  NOT_FOUND: 404,
+  CONFLICT: 409,
+  FORBIDDEN: 403,
+  UNPROCESSABLE_ENTITY: 422
+}
 
 const clientAxios = axios.create({
   baseURL: 'http://localhost:8000/api/',
@@ -27,7 +41,7 @@ clientAxios.interceptors.response.use(
     return response?.data;
   },
   (error) => {
-    console.log(error)
+    throw error.response
   }
 )
 

@@ -14,6 +14,10 @@
   min-width: 16vw;
 }
 
+.sidebar.close ~ .container .row__item {
+  min-width: 20vw;
+}
+
 .manager__todo {
   width: 100%;
   display: flex;

@@ -31,7 +31,8 @@
 }
 
 .button.danger {
-  border: 1px solid #fa5a5a;
+  border: 1px solid #fa5a5a !important;
+  outline: none !important;
   padding: 11px 17px;
   background-color: transparent;
   color: #fa5a5a;

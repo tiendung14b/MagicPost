@@ -33,7 +33,7 @@ function Director() {
     <Layout>
       <SideBar title="Director">
         <div
-          className="sidebar__item box clicked"
+          className="sidebar__item__content box clicked"
           title="Quản lý nhân sự"
           id="director__human"
           onClick={() => handleChooseItem("director__human")}
@@ -42,7 +42,7 @@ function Director() {
           <p className="sidebar__item__text">Quản lý nhân sự</p>
         </div>
         <div
-          className="sidebar__item box"
+          className="sidebar__item__content box"
           title="Quản lý điểm giao dịch"
           id="director__transaction"
           onClick={() => handleChooseItem("director__transaction")}
@@ -51,7 +51,7 @@ function Director() {
           <p className="sidebar__item__text">Quản lý điểm giao dịch</p>
         </div>
         <div
-          className="sidebar__item box"
+          className="sidebar__item__content box"
           title="Quản lý kho"
           id="director__warehouse"
           onClick={() => handleChooseItem("director__warehouse")}
@@ -60,7 +60,7 @@ function Director() {
           <p className="sidebar__item__text">Quản lý kho</p>
         </div>
         <div
-          className="sidebar__item box"
+          className="sidebar__item__content box"
           title="Thống kê logistic"
           id="director__stat"
           onClick={() => handleChooseItem("director__stat")}
