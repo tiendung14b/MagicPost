@@ -18,7 +18,7 @@ const ManagerPage = () => {
     listManager,
     getListManager,
     createManager,
-    deleteUser,
+    deleteManager,
   } = useUser(toast);
   const [newUser, setNewUser] = useState({});
   const [userChoosen, setUserChoosen] = useState({});
@@ -49,11 +49,6 @@ const ManagerPage = () => {
       return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
     }
   });
-
-  const handleDelete = () => {
-    deleteUser();
-    getListManager();
-  };
 
   useEffect(() => {
     getListManager();
@@ -171,7 +166,7 @@ const ManagerPage = () => {
             className={"danger"}
             onClick={() => {
               window["manager_popup"].close();
-              deleteUser(userChoosen?._id);
+              deleteManager(userChoosen?._id);
             }}
           />
         </div>
