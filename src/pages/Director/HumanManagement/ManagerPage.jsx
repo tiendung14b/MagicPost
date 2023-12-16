@@ -12,22 +12,17 @@ import Loading from "../../../ui/Loading/Loading";
 
 const ManagerPage = () => {
   const {
-    userLoading,
+    userloading,
     listManager,
-    deleteInfo,
     getListManager,
     createManager,
     deleteUser,
   } = useUser(toast);
   const [newUser, setNewUser] = useState({});
+  const [userChoosen, setUserChoosen] = useState({});
 
   const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
-  };
-
-  const handleDelete = () => {
-    deleteUser();
-    getListManager();
   };
 
   useEffect(() => {
@@ -68,6 +63,8 @@ const ManagerPage = () => {
                 text={"Xem chi tiết"}
                 className={"action"}
                 onClick={() => {
+                  setUserChoosen(manager);
+                  console.log(userChoosen);
                   window["manager_popup"].showModal();
                 }}
               />
@@ -81,16 +78,40 @@ const ManagerPage = () => {
         title={"Thông tin quản lý"}
       >
         <div className="popup__body__content">
-          <p className="warn" id="add_manager_warn">
-            Xoá người dùng
-          </p>
+          <div className="manager_popup__field">
+            <p className="manager_popup__field__title">Họ tên:</p>
+            <p className="manager_popup__field__value">
+              {userChoosen?.first_name + " " + userChoosen?.last_name}
+            </p>
+          </div>
+          <div className="manager_popup__field">
+            <p className="manager_popup__field__title">Số điện thoại:</p>
+            <p className="manager_popup__field__value">
+              {userChoosen?.phone_number}
+            </p>
+          </div>
+          <div className="manager_popup__field">
+            <p className="manager_popup__field__title">Email:</p>
+            <p className="manager_popup__field__value">{userChoosen?.email}</p>
+          </div>
+          <div className="manager_popup__field">
+            <p className="manager_popup__field__title">Nơi làm việc:</p>
+            <p className="manager_popup__field__value">
+              {userChoosen?.workplace?.name || "Chưa có"}
+            </p>
+          </div>
+          <div className="manager_popup__field">
+            <p className="manager_popup__field__title">Vai trò:</p>
+            <p className="manager_popup__field__value">
+              {userChoosen?.workplace?.role || "Chưa có"}
+            </p>
+          </div>
           <Button
             text={"Xoá người dùng này"}
-            className={"action"}
+            className={"danger"}
             onClick={() => {
               window["manager_popup"].close();
-              handleDelete();
-              Toast.success("Xoá người dùng thành công", toast);
+              deleteUser(userChoosen?._id);
             }}
           />
         </div>
@@ -104,7 +125,6 @@ const ManagerPage = () => {
           <Input
             className="add_manager_popup__input"
             placeholder={"Họ"}
-            id="login_info"
             type="text"
             name="first_name"
             onChange={handleChange}
@@ -112,7 +132,6 @@ const ManagerPage = () => {
           <Input
             className="add_manager_popup__input"
             placeholder={"Tên"}
-            id="login_info"
             type="text"
             name="last_name"
             onChange={handleChange}
@@ -120,7 +139,6 @@ const ManagerPage = () => {
           <Input
             className="add_manager_popup__input"
             placeholder={"Số điện thoại"}
-            id="login_info"
             type="tel"
             name="phone_number"
             onChange={handleChange}
@@ -128,7 +146,6 @@ const ManagerPage = () => {
           <Input
             className="add_manager_popup__input"
             placeholder="Email"
-            id="login_info"
             type="email"
             name="email"
             onChange={handleChange}
@@ -169,32 +186,40 @@ const ManagerPage = () => {
           <p className="warn" id="add_manager_warn">
             Bạn cần nhập đầy đủ thông tin
           </p>
-          <Button
-            text={"Thêm quản lý"}
-            className={"submit"}
-            onClick={() => {
-              console.log(newUser.workplace);
-              if (
-                !newUser?.phone_number ||
-                !newUser?.first_name ||
-                !newUser?.last_name ||
-                !newUser?.email ||
-                !newUser?.workplace?.role
-              ) {
-                Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
-                window["add_manager_warn"].className = "warn show";
-                return;
-              }
-              window["add_manager_popup"].close();
-              createManager(newUser);
-              setNewUser({});
-              getListManager();
-              Toast.success("Thêm quản lý thành công", toast);
-            }}
-          />
+          <div className="add_manager_submit">
+            <Button
+              text={"Thêm quản lý"}
+              className={"submit"}
+              onClick={() => {
+                console.log(newUser.workplace);
+                if (
+                  !newUser?.phone_number ||
+                  !newUser?.first_name ||
+                  !newUser?.last_name ||
+                  !newUser?.email ||
+                  !newUser?.workplace?.role
+                ) {
+                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
+                  window["add_manager_warn"].className = "warn show";
+                  return;
+                }
+                window["add_manager_popup"].close();
+                createManager(newUser);
+                setNewUser({});
+              }}
+            />
+            <Button
+              text={"Hủy"}
+              className={"cancel"}
+              onClick={() => {
+                window["add_manager_popup"].close();
+                setNewUser({});
+              }}
+            />
+          </div>
         </div>
       </Popup>
-      {userLoading && <Loading />}
+      {userloading ? <Loading /> : <></>}
       <ToastContainer className="toasify" />
     </div>
   );

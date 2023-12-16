@@ -8,7 +8,6 @@ import React from "react";
 const useUser = (toast) => {
   const [listManager, setListManager] = useState([]);
   const [userInfo, setUserInfo] = useState({});
-  const [deleteInfo, deleteUserInfo] = useState({})
   const [userloading, setUserLoading] = useState(true);
 
   const getUserInfo = async () => {
@@ -24,6 +23,7 @@ const useUser = (toast) => {
 
   const getListManager = async () => {
     try {
+      console.log(userloading);
       const response = await clientAxios.get('/user/get_list_manager')
       setUserLoading(false)
       setListManager(response?.result)
@@ -34,22 +34,23 @@ const useUser = (toast) => {
 
   const createManager = async (data) => {
     try {
-      const response = await clientAxios.post('/user/manager', data)
+      setUserLoading(true)
+      await clientAxios.post('/user/create_manager', data)
+      getListManager();
       Toast.success("Thêm mới thành công", toast);
-      getListManager(response?.result)
     } catch(err) {
       console.log(err)
     }
   }
 
-  const deleteUser = async () => {
+  const deleteUser = async (id) => {
     try {
-      const response = await clientAxios.delete('/user/user', {data: deleteInfo})
+      setUserLoading(true)
+      await clientAxios.delete('/user/' + id)
+      getListManager()
       Toast.success("Xóa thành công", toast);
-      getUserInfo(response?.result)
-      deleteUserInfo(response?.result)
     } catch(err) {
-      console.log(err)
+      Toast.error(err.message, toast);
     }
   }
 
@@ -57,7 +58,6 @@ const useUser = (toast) => {
     userloading,
     listManager,
     userInfo,
-    deleteInfo,
     getListManager,
     getUserInfo,
     createManager,
