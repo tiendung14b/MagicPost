@@ -8,7 +8,7 @@ import React from "react";
 const useUser = (toast) => {
   const [listManager, setListManager] = useState([]);
   const [userInfo, setUserInfo] = useState({});
-  const [userloading, setUserLoading] = useState(true);
+  const [userloading, setUserLoading] = useState(false);
 
   const getUserInfo = async () => {
     try {

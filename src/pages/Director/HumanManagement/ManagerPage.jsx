@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
 
+import arrow from "../../../assets/arrow.svg";
+
 const ManagerPage = () => {
   const {
     userloading,
@@ -72,25 +74,38 @@ const ManagerPage = () => {
           <Input placeholder={"Tìm kiếm"} className={"manager_phone_search"} />
         </Row>
         <Row className="title">
-          <div className="row__item title__name">
+          <div className="row__item sort_item title__name">
             Họ Tên
-            <button onClick={() => handleSort("first_name")}>
-              {sortedColumn === "first_name" && sortOrder === "asc" ? "▲" : "▼"}
-            </button>
+            <img
+              src={arrow}
+              alt=""
+              onClick={(e) => {
+                handleSort("first_name");
+                e.target.classList.toggle("active");
+              }}
+            />
           </div>
-          <div className="row__item title__phone">
+          <div className="row__item sort_item title__phone">
             Số điện thoại
-            <button onClick={() => handleSort("phone_number")}>
-              {sortedColumn === "phone_number" && sortOrder === "asc"
-                ? "▲"
-                : "▼"}
-            </button>
+            <img
+              src={arrow}
+              alt=""
+              onClick={(e) => {
+                handleSort("phone_number");
+                e.target.classList.toggle("active");
+              }}
+            />
           </div>
-          <div className="row__item title__workplace">
+          <div className="row__item sort_item title__workplace">
             Điểm quản lý
-            <button onClick={() => handleSort("workplace")}>
-              {sortedColumn === "workplace" && sortOrder === "asc" ? "▲" : "▼"}
-            </button>
+            <img
+              src={arrow}
+              alt=""
+              onClick={(e) => {
+                handleSort("workplace");
+                e.target.classList.toggle("active");
+              }}
+            />
           </div>
           <div className="row__item title__edit">Quản lý tài khoản</div>
         </Row>
