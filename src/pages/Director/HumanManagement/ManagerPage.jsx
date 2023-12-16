@@ -21,8 +21,36 @@ const ManagerPage = () => {
   const [newUser, setNewUser] = useState({});
   const [userChoosen, setUserChoosen] = useState({});
 
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc");
+
   const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  };
+
+  const handleSort = (column) => {
+    if (sortedColumn === column) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortedColumn(column);
+      setSortOrder("asc");
+    }
+  };
+
+  const sortedManager = listManager?.slice().sort((a, b) => {
+    const columnA = a[sortedColumn];
+    const columnB = b[sortedColumn];
+
+    if (sortOrder === "asc") {
+      return columnA < columnB ? -1 : columnA > columnB ? 1 : 0;
+    } else {
+      return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
+    }
+  });
+
+  const handleDelete = () => {
+    deleteUser();
+    getListManager();
   };
 
   useEffect(() => {
@@ -44,12 +72,29 @@ const ManagerPage = () => {
           <Input placeholder={"Tìm kiếm"} className={"manager_phone_search"} />
         </Row>
         <Row className="title">
-          <p className="row__item title__name">Họ tên</p>
-          <p className="row__item title__phone">Số điện thoại</p>
-          <p className="row__item title__workplace">Nơi làm việc</p>
-          <p className="row__item title__edit">Quản lý tài khoản</p>
+          <div className="row__item title__name">
+            Họ Tên
+            <button onClick={() => handleSort("first_name")}>
+              {sortedColumn === "first_name" && sortOrder === "asc" ? "▲" : "▼"}
+            </button>
+          </div>
+          <div className="row__item title__phone">
+            Số điện thoại
+            <button onClick={() => handleSort("phone_number")}>
+              {sortedColumn === "phone_number" && sortOrder === "asc"
+                ? "▲"
+                : "▼"}
+            </button>
+          </div>
+          <div className="row__item title__workplace">
+            Điểm quản lý
+            <button onClick={() => handleSort("workplace")}>
+              {sortedColumn === "workplace" && sortOrder === "asc" ? "▲" : "▼"}
+            </button>
+          </div>
+          <div className="row__item title__edit">Quản lý tài khoản</div>
         </Row>
-        {listManager?.map((manager) => (
+        {sortedManager?.map((manager) => (
           <Row className="manager__detail">
             <p className="manager__name row__item">
               {manager?.first_name + " " + manager?.last_name}

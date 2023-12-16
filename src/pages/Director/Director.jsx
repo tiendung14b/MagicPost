@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 
-import NavBar from "./NavBar/NavBar";
 import SideBar from "../../components/SideBar/SideBar";
-import DashBoard from "../../components/DashBoard/DashBoard";
-import Row from "../../components/DashBoard/Row";
 import human from "../../assets/human.svg";
 import truck from "../../assets/truck.png";
 import stock from "../../assets/stock.png";
@@ -13,7 +10,11 @@ import useUser from "../../hooks/useUser";
 
 import "./Director.css";
 import Layout from "../../components/Layout/Layout";
+
 import ManagerPage from "./HumanManagement/ManagerPage";
+import TransactionPage from "./TransactionPointManagement/TransactionPage";
+import WarehousePage from "./WarehouseManagement/WarehousePage";
+import LogisticPage from "./LogisticManagement/LogisticPage";
 
 function Director() {
   const { loading, listManager, getListManager } = useUser();
@@ -70,7 +71,12 @@ function Director() {
         </div>
       </SideBar>
       <div className="container">
-        {itemChoosen === "director__human" && <ManagerPage />}
+        <div className="director__content">
+          {itemChoosen === "director__human" && <ManagerPage />}
+          {itemChoosen === "director__transaction" && <TransactionPage />}
+          {itemChoosen === "director__warehouse" && <WarehousePage />}
+          {itemChoosen === "director__stat" && <LogisticPage />}
+        </div>
       </div>
     </Layout>
   );
