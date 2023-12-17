@@ -11,14 +11,20 @@ import useUser from "../../hooks/useUser";
 import "./Director.css";
 import Layout from "../../components/Layout/Layout";
 
+import useWindowDimensions from "../../hooks/useWindowScreen";
+
 import ManagerPage from "./HumanManagement/ManagerPage";
 import TransactionPage from "./TransactionPointManagement/TransactionPage";
 import WarehousePage from "./WarehouseManagement/WarehousePage";
 import LogisticPage from "./LogisticManagement/LogisticPage";
 
+import ManagerPageMobile from "./HumanManagement/ManagerPageMobile";
+
 function Director() {
   const { loading, listManager, getListManager } = useUser();
   const [itemChoosen, setItemChoosen] = React.useState("director__human");
+
+  const { width } = useWindowDimensions();
 
   const handleChooseItem = (id) => {
     document.getElementById(itemChoosen).classList.remove("clicked");
@@ -72,7 +78,9 @@ function Director() {
       </SideBar>
       <div className="container">
         <div className="director__content">
-          {itemChoosen === "director__human" && <ManagerPage />}
+          {itemChoosen === "director__human" && (
+            width > 768 ? <ManagerPage /> : <ManagerPageMobile />
+          )}
           {itemChoosen === "director__transaction" && <TransactionPage />}
           {itemChoosen === "director__warehouse" && <WarehousePage />}
           {itemChoosen === "director__stat" && <LogisticPage />}

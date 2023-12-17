@@ -1,8 +1,15 @@
 import React from 'react'
 import './DashBoard.css'
 
-const DashBoard = ({children}) => {
-  return <div className="dashboard">{children}</div>;
+import useWindowDimensions from '../../hooks/useWindowScreen'
+
+const DashBoard = ({ children }) => {
+  
+  const { width } = useWindowDimensions();
+
+  const isMobile = width <= 768 ? 'dashboard__mobile' : 'dashboard';
+
+  return <div className={isMobile}>{children}</div>;
 }
 
 export default DashBoard
