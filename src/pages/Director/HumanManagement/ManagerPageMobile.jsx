@@ -1,18 +1,21 @@
+import React from 'react'
 import Toast from "../../../ui/Toast/Toast";
 import DashBoard from "../../../components/DashBoard/DashBoard";
 import Row from "../../../components/DashBoard/Row";
+import Column from '../../../components/DashBoard/Column';
 import useUser from "../../../hooks/useUser";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
 import Popup from "../../../ui/Popup/Popup";
-import "./manager_page.css";
+import './manager_page_mobile.css'
+
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
 
 import arrow from "../../../assets/arrow.svg";
 
-const ManagerPage = () => {
+const ManagerPageMobile = () => {
   const {
     userloading,
     listManager,
@@ -26,12 +29,12 @@ const ManagerPage = () => {
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const [search, setSearch] = useState('');
-  const [searchBy, setSearchBy] = useState('first_name');
+  const [search, setSearch] = useState("");
+  const [searchBy, setSearchBy] = useState("first_name");
 
   const handleSearchTypeChange = (value) => {
     setSearchBy(value);
-    setSearch('');
+    setSearch("");
   };
 
   const handleChange = (e) => {
@@ -63,10 +66,10 @@ const ManagerPage = () => {
   }, []);
 
   return (
-    <div className="manager">
-      <h1 className="page_title">Manager Dashboard</h1>
+    <div className="manager__mobile">
+      <h1 className="page_title">Manager Dashboard Mobile</h1>
       <DashBoard>
-        <Row className="manager__todo">
+        <Column className="manager__todo__mobile">
           <Button
             text={"Thêm quản lý"}
             className={"action"}
@@ -74,7 +77,8 @@ const ManagerPage = () => {
               window["add_manager_popup"].showModal();
             }}
           />
-          <div className="manager__search_type">
+          <div className="manager__search__type">
+            <p>Tìm kiếm theo:</p>
             <select onChange={(e) => handleSearchTypeChange(e.target.value)}>
               <option value="first_name">First Name</option>
               <option value="phone">Phone Number</option>
@@ -85,12 +89,39 @@ const ManagerPage = () => {
             placeholder={`Tìm kiếm theo ${
               searchBy === "first_name" ? "first name" : searchBy
             }`}
-            className={"manager__search"}
+            className={"manager__search__mobile"}
             onChange={(e) => setSearch(e.target.value)}
           />
-        </Row>
-        <Row className="title">
-          <div className="row__item sort_item title__name">
+
+          <div className="manager__fiter__type">
+            <p>Sắp xếp theo:</p>
+            <select
+              onChange={(e) => {
+                handleSort(e.target.value);
+              }}
+            >
+              <option value="first_name">First Name</option>
+              <option value="phone_number">Phone Number</option>
+              <option value="workplace">Workplace</option>
+            </select>
+          </div>
+
+          <div className="column__item sort_item title__name">
+            <img
+              src={arrow}
+              alt=""
+              onClick={(e) => {
+                const selectedOption = document.querySelector(
+                  ".manager__fiter__type select"
+                );
+                handleSort(selectedOption.value);
+                e.target.classList.toggle("active");
+              }}
+            />
+          </div>
+        </Column>
+        {/* <Column className="title">
+          <div className="column__item sort_item title__name">
             Họ Tên
             <img
               src={arrow}
@@ -101,7 +132,7 @@ const ManagerPage = () => {
               }}
             />
           </div>
-          <div className="row__item sort_item title__phone">
+          <div className="column__item sort_item title__phone">
             Số điện thoại
             <img
               src={arrow}
@@ -112,7 +143,7 @@ const ManagerPage = () => {
               }}
             />
           </div>
-          <div className="row__item sort_item title__workplace">
+          <div className="column__item sort_item title__workplace">
             Điểm quản lý
             <img
               src={arrow}
@@ -123,33 +154,39 @@ const ManagerPage = () => {
               }}
             />
           </div>
-          <div className="row__item title__edit">Quản lý tài khoản</div>
-        </Row>
+          <div className="column__item title__edit">Quản lý tài khoản</div>
+        </Column> */}
         {sortedManager
           ?.filter((manager) => {
             const searchValue = search.toLowerCase();
-            if(searchBy === 'first_name') {
+            if (searchBy === "first_name") {
               return manager?.first_name.toLowerCase().includes(searchValue);
             }
-            if(searchBy === 'phone') {
+            if (searchBy === "phone") {
               return manager?.phone_number.toLowerCase().includes(searchValue);
             }
-            if(searchBy === 'email') {
+            if (searchBy === "email") {
               return manager?.email.toLowerCase().includes(searchValue);
             }
           })
           ?.map((manager) => (
-            <Row className="manager__detail">
-              <p className="manager__name row__item">
-                {manager?.first_name + " " + manager?.last_name}
+            <Column className="manager__detail__mobile">
+              <p className="manager__name column__item">
+                <div className="column__item sort_item title__name">
+                  Họ Tên: {manager?.first_name + " " + manager?.last_name}
+                </div>
               </p>
-              <p className="row__item manager__phone">
-                {manager?.phone_number}
+              <p className="column__item manager__phone">
+                <div className="column__item sort_item title__phone">
+                  Số điện thoại: {manager?.phone_number}
+                </div>
               </p>
-              <p className="row__item manager__workplace">
-                {manager?.workplace?.name || "Chưa có"}
+              <p className="column__item manager__workplace">
+                <div className="column__item sort_item title__workplace">
+                  Điểm quản lý: {manager?.workplace?.name || "Chưa có"}
+                </div>
               </p>
-              <div className="row__item manager__edit">
+              <div className="column__item manager__edit">
                 <Button
                   text={"Xem chi tiết"}
                   className={"action"}
@@ -160,7 +197,7 @@ const ManagerPage = () => {
                   }}
                 />
               </div>
-            </Row>
+            </Column>
           ))}
       </DashBoard>
       <Popup
@@ -314,6 +351,6 @@ const ManagerPage = () => {
       <ToastContainer className="toasify" />
     </div>
   );
-};
+}
 
-export default ManagerPage;
+export default ManagerPageMobile

@@ -23,7 +23,7 @@
   display: flex;
 }
 
-.manager_phone_search {
+.manager__search {
   margin-left: auto;
   width: 50%;
 }
