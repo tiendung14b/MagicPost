@@ -176,34 +176,43 @@ const ManagerPageMobile = () => {
             <Column className="manager__detail__mobile">
               <p className="manager__name column__item">
                 <div className="column__item sort_item title__name">
-                  Họ Tên: {manager?.first_name + " " + manager?.last_name}
+                  <p className="column_title">Họ Tên: </p>
+                  {manager?.first_name + " " + manager?.last_name}
                 </div>
               </p>
               <p className="column__item manager__phone">
                 <div className="column__item sort_item title__phone">
-                  Số điện thoại: {manager?.phone_number}
+                  <p className="column_title">Số điện thoại: </p>
+                  {manager?.phone_number}
                 </div>
               </p>
               <p className="column__item manager__workplace">
                 <div className="column__item sort_item title__workplace">
-                  Điểm quản lý: {manager?.workplace?.name || "Chưa có"}
+                  <p className="column_title">Điểm quản lý: </p>
+                  {manager?.workplace?.name || "Chưa có"}
                 </div>
+              </p>
+              <p className="column__item sort_item title__email">
+                <p className="column_title">Email: </p> {manager?.email}
+              </p>
+              <p className="column__item sort_item title__role">
+                <p className="column_title">Vai Trò: </p>
+                {manager?.workplace?.role || "Chưa có"}
               </p>
               <div className="column__item manager__edit">
                 <Button
-                  text={"Xem chi tiết"}
-                  className={"action"}
+                  text={"Xoá người dùng này"}
+                  className={"danger"}
                   onClick={() => {
-                    setUserChoosen(manager);
-                    console.log(userChoosen);
-                    window["manager_popup"].showModal();
+                    window["manager_popup"].close();
+                    deleteManager(userChoosen?._id);
                   }}
                 />
               </div>
             </Column>
           ))}
       </DashBoard>
-      <Popup
+      {/* <Popup
         className="manager_popup"
         popup_id={"manager_popup"}
         title={"Thông tin quản lý"}
@@ -246,7 +255,7 @@ const ManagerPageMobile = () => {
             }}
           />
         </div>
-      </Popup>
+      </Popup> */}
       <Popup
         className="add_manager_popup"
         popup_id={"add_manager_popup"}
