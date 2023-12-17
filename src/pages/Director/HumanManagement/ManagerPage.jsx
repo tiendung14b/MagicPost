@@ -9,6 +9,7 @@ import "./manager_page.css";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
+import useWindowScreen from "../../../hooks/useWindowScreen";
 
 import arrow from "../../../assets/arrow.svg";
 
@@ -26,12 +27,14 @@ const ManagerPage = () => {
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const [search, setSearch] = useState('');
-  const [searchBy, setSearchBy] = useState('first_name');
+  const { width, height } = useWindowScreen();
+  const [numPage, setNumPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const [searchBy, setSearchBy] = useState("first_name");
 
   const handleSearchTypeChange = (value) => {
     setSearchBy(value);
-    setSearch('');
+    setSearch("");
   };
 
   const handleChange = (e) => {
@@ -47,16 +50,21 @@ const ManagerPage = () => {
     }
   };
 
-  const sortedManager = listManager?.slice().sort((a, b) => {
-    const columnA = a[sortedColumn];
-    const columnB = b[sortedColumn];
+  const sortedManager = listManager
+    ?.slice(
+      numPage * ((0.67 * height) / 60),
+      numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
+    )
+    .sort((a, b) => {
+      const columnA = a[sortedColumn];
+      const columnB = b[sortedColumn];
 
-    if (sortOrder === "asc") {
-      return columnA < columnB ? -1 : columnA > columnB ? 1 : 0;
-    } else {
-      return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
-    }
-  });
+      if (sortOrder === "asc") {
+        return columnA < columnB ? -1 : columnA > columnB ? 1 : 0;
+      } else {
+        return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
+      }
+    });
 
   useEffect(() => {
     getListManager();
@@ -132,10 +140,10 @@ const ManagerPage = () => {
               const fullName = manager?.first_name + " " + manager?.last_name;
               return fullName.toLowerCase().includes(searchValue);
             }
-            if(searchBy === 'phone') {
+            if (searchBy === "phone") {
               return manager?.phone_number.toLowerCase().includes(searchValue);
             }
-            if(searchBy === 'email') {
+            if (searchBy === "email") {
               return manager?.email.toLowerCase().includes(searchValue);
             }
           })
@@ -164,6 +172,30 @@ const ManagerPage = () => {
             </Row>
           ))}
       </DashBoard>
+      <div className="pagination" id="pagination">
+        {[
+          ...Array(
+            Math.ceil(listManager.length / ((0.73 * height) / 60))
+          ).keys(),
+        ].map((i) => (
+          <div
+            id={"page_" + i}
+            className="pagination__item"
+            onClick={(e) => {
+              if (i == 0 && numPage == i)
+                window["page_" + i].classList.toggle("active");
+              if (numPage === i) return;
+              window["page_" + numPage].classList.toggle("active");
+              e.target.classList.toggle("active");
+              setNumPage(i);
+              if (i < 5 || i > 15) return;
+              window["pagination"].scrollLeft = (i - 5) * 40;
+            }}
+          >
+            {i + 1}
+          </div>
+        ))}
+      </div>
       <Popup
         className="manager_popup"
         popup_id={"manager_popup"}

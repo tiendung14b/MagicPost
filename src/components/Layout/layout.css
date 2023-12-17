@@ -12,6 +12,7 @@
   width: calc(100% - 272px);
   height: 100vh;
   transition: all 0.2s ease;
+  overflow: scroll;
 }
 
 .sidebar.close ~ .container {
