@@ -26,6 +26,14 @@ const ManagerPage = () => {
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
+  const [search, setSearch] = useState('');
+  const [searchBy, setSearchBy] = useState('first_name');
+
+  const handleSearchTypeChange = (value) => {
+    setSearchBy(value);
+    setSearch('');
+  };
+
   const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
@@ -66,7 +74,20 @@ const ManagerPage = () => {
               window["add_manager_popup"].showModal();
             }}
           />
-          <Input placeholder={"Tìm kiếm"} className={"manager_phone_search"} />
+          <div className="manager__search_type">
+            <select onChange={(e) => handleSearchTypeChange(e.target.value)}>
+              <option value="first_name">First Name</option>
+              <option value="phone">Phone Number</option>
+              <option value="email">Email</option>
+            </select>
+          </div>
+          <Input
+            placeholder={`Tìm kiếm theo ${
+              searchBy === "first_name" ? "first name" : searchBy
+            }`}
+            className={"manager_phone_search"}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </Row>
         <Row className="title">
           <div className="row__item sort_item title__name">
@@ -104,28 +125,43 @@ const ManagerPage = () => {
           </div>
           <div className="row__item title__edit">Quản lý tài khoản</div>
         </Row>
-        {sortedManager?.map((manager) => (
-          <Row className="manager__detail">
-            <p className="manager__name row__item">
-              {manager?.first_name + " " + manager?.last_name}
-            </p>
-            <p className="row__item manager__phone">{manager?.phone_number}</p>
-            <p className="row__item manager__workplace">
-              {manager?.workplace?.name || "Chưa có"}
-            </p>
-            <div className="row__item manager__edit">
-              <Button
-                text={"Xem chi tiết"}
-                className={"action"}
-                onClick={() => {
-                  setUserChoosen(manager);
-                  console.log(userChoosen);
-                  window["manager_popup"].showModal();
-                }}
-              />
-            </div>
-          </Row>
-        ))}
+        {sortedManager
+          ?.filter((manager) => {
+            const searchValue = search.toLowerCase();
+            if(searchBy === 'first_name') {
+              return manager?.first_name.toLowerCase().includes(searchValue);
+            }
+            if(searchBy === 'phone') {
+              return manager?.phone_number.toLowerCase().includes(searchValue);
+            }
+            if(searchBy === 'email') {
+              return manager?.email.toLowerCase().includes(searchValue);
+            }
+          })
+          ?.map((manager) => (
+            <Row className="manager__detail">
+              <p className="manager__name row__item">
+                {manager?.first_name + " " + manager?.last_name}
+              </p>
+              <p className="row__item manager__phone">
+                {manager?.phone_number}
+              </p>
+              <p className="row__item manager__workplace">
+                {manager?.workplace?.name || "Chưa có"}
+              </p>
+              <div className="row__item manager__edit">
+                <Button
+                  text={"Xem chi tiết"}
+                  className={"action"}
+                  onClick={() => {
+                    setUserChoosen(manager);
+                    console.log(userChoosen);
+                    window["manager_popup"].showModal();
+                  }}
+                />
+              </div>
+            </Row>
+          ))}
       </DashBoard>
       <Popup
         className="manager_popup"
