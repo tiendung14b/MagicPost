@@ -67,7 +67,7 @@ const ManagerPageMobile = () => {
 
   return (
     <div className="manager__mobile">
-      <h1 className="page_title">Manager Dashboard Mobile</h1>
+      <h1 className="page__title">Manager Dashboard Mobile</h1>
       <DashBoard>
         <Column className="manager__todo__mobile">
           <Button

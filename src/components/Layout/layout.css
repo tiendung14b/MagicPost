@@ -7,6 +7,7 @@
 .container {
   position: fixed;
   top: 0;
+  overflow-y: scroll;
   left: 272px;
   width: calc(100% - 272px);
   height: 100vh;

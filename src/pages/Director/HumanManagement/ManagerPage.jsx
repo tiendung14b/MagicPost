@@ -128,8 +128,9 @@ const ManagerPage = () => {
         {sortedManager
           ?.filter((manager) => {
             const searchValue = search.toLowerCase();
-            if(searchBy === 'first_name') {
-              return manager?.first_name.toLowerCase().includes(searchValue);
+            if (searchBy === 'first_name') {
+              const fullName = manager?.first_name + " " + manager?.last_name;
+              return fullName.toLowerCase().includes(searchValue);
             }
             if(searchBy === 'phone') {
               return manager?.phone_number.toLowerCase().includes(searchValue);
