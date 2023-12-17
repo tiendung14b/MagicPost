@@ -1,13 +1,13 @@
-import React from 'react'
+import React from "react";
 import Toast from "../../../ui/Toast/Toast";
 import DashBoard from "../../../components/DashBoard/DashBoard";
 import Row from "../../../components/DashBoard/Row";
-import Column from '../../../components/DashBoard/Column';
+import Column from "../../../components/DashBoard/Column";
 import useUser from "../../../hooks/useUser";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
 import Popup from "../../../ui/Popup/Popup";
-import './manager_page_mobile.css'
+import "./manager_page_mobile.css";
 
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -67,7 +67,7 @@ const ManagerPageMobile = () => {
 
   return (
     <div className="manager__mobile">
-      <h1 className="page__title">Manager Dashboard Mobile</h1>
+      <h1 className="page__title">Manager Dashboard</h1>
       <DashBoard>
         <Column className="manager__todo__mobile">
           <Button
@@ -77,48 +77,51 @@ const ManagerPageMobile = () => {
               window["add_manager_popup"].showModal();
             }}
           />
-          <div className="manager__search__type">
-            <p>Tìm kiếm theo:</p>
-            <select onChange={(e) => handleSearchTypeChange(e.target.value)}>
-              <option value="first_name">First Name</option>
-              <option value="phone">Phone Number</option>
-              <option value="email">Email</option>
-            </select>
-          </div>
-          <Input
-            placeholder={`Tìm kiếm theo ${
-              searchBy === "first_name" ? "first name" : searchBy
-            }`}
-            className={"manager__search__mobile"}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-
-          <div className="manager__fiter__type">
-            <p>Sắp xếp theo:</p>
-            <select
-              onChange={(e) => {
-                handleSort(e.target.value);
-              }}
-            >
-              <option value="first_name">First Name</option>
-              <option value="phone_number">Phone Number</option>
-              <option value="workplace">Workplace</option>
-            </select>
-          </div>
-
-          <div className="column__item sort_item title__name">
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                const selectedOption = document.querySelector(
-                  ".manager__fiter__type select"
-                );
-                handleSort(selectedOption.value);
-                e.target.classList.toggle("active");
-              }}
+          <Row className={"dashboard_rowForColumn"}>
+            <Input
+              placeholder={`Tìm kiếm theo ${
+                searchBy === "first_name" ? "first name" : searchBy
+              }`}
+              className={"manager__search__mobile"}
+              onChange={(e) => setSearch(e.target.value)}
             />
-          </div>
+            <div className="manager__search__type">
+              <select
+                className="selected__search"
+                onChange={(e) => handleSearchTypeChange(e.target.value)}
+              >
+                <option value="first_name">First Name</option>
+                <option value="phone">Phone Number</option>
+                <option value="email">Email</option>
+              </select>
+            </div>
+          </Row>
+          <Row className={"dashboard_rowForColumn"}>
+            <div className="column__item sort_item title__name">
+              <img
+                src={arrow}
+                onClick={(e) => {
+                  const selectedOption = document.querySelector(
+                    ".manager__fiter__type select"
+                  );
+                  handleSort(selectedOption.value);
+                  e.target.classList.toggle("active");
+                }}
+              />
+            </div>
+            <div className="manager__fiter__type">
+              <select
+                className="selected__search"
+                onChange={(e) => {
+                  handleSort(e.target.value);
+                }}
+              >
+                <option value="first_name">First Name</option>
+                <option value="phone_number">Phone Number</option>
+                <option value="workplace">Workplace</option>
+              </select>
+            </div>
+          </Row>
         </Column>
         {/* <Column className="title">
           <div className="column__item sort_item title__name">
@@ -351,6 +354,6 @@ const ManagerPageMobile = () => {
       <ToastContainer className="toasify" />
     </div>
   );
-}
+};
 
-export default ManagerPageMobile
+export default ManagerPageMobile;

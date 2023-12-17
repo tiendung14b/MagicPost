@@ -36,6 +36,8 @@ function Director() {
     getListManager();
   }, []);
 
+  const containerClassName = width < 768 ? "container__mobile" : "container";
+
   return (
     <Layout>
       <SideBar title="Director">
@@ -76,7 +78,7 @@ function Director() {
           <p className="sidebar__item__text">Thống kê logistic</p>
         </div>
       </SideBar>
-      <div className="container">
+      <div className={containerClassName}>
         <div className="director__content">
           {itemChoosen === "director__human" && (
             width > 768 ? <ManagerPage /> : <ManagerPageMobile />

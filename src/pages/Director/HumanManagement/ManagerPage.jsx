@@ -29,18 +29,24 @@ const ManagerPage = () => {
 
   const { width, height } = useWindowScreen();
   const [numPage, setNumPage] = useState(0);
+
+  //search state
   const [search, setSearch] = useState("");
+  //search type state and dropdown
   const [searchBy, setSearchBy] = useState("first_name");
 
+  //handle search type change
   const handleSearchTypeChange = (value) => {
     setSearchBy(value);
     setSearch("");
   };
 
+  //handle change
   const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
 
+  //handle sort
   const handleSort = (column) => {
     if (sortedColumn === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -82,20 +88,24 @@ const ManagerPage = () => {
               window["add_manager_popup"].showModal();
             }}
           />
-          <div className="manager__search_type">
-            <select onChange={(e) => handleSearchTypeChange(e.target.value)}>
+          <Input
+            placeholder={`Tìm kiếm theo ${
+              searchBy === "first_name" ? "first name" : searchBy
+            }`}
+            className={"manager__search__mobile"}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <div className="manager__search__type">
+            <select
+              placeholder=""
+              className="selected__search"
+              onChange={(e) => handleSearchTypeChange(e.target.value)}
+            >
               <option value="first_name">First Name</option>
               <option value="phone">Phone Number</option>
               <option value="email">Email</option>
             </select>
           </div>
-          <Input
-            placeholder={`Tìm kiếm theo ${
-              searchBy === "first_name" ? "first name" : searchBy
-            }`}
-            className={"manager__search"}
-            onChange={(e) => setSearch(e.target.value)}
-          />
         </Row>
         <Row className="title">
           <div className="row__item sort_item title__name">
@@ -136,9 +146,8 @@ const ManagerPage = () => {
         {sortedManager
           ?.filter((manager) => {
             const searchValue = search.toLowerCase();
-            if (searchBy === 'first_name') {
-              const fullName = manager?.first_name + " " + manager?.last_name;
-              return fullName.toLowerCase().includes(searchValue);
+            if (searchBy === "first_name") {
+              return manager?.first_name.toLowerCase().includes(searchValue);
             }
             if (searchBy === "phone") {
               return manager?.phone_number.toLowerCase().includes(searchValue);

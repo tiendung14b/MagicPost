@@ -4,6 +4,9 @@
   padding: 10px 25px;
   font-size: 14px;
   align-items: center;
+  margin-bottom: 20px;
+  background-color: white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .column__item.sort_item {
@@ -17,6 +20,7 @@
   height: 18px;
   transition: all ease 0.3s;
   transform: rotate(0deg);
+
 }
 
 .column__item.sort_item img.active {

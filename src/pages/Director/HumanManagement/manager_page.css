@@ -28,6 +28,25 @@
   width: 50%;
 }
 
+
+.selected__search {
+  padding: 10px;
+  font-size: 16px;
+  width: 150px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.selected__search option {
+  background-color: #fff;
+  color: #333;
+}
+
+.selected__search {
+  border: none;
+}
+
 .add_manager_popup .warn {
   display: none;
 }
