@@ -5,7 +5,9 @@ import useUser from "../../../hooks/useUser";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
 import Popup from "../../../ui/Popup/Popup";
+import Pagination from "../../../ui/Pagination/Pagination";
 import "./manager_page.css";
+import { useMemo } from "react";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
@@ -25,6 +27,8 @@ const ManagerPage = () => {
 
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
+
+  const [page, setPage] = useState(0);
 
   const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
@@ -50,6 +54,16 @@ const ManagerPage = () => {
     }
   });
 
+  let pageSize = 6; //bang cong thuc lay so lieu man hinh tinh hom qua
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * pageSize;
+    const lastPageIndex = firstPageIndex + pageSize;
+    return sortedManager?.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
   useEffect(() => {
     getListManager();
   }, []);
@@ -66,6 +80,21 @@ const ManagerPage = () => {
               window["add_manager_popup"].showModal();
             }}
           />
+          <Button
+            text={"Sang trang mới"}
+            className={"action"}
+            onClick={() => {
+              setPage(page + 1);
+            }}
+          />
+          <Button
+            text={"Về trang cũ"}
+            className={"action"}
+            onClick={() => {
+              setPage(page - 1);
+            }}
+          />
+
           <Input placeholder={"Tìm kiếm"} className={"manager_phone_search"} />
         </Row>
         <Row className="title">
@@ -104,7 +133,7 @@ const ManagerPage = () => {
           </div>
           <div className="row__item title__edit">Quản lý tài khoản</div>
         </Row>
-        {sortedManager?.map((manager) => (
+        {currentTableData?.slice()?.map((manager) => (
           <Row className="manager__detail">
             <p className="manager__name row__item">
               {manager?.first_name + " " + manager?.last_name}
@@ -126,6 +155,12 @@ const ManagerPage = () => {
             </div>
           </Row>
         ))}
+        <Pagination
+          currentPage={"1"}
+          totalCount={"100"}
+          pageSize={"4"}
+          onPageChange={page => setCurrentPage(page)} //truyền tham số vào không nhận nên để tạm hardcode
+        />
       </DashBoard>
       <Popup
         className="manager_popup"
