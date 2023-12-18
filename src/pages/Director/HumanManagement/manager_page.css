@@ -31,7 +31,7 @@
 
 .manager__search {
   margin-left: auto;
-  width: 30%;
+  width: 100%;
 }
 
 .selected__search {
@@ -148,10 +148,14 @@
   color: white;
 }
 
-/* select option */
-.manager__search__type {
+/* dropdrown container css */
+.manager__search__type { 
+  position: absolute;
+  right: 6.65rem;
   font-size: 14px;
   border: none;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #dfe3e8;
   border-radius: 10px;
   margin-left: auto;
   color: #888;
@@ -161,10 +165,28 @@
   outline: none;
 }
 
-.manager__search__type option {
-  display: inline-block;
-  border: none;
-  padding: 10px;
-  color: #fa5a5a;
+.manager__search__type::before {
+  content: " ";
+  position: absolute;
+  transform: rotate(45deg);
+}
+
+.input__div {
+  display: flex;
+  margin-left: auto;
+  flex-direction: row;  
+  border: 1px solid #dfe3e8;
+}
+
+.search_icon {
+  width: 35px;
+  padding: 5px;
+  color: #777;
+}
+
+.dropdown__div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-left: auto;
 }
