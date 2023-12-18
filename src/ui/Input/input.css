@@ -1,8 +1,9 @@
 input {
-  padding: 12px 0px;
+  padding: 12px 15px;
   align-items: flex-start;
   border: none;
   width: 100%;
+  border-radius: 6px;
 }
 
 input:focus {
@@ -27,5 +28,4 @@ label {
   align-items: center;
   border-radius: 6px;
   border: 1px solid #dfe3e8;
-  padding: 0 15px;
 }

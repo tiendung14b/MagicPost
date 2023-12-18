@@ -13,6 +13,8 @@ import { decodeToken } from "react-jwt";
 import Loading from "../../ui/Loading/Loading";
 import { useNavigate } from "react-router-dom";
 import Popup from "../../ui/Popup/Popup";
+import responseToast from "../../util/response";
+import role from "../../util/role";
 
 const Login = () => {
   const { width } = useWindowDimensions();
@@ -35,13 +37,18 @@ const Login = () => {
       sessionStorage.setItem("user", JSON.stringify(user));
       if (user.workplace.role == "DIRECTOR") {
         return navigate("/director");
+      } else if (
+        user.workplace.role == role.TRANSACTION_MANAGER &&
+        user.workplace.workplace_name == "TRANSACTION"
+      ) {
+        return navigate("/transaction");
       } else {
-        Toast.warn("Chức năng này đang được phát triển", toast);
+        Toast.warn("Bạn không có quyền truy cập vào trang này", toast);
       }
       setLoading(false);
     } catch (err) {
       if (!err.response) {
-        Toast.error(`API error + ${err}`, toast);
+        responseToast(err, toast);
         console.log(err);
         return setLoading(false);
       }
