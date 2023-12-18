@@ -92,20 +92,19 @@ const ManagerPage = () => {
             placeholder={`Tìm kiếm theo ${
               searchBy === "first_name" ? "first name" : searchBy
             }`}
-            className={"manager__search__mobile"}
+            className={"manager__search"}
             onChange={(e) => setSearch(e.target.value)}
-          />
-          <div className="manager__search__type">
+          >
             <select
+              className="manager__search__type"
               placeholder=""
-              className="selected__search"
               onChange={(e) => handleSearchTypeChange(e.target.value)}
             >
               <option value="first_name">First Name</option>
               <option value="phone">Phone Number</option>
               <option value="email">Email</option>
             </select>
-          </div>
+          </Input>
         </Row>
         <Row className="title">
           <div className="row__item sort_item title__name">

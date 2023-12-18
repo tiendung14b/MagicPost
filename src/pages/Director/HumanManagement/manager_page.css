@@ -23,11 +23,16 @@
   display: flex;
 }
 
-.manager__search {
-  margin-left: auto;
-  width: 50%;
+.manager__todo input:focus {
+  outline: none;
+  border: 0px solid transparent;
+  padding: 12px 0px;
 }
 
+.manager__search {
+  margin-left: auto;
+  width: 30%;
+}
 
 .selected__search {
   padding: 10px;
@@ -141,4 +146,25 @@
 .pagination__item.active {
   background-color: #fa5a5a;
   color: white;
+}
+
+/* select option */
+.manager__search__type {
+  font-size: 14px;
+  border: none;
+  border-radius: 10px;
+  margin-left: auto;
+  color: #888;
+}
+
+.manager__search__type:focus {
+  outline: none;
+}
+
+.manager__search__type option {
+  display: inline-block;
+  border: none;
+  padding: 10px;
+  color: #fa5a5a;
+  margin-left: auto;
 }
