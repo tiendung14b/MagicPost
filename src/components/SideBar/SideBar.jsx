@@ -9,11 +9,13 @@ import useUser from "../../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 import Popup from "../../ui/Popup/Popup";
 import Button from "../../ui/Button/Button";
+import CropBox from "../CropBox/CropBox";
 
 const SideBar = ({ title, children }) => {
   const [sidebarState, setSidebarState] = useState("");
   const { userInfo, getUserInfo } = useUser();
   const navigate = useNavigate();
+  const [crop, setCrop] = useState();
 
   useEffect(() => {
     getUserInfo();
@@ -38,9 +40,16 @@ const SideBar = ({ title, children }) => {
       </div>
       <hr />
       <ul className="sidebar__nav">
-        <li className="sidebar__item user">
+        <li
+          className="sidebar__item user"
+          onClick={() => window["avt_crop"].showModal()}
+        >
           <div className="sidebar__item__content">
-            <img className="sidebar__avt" src={avt21} alt="" />
+            {userInfo?.url_avatar ? (
+              <img className="sidebar__avt" src={userInfo?.url_avatar} alt="" />
+            ) : (
+              <img className="sidebar__avt" src={avt21} alt="" />
+            )}
             <div className="sidebar__user__detail">
               <p className="sidebar__usename">
                 {userInfo?.first_name + " " + userInfo?.last_name}
@@ -92,6 +101,14 @@ const SideBar = ({ title, children }) => {
             />
           </div>
         </div>
+      </Popup>
+      <Popup
+        popup_id={"avt_crop"}
+        onClose={() => {
+          getUserInfo();
+        }}
+      >
+        <CropBox />
       </Popup>
     </div>
   );

@@ -43,6 +43,21 @@ const useUser = (toast) => {
     }
   }
 
+  const uploadAvatar = async (url) => {
+    try {
+      setUserLoading(true)
+      const id = JSON.parse(sessionStorage.getItem('user'))?._id
+      const response = await clientAxios.put(`/user/${id}`, {url_avatar: url})
+      setUserLoading(false)
+      getUserInfo()
+      window["avt_crop"].close();
+      Toast.success("Cập nhật thành công", toast);
+    } catch(err) {
+      setUserLoading(false)
+      responseToast(err, toast)
+    }
+  }
+
   const deleteManager = async (id) => {
     try {
       setUserLoading(true)
@@ -63,6 +78,7 @@ const useUser = (toast) => {
     getUserInfo,
     createManager,
     deleteManager,
+    uploadAvatar
   };
 };
 
