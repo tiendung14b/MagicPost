@@ -2,12 +2,11 @@ input {
   padding: 12px 0px;
   align-items: flex-start;
   border: none;
+  width: 100%;
 }
 
 input:focus {
   outline: none;
-  border: 1px solid #ff6969;
-  padding: 11px 0px;
 }
 
 input::placeholder {
