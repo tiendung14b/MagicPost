@@ -19,16 +19,21 @@
     gap: 10px;
     justify-content: space-around;
     align-items: flex-start;
-    width: 100%;
+    width: 125%;
     padding: 20px;
 }
 
 .manager__search__mobile {
-    width: 35%;
+    width: 100%;
 }
 
-.column_title {
+.column__title {
     font-weight: 600;
     color: #016a70;
 }
 
+.dropdown__image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

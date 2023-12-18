@@ -14,7 +14,7 @@ import useWindowScreen from "../../../hooks/useWindowScreen";
 import Dropdown from "../../../ui/Dropdown/Dropdown";
 
 import arrow from "../../../assets/arrow.svg";
-import search_icon from "../../../assets/search.png";
+import filter_icon from "../../../assets/filter.svg";
 
 const ManagerPage = () => {
   const {
@@ -106,7 +106,7 @@ const ManagerPage = () => {
             ></Input>
             <div className="dropdown__div">
               <img
-                src={search_icon}
+                src={filter_icon}
                 className="search_icon"
                 onClick={() => setIsDropdown((prev) => !prev)}
               />

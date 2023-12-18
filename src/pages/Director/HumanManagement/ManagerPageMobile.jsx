@@ -1,19 +1,21 @@
-import React from "react";
 import Toast from "../../../ui/Toast/Toast";
 import DashBoard from "../../../components/DashBoard/DashBoard";
 import Row from "../../../components/DashBoard/Row";
-import Column from "../../../components/DashBoard/Column";
 import useUser from "../../../hooks/useUser";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
 import Popup from "../../../ui/Popup/Popup";
+import "./manager_page.css";
 import "./manager_page_mobile.css";
-
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
+import useWindowScreen from "../../../hooks/useWindowScreen";
+import Column from "../../../components/DashBoard/Column";
+import Dropdown from "../../../ui/Dropdown/Dropdown";
 
 import arrow from "../../../assets/arrow.svg";
+import filter_icon from "../../../assets/filter.svg";
 
 const ManagerPageMobile = () => {
   const {
@@ -32,13 +34,18 @@ const ManagerPageMobile = () => {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("first_name");
 
+  const [isDropdown, setIsDropdown] = useState(false);
+
+  const [selected, setSelected] = useState(null);
+
+  const values = ["first_name", "phone_number", "email"];
+
   const handleSearchTypeChange = (value) => {
+    setIsDropdown(false);
+    setSelected(value);
     setSearchBy(value);
     setSearch("");
-  };
-
-  const handleChange = (e) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
+    handleSort(value);
   };
 
   const handleSort = (column) => {
@@ -48,6 +55,11 @@ const ManagerPageMobile = () => {
       setSortedColumn(column);
       setSortOrder("asc");
     }
+    console.log(column);
+  };
+
+  const handleChange = (e) => {
+    setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
 
   const sortedManager = listManager?.slice().sort((a, b) => {
@@ -85,42 +97,48 @@ const ManagerPageMobile = () => {
               className={"manager__search__mobile"}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <div className="manager__search__type">
-              <select
-                className="selected__search"
-                onChange={(e) => handleSearchTypeChange(e.target.value)}
-              >
-                <option value="first_name">First Name</option>
-                <option value="phone">Phone Number</option>
-                <option value="email">Email</option>
-              </select>
+            <div className="dropdown__div">
+              <div className="dropdown__image">
+                <div className="column__item sort_item title__name">
+                  <img
+                    src={arrow}
+                    onClick={(e) => {
+                      handleSort(selected);
+                      e.target.classList.toggle("active");
+                    }}
+                  />
+                </div>
+                <img
+                  src={filter_icon}
+                  className="search_icon"
+                  onClick={() => setIsDropdown((prev) => !prev)}
+                />
+              </div>
+              {isDropdown ? (
+                <Dropdown
+                  items={values}
+                  className="manager__search__type"
+                  onItemClick={(value) => handleSearchTypeChange(value)}
+                />
+              ) : (
+                <></>
+              )}
             </div>
           </Row>
           <Row className={"dashboard_rowForColumn"}>
-            <div className="column__item sort_item title__name">
-              <img
-                src={arrow}
-                onClick={(e) => {
-                  const selectedOption = document.querySelector(
-                    ".manager__fiter__type select"
-                  );
-                  handleSort(selectedOption.value);
-                  e.target.classList.toggle("active");
-                }}
-              />
-            </div>
-            <div className="manager__fiter__type">
+            {/* <div className="manager__fiter__type">
               <select
                 className="selected__search"
                 onChange={(e) => {
                   handleSort(e.target.value);
+                  console.log(e.target.value);
                 }}
               >
                 <option value="first_name">First Name</option>
                 <option value="phone_number">Phone Number</option>
                 <option value="workplace">Workplace</option>
               </select>
-            </div>
+            </div> */}
           </Row>
         </Column>
         {/* <Column className="title">
@@ -165,7 +183,7 @@ const ManagerPageMobile = () => {
             if (searchBy === "first_name") {
               return manager?.first_name.toLowerCase().includes(searchValue);
             }
-            if (searchBy === "phone") {
+            if (searchBy === "phone_number") {
               return manager?.phone_number.toLowerCase().includes(searchValue);
             }
             if (searchBy === "email") {
@@ -176,27 +194,27 @@ const ManagerPageMobile = () => {
             <Column className="manager__detail__mobile">
               <p className="manager__name column__item">
                 <div className="column__item sort_item title__name">
-                  <p className="column_title">Họ Tên: </p>
+                  <p className="column__title">Họ Tên: </p>
                   {manager?.first_name + " " + manager?.last_name}
                 </div>
               </p>
               <p className="column__item manager__phone">
                 <div className="column__item sort_item title__phone">
-                  <p className="column_title">Số điện thoại: </p>
+                  <p className="column__title">Số điện thoại: </p>
                   {manager?.phone_number}
                 </div>
               </p>
               <p className="column__item manager__workplace">
                 <div className="column__item sort_item title__workplace">
-                  <p className="column_title">Điểm quản lý: </p>
+                  <p className="column__title">Điểm quản lý: </p>
                   {manager?.workplace?.name || "Chưa có"}
                 </div>
               </p>
               <p className="column__item sort_item title__email">
-                <p className="column_title">Email: </p> {manager?.email}
+                <p className="column__title">Email: </p> {manager?.email}
               </p>
               <p className="column__item sort_item title__role">
-                <p className="column_title">Vai Trò: </p>
+                <p className="column__title">Vai Trò: </p>
                 {manager?.workplace?.role || "Chưa có"}
               </p>
               <div className="column__item manager__edit">

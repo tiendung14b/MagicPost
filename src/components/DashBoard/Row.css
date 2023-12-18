@@ -8,6 +8,8 @@
 
 .dashboard_rowForColumn {
   padding: 0;
+  border: 1px solid #dfe3e8;
+  border-radius: 5px;
 }
 
 .dashboard__row.title {
