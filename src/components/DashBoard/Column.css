@@ -3,7 +3,7 @@
   flex-direction: column;
   padding: 10px 25px;
   font-size: 14px;
-  align-items: center;
+  width: 125%;
   margin-bottom: 20px;
   background-color: white;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
