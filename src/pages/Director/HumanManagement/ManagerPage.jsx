@@ -94,17 +94,16 @@ const ManagerPage = () => {
             }`}
             className={"manager__search"}
             onChange={(e) => setSearch(e.target.value)}
+          ></Input>
+          <select
+            className="manager__search__type"
+            placeholder=""
+            onChange={(e) => handleSearchTypeChange(e.target.value)}
           >
-            <select
-              className="manager__search__type"
-              placeholder=""
-              onChange={(e) => handleSearchTypeChange(e.target.value)}
-            >
-              <option value="first_name">First Name</option>
-              <option value="phone">Phone Number</option>
-              <option value="email">Email</option>
-            </select>
-          </Input>
+            <option value="first_name">First Name</option>
+            <option value="phone">Phone Number</option>
+            <option value="email">Email</option>
+          </select>
         </Row>
         <Row className="title">
           <div className="row__item sort_item title__name">
