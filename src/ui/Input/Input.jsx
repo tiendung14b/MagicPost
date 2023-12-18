@@ -9,7 +9,6 @@ const Input = ({
   style = {},
   type = "text",
   onChange = () => {},
-  children,
 }) => {
   return (
     <label htmlFor={id} style={style} onChange={onChange} className={className}>
@@ -21,7 +20,6 @@ const Input = ({
           id={id}
           name={name}
         ></input>
-        {children}
       </div>
     </label>
   );

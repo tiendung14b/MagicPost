@@ -11,7 +11,10 @@ import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
 import useWindowScreen from "../../../hooks/useWindowScreen";
 
+import Dropdown from "../../../ui/Dropdown/Dropdown";
+
 import arrow from "../../../assets/arrow.svg";
+import search_icon from "../../../assets/search.png";
 
 const ManagerPage = () => {
   const {
@@ -27,8 +30,12 @@ const ManagerPage = () => {
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const { width, height } = useWindowScreen();
+  const { height } = useWindowScreen();
   const [numPage, setNumPage] = useState(0);
+
+  const [isDropdown, setIsDropdown] = useState(false);
+
+  const values = ["first_name", "phone", "email"];
 
   //search state
   const [search, setSearch] = useState("");
@@ -37,6 +44,7 @@ const ManagerPage = () => {
 
   //handle search type change
   const handleSearchTypeChange = (value) => {
+    setIsDropdown(false);
     setSearchBy(value);
     setSearch("");
   };
@@ -88,23 +96,31 @@ const ManagerPage = () => {
               window["add_manager_popup"].showModal();
             }}
           />
-          <Input
-            placeholder={`Tìm kiếm theo ${
-              searchBy === "first_name" ? "first name" : searchBy
-            }`}
-            className={"manager__search"}
-            onChange={(e) => setSearch(e.target.value)}
-          >
-            <select
-              className="manager__search__type"
-              placeholder=""
-              onChange={(e) => handleSearchTypeChange(e.target.value)}
-            >
-              <option value="first_name">First Name</option>
-              <option value="phone">Phone Number</option>
-              <option value="email">Email</option>
-            </select>
-          </Input>
+          <div className="input__div">
+            <Input
+              placeholder={`Tìm kiếm theo ${
+                searchBy === "first_name" ? "first name" : searchBy
+              }`}
+              className={"manager__search"}
+              onChange={(e) => setSearch(e.target.value)}
+            ></Input>
+            <div className="dropdown__div">
+              <img
+                src={search_icon}
+                className="search_icon"
+                onClick={() => setIsDropdown((prev) => !prev)}
+              />
+              {isDropdown ? (
+                <Dropdown
+                  items={values}
+                  className="manager__search__type"
+                  onItemClick={(value) => handleSearchTypeChange(value)}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
         </Row>
         <Row className="title">
           <div className="row__item sort_item title__name">
