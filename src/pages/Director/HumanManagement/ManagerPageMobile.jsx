@@ -184,8 +184,7 @@ const ManagerPageMobile = () => {
                   text={"Xoá người dùng này"}
                   className={"danger"}
                   onClick={() => {
-                    window["manager_popup"].close();
-                    deleteManager(userChoosen?._id);
+                    deleteManager(manager?._id);
                   }}
                 />
               </div>

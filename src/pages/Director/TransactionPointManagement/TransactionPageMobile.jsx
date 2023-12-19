@@ -17,7 +17,7 @@ import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
 
 //sample data
-import transacsionData from "../../../pages/Sample/TransacsionSample.json";
+import transactionData from "../../../pages/Sample/TransactionSample.json";
 
 const TransactionPageMobile = () => {
   const {
@@ -89,7 +89,7 @@ const TransactionPageMobile = () => {
     });
 
   //list transaction sorted to sortedTransaction
-  const sortedTransaction = transacsionData
+  const sortedTransaction = transactionData
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -161,46 +161,46 @@ const TransactionPageMobile = () => {
           </Row>
         </Column>
         {sortedTransaction
-          ?.filter((transacsionData) => {
+          ?.filter((transactionData) => {
             const searchValue = search.toLowerCase();
             if (searchBy === "id") {
-              return transacsionData.id;
+              return transactionData.id;
             }
             if (searchBy === "date") {
-              return transacsionData.date.toLowerCase().includes(searchValue);
+              return transactionData.date.toLowerCase().includes(searchValue);
             }
             if (searchBy === "description") {
-              return transacsionData.description
+              return transactionData.description
                 .toLowerCase()
                 .includes(searchValue);
             }
             if (searchBy === "amount") {
-              return transacsionData.amount;
+              return transactionData.amount;
             }
           })
-          ?.map((transacsionData) => (
+          ?.map((transactionData) => (
             <Column className="manager__detail__mobile">
               <p className="manager__name column__item">
                 <div className="column__item sort_item title__name">
                   <p className="column__title">ID: </p>
-                  {transacsionData?.id}
+                  {transactionData?.id}
                 </div>
               </p>
               <p className="column__item manager__phone">
                 <div className="column__item sort_item title__phone">
                   <p className="column__title">Date: </p>
-                  {transacsionData?.date}
+                  {transactionData?.date}
                 </div>
               </p>
               <p className="column__item manager__workplace">
                 <div className="column__item sort_item title__workplace">
                   <p className="column__title">Description: </p>
-                  {transacsionData?.description}
+                  {transactionData?.description}
                 </div>
               </p>
               <p className="column__item sort_item title__role">
                 <p className="column__title">Amount: </p>
-                {transacsionData?.amount}
+                {transactionData?.amount}
               </p>
               <div className="column__item manager__edit">
                 <Button
