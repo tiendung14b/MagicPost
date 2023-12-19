@@ -1,5 +1,5 @@
 import React from "react";
-import "./logistic_page.css";
+import "../Director.css";
 
 const LogisticPage = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react'
-import "./warehouse_page.css"
+import "../Director.css";
 
 const WarehousePage = () => {
   return (

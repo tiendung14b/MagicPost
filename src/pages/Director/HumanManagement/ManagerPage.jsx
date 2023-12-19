@@ -5,14 +5,12 @@ import useUser from "../../../hooks/useUser";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
 import Popup from "../../../ui/Popup/Popup";
-import "./manager_page.css";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
 import useWindowScreen from "../../../hooks/useWindowScreen";
-
+import "../Director.css"
 import Dropdown from "../../../ui/Dropdown/Dropdown";
-
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
 
@@ -24,24 +22,24 @@ const ManagerPage = () => {
     createManager,
     deleteManager,
   } = useUser(toast);
+
+  //state for user
   const [newUser, setNewUser] = useState({});
   const [userChoosen, setUserChoosen] = useState({});
-
+  //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
-
+  //state for pagination
   const { height } = useWindowScreen();
   const [numPage, setNumPage] = useState(0);
-
+  //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
-
+  //state for values of dropdown and selected
   const values = ["first_name", "phone", "email"];
-
-  //search state
+  //state for search
   const [search, setSearch] = useState("");
-  //search type state and dropdown
+  //state for choosen type
   const [searchBy, setSearchBy] = useState("first_name");
-
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
@@ -53,7 +51,6 @@ const ManagerPage = () => {
   const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
-
   //handle sort
   const handleSort = (column) => {
     if (sortedColumn === column) {
@@ -63,7 +60,7 @@ const ManagerPage = () => {
       setSortOrder("asc");
     }
   };
-
+  //list manager sorted to sortedManager
   const sortedManager = listManager
     ?.slice(
       numPage * ((0.67 * height) / 60),
@@ -79,7 +76,7 @@ const ManagerPage = () => {
         return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
       }
     });
-
+  //useEffect
   useEffect(() => {
     getListManager();
   }, []);
@@ -162,7 +159,8 @@ const ManagerPage = () => {
           ?.filter((manager) => {
             const searchValue = search.toLowerCase();
             if (searchBy === "first_name") {
-              return manager?.first_name.toLowerCase().includes(searchValue);
+              const fullName = manager?.first_name + " " + manager?.last_name;
+              return fullName.toLowerCase().includes(searchValue);
             }
             if (searchBy === "phone") {
               return manager?.phone_number.toLowerCase().includes(searchValue);

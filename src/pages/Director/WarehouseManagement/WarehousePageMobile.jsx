@@ -8,13 +8,15 @@ import Popup from "../../../ui/Popup/Popup";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
+import Column from "../../../components/DashBoard/Column";
 import useWindowScreen from "../../../hooks/useWindowScreen";
-import "../Director.css";
 import Dropdown from "../../../ui/Dropdown/Dropdown";
+import "../Director.css";
+
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
 
-const TransactionPage = () => {
+const WarehousePageMobile = () => {
   const {
     userloading,
     listManager,
@@ -22,7 +24,6 @@ const TransactionPage = () => {
     createManager,
     deleteManager,
   } = useUser(toast);
-
   //state for user
   const [newUser, setNewUser] = useState({});
   const [userChoosen, setUserChoosen] = useState({});
@@ -34,23 +35,23 @@ const TransactionPage = () => {
   const [numPage, setNumPage] = useState(0);
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
-  const values = ["first_name", "phone", "email"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
   const [searchBy, setSearchBy] = useState("first_name");
+  //state for selected value to fitler
+  const [selected, setSelected] = useState(null);
+  //state for values of dropdown and selected
+  const values = ["first_name", "phone_number", "email"];
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
+    setSelected(value);
     setSearchBy(value);
     setSearch("");
+    handleSort(value);
   };
 
-  //handle change
-  const handleChange = (e) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
-  };
-  //handle sort
   const handleSort = (column) => {
     if (sortedColumn === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -58,7 +59,13 @@ const TransactionPage = () => {
       setSortedColumn(column);
       setSortOrder("asc");
     }
+    console.log(column);
   };
+
+  const handleChange = (e) => {
+    setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  };
+
   //list manager sorted to sortedManager
   const sortedManager = listManager
     ?.slice(
@@ -75,37 +82,50 @@ const TransactionPage = () => {
         return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
       }
     });
-  //useEffect
+
   useEffect(() => {
     getListManager();
   }, []);
 
   return (
-    <div className="manager">
-      <h1 className="page_title">Manager Dashboard</h1>
+    <div className="manager__mobile">
+      <h1 className="page__title">Warehouse Dashboard</h1>
       <DashBoard>
-        <Row className="manager__todo">
-          <Button
-            text={"Thêm quản lý"}
-            className={"action"}
-            onClick={() => {
-              window["add_manager_popup"].showModal();
-            }}
-          />
-          <div className="input__div">
+        <Column className="manager__todo__mobile">
+          <div className="button__layout__mobile">
+            <Button
+              text={"Thêm quản lý"}
+              className={"action"}
+              onClick={() => {
+                window["add_manager_popup"].showModal();
+              }}
+            />
+          </div>
+          <Row className={"dashboard_rowForColumn"}>
             <Input
               placeholder={`Tìm kiếm theo ${
                 searchBy === "first_name" ? "first name" : searchBy
               }`}
-              className={"manager__search"}
+              className={"manager__search__mobile"}
               onChange={(e) => setSearch(e.target.value)}
-            ></Input>
+            />
             <div className="dropdown__div">
-              <img
-                src={filter_icon}
-                className="search_icon"
-                onClick={() => setIsDropdown((prev) => !prev)}
-              />
+              <div className="dropdown__image">
+                <div className="column__item sort_item title__name">
+                  <img
+                    src={arrow}
+                    onClick={(e) => {
+                      handleSort(selected);
+                      e.target.classList.toggle("active");
+                    }}
+                  />
+                </div>
+                <img
+                  src={filter_icon}
+                  className="search_icon"
+                  onClick={() => setIsDropdown((prev) => !prev)}
+                />
+              </div>
               {isDropdown ? (
                 <Dropdown
                   items={values}
@@ -116,52 +136,15 @@ const TransactionPage = () => {
                 <></>
               )}
             </div>
-          </div>
-        </Row>
-        <Row className="title">
-          <div className="row__item sort_item title__name">
-            Họ Tên
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("first_name");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="row__item sort_item title__phone">
-            Số điện thoại
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("phone_number");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="row__item sort_item title__workplace">
-            Điểm quản lý
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("workplace");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="row__item title__edit">Quản lý tài khoản</div>
-        </Row>
+          </Row>
+        </Column>
         {sortedManager
           ?.filter((manager) => {
             const searchValue = search.toLowerCase();
             if (searchBy === "first_name") {
-              const fullName = manager?.first_name + " " + manager?.last_name;
-              return fullName.toLowerCase().includes(searchValue);
+              return manager?.first_name.toLowerCase().includes(searchValue);
             }
-            if (searchBy === "phone") {
+            if (searchBy === "phone_number") {
               return manager?.phone_number.toLowerCase().includes(searchValue);
             }
             if (searchBy === "email") {
@@ -169,28 +152,43 @@ const TransactionPage = () => {
             }
           })
           ?.map((manager) => (
-            <Row className="manager__detail">
-              <p className="manager__name row__item">
-                {manager?.first_name + " " + manager?.last_name}
+            <Column className="manager__detail__mobile">
+              <p className="manager__name column__item">
+                <div className="column__item sort_item title__name">
+                  <p className="column__title">Họ Tên: </p>
+                  {manager?.first_name + " " + manager?.last_name}
+                </div>
               </p>
-              <p className="row__item manager__phone">
-                {manager?.phone_number}
+              <p className="column__item manager__phone">
+                <div className="column__item sort_item title__phone">
+                  <p className="column__title">Số điện thoại: </p>
+                  {manager?.phone_number}
+                </div>
               </p>
-              <p className="row__item manager__workplace">
-                {manager?.workplace?.name || "Chưa có"}
+              <p className="column__item manager__workplace">
+                <div className="column__item sort_item title__workplace">
+                  <p className="column__title">Điểm quản lý: </p>
+                  {manager?.workplace?.name || "Chưa có"}
+                </div>
               </p>
-              <div className="row__item manager__edit">
+              <p className="column__item sort_item title__email">
+                <p className="column__title">Email: </p> {manager?.email}
+              </p>
+              <p className="column__item sort_item title__role">
+                <p className="column__title">Vai Trò: </p>
+                {manager?.workplace?.role || "Chưa có"}
+              </p>
+              <div className="column__item manager__edit">
                 <Button
-                  text={"Xem chi tiết"}
-                  className={"action"}
+                  text={"Xoá người dùng này"}
+                  className={"danger"}
                   onClick={() => {
-                    setUserChoosen(manager);
-                    console.log(userChoosen);
-                    window["manager_popup"].showModal();
+                    window["manager_popup"].close();
+                    deleteManager(userChoosen?._id);
                   }}
                 />
               </div>
-            </Row>
+            </Column>
           ))}
       </DashBoard>
       <div className="pagination" id="pagination">
@@ -217,50 +215,6 @@ const TransactionPage = () => {
           </div>
         ))}
       </div>
-      <Popup
-        className="manager_popup"
-        popup_id={"manager_popup"}
-        title={"Thông tin quản lý"}
-      >
-        <div className="popup__body__content">
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Họ tên:</p>
-            <p className="manager_popup__field__value">
-              {userChoosen?.first_name + " " + userChoosen?.last_name}
-            </p>
-          </div>
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Số điện thoại:</p>
-            <p className="manager_popup__field__value">
-              {userChoosen?.phone_number}
-            </p>
-          </div>
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Email:</p>
-            <p className="manager_popup__field__value">{userChoosen?.email}</p>
-          </div>
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Nơi làm việc:</p>
-            <p className="manager_popup__field__value">
-              {userChoosen?.workplace?.name || "Chưa có"}
-            </p>
-          </div>
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Vai trò:</p>
-            <p className="manager_popup__field__value">
-              {userChoosen?.workplace?.role || "Chưa có"}
-            </p>
-          </div>
-          <Button
-            text={"Xoá người dùng này"}
-            className={"danger"}
-            onClick={() => {
-              window["manager_popup"].close();
-              deleteManager(userChoosen?._id);
-            }}
-          />
-        </div>
-      </Popup>
       <Popup
         className="add_manager_popup"
         popup_id={"add_manager_popup"}
@@ -370,4 +324,4 @@ const TransactionPage = () => {
   );
 };
 
-export default TransactionPage;
+export default WarehousePageMobile;
