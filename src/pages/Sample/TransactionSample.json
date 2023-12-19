@@ -1,26 +1,26 @@
 [
   {
-    "id": 1,
+    "id": "1234",
     "date": "2023-01-01",
     "description": "Purchase item A",
-    "amount": 50.0
+    "amount": "50.0"
   },
   {
-    "id": 2,
+    "id": "22342345435",
     "date": "2023-01-05",
     "description": "Payment received",
-    "amount": 75.0
+    "amount": "75.0"
   },
   {
-    "id": 3,
+    "id": "334654646",
     "date": "2023-01-10",
     "description": "Expense for service B",
-    "amount": -30.0
+    "amount": "-30.0"
   },
   {
-    "id": 4,
+    "id": "467687686",
     "date": "2023-01-15",
     "description": "Refund for item C",
-    "amount": 20.0
+    "amount": "20.0"
   }
 ]

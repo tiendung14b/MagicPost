@@ -2,6 +2,7 @@ import Toast from "../../../ui/Toast/Toast";
 import DashBoard from "../../../components/DashBoard/DashBoard";
 import Row from "../../../components/DashBoard/Row";
 import useUser from "../../../hooks/useUser";
+import useTransactionSpot from "../../../hooks/useTransactionSpot";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
 import Popup from "../../../ui/Popup/Popup";
@@ -16,20 +17,14 @@ import "../Director.css";
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
 
-//sample data
-import transactionData from "../../../pages/Sample/TransactionSample.json";
-
 const TransactionPageMobile = () => {
   const {
-    userloading,
-    listManager,
-    getListManager,
-    createManager,
-    deleteManager,
-  } = useUser(toast);
-  //state for user
-  const [newUser, setNewUser] = useState({});
-  const [userChoosen, setUserChoosen] = useState({});
+    //state for transaction spot
+    listTransactionSpot,
+    transactionSpotLoading,
+    getListTransactionSpot,
+  } = useTransactionSpot(toast);
+
   //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -41,13 +36,12 @@ const TransactionPageMobile = () => {
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
-  const [searchBy, setSearchBy] = useState("id");
+  const [searchBy, setSearchBy] = useState("name");
   //state for selected value to fitler
   const [selected, setSelected] = useState(null);
   //state for values of dropdown and selected
-  const values = ["first_name", "phone_number", "email"];
+  const transactionValues = ["name", "location_city", "postal_code"];
 
-  const transactionValues = ["id", "date", "description", "amount"];
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
@@ -56,7 +50,7 @@ const TransactionPageMobile = () => {
     setSearch("");
     handleSort(value);
   };
-
+  //handle sort
   const handleSort = (column) => {
     if (sortedColumn === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -67,29 +61,8 @@ const TransactionPageMobile = () => {
     console.log(column);
   };
 
-  const handleChange = (e) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
-  };
-
-  //list manager sorted to sortedManager
-  const sortedManager = listManager
-    ?.slice(
-      numPage * ((0.67 * height) / 60),
-      numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
-    )
-    .sort((a, b) => {
-      const columnA = a[sortedColumn];
-      const columnB = b[sortedColumn];
-
-      if (sortOrder === "asc") {
-        return columnA < columnB ? -1 : columnA > columnB ? 1 : 0;
-      } else {
-        return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
-      }
-    });
-
   //list transaction sorted to sortedTransaction
-  const sortedTransaction = transactionData
+  const sortedTransaction = listTransactionSpot
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -106,7 +79,7 @@ const TransactionPageMobile = () => {
     });
 
   useEffect(() => {
-    getListManager();
+    getListTransactionSpot(); //worked but can't get data, wait to fix in hook
   }, []);
 
   return (
@@ -116,7 +89,7 @@ const TransactionPageMobile = () => {
         <Column className="manager__todo__mobile">
           <div className="button__layout__mobile">
             <Button
-              text={"Thêm quản lý"}
+              text={"Thêm điểm giao dịch"}
               className={"action"}
               onClick={() => {
                 window["add_manager_popup"].showModal();
@@ -126,10 +99,12 @@ const TransactionPageMobile = () => {
           <Row className={"dashboard_rowForColumn"}>
             <Input
               placeholder={`Tìm kiếm theo ${
-                searchBy === "id" ? "id" : searchBy
+                searchBy === "name" ? "name" : searchBy
               }`}
               className={"manager__search__mobile"}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
             />
             <div className="dropdown__div">
               <div className="dropdown__image">
@@ -145,7 +120,9 @@ const TransactionPageMobile = () => {
                 <img
                   src={filter_icon}
                   className="search_icon"
-                  onClick={() => setIsDropdown((prev) => !prev)}
+                  onClick={() => {
+                    setIsDropdown((prev) => !prev);
+                  }}
                 />
               </div>
               {isDropdown ? (
@@ -161,55 +138,47 @@ const TransactionPageMobile = () => {
           </Row>
         </Column>
         {sortedTransaction
-          ?.filter((transactionData) => {
+          ?.filter((transactionSpot) => {
             const searchValue = search.toLowerCase();
-            if (searchBy === "id") {
-              return transactionData.id;
+            if (searchBy === "name") {
+              return transactionSpot?.name?.toLowerCase().includes(searchValue);
             }
-            if (searchBy === "date") {
-              return transactionData.date.toLowerCase().includes(searchValue);
-            }
-            if (searchBy === "description") {
-              return transactionData.description
-                .toLowerCase()
+            if (searchBy === "location_city") {
+              return transactionSpot?.location?.city
+                ?.toLowerCase()
                 .includes(searchValue);
             }
-            if (searchBy === "amount") {
-              return transactionData.amount;
+            if (searchBy === "postal_code") {
+              return transactionSpot?.postal_code
+                ?.toLowerCase()
+                .includes(searchValue);
             }
           })
-          ?.map((transactionData) => (
+          ?.map((transactionSpot) => (
             <Column className="manager__detail__mobile">
               <p className="manager__name column__item">
                 <div className="column__item sort_item title__name">
-                  <p className="column__title">ID: </p>
-                  {transactionData?.id}
+                  <p className="column__title">Name: </p>
+                  {transactionSpot?.name}
                 </div>
               </p>
               <p className="column__item manager__phone">
                 <div className="column__item sort_item title__phone">
-                  <p className="column__title">Date: </p>
-                  {transactionData?.date}
+                  <p className="column__title">Location City: </p>
+                  {transactionSpot?.location?.city}
                 </div>
               </p>
               <p className="column__item manager__workplace">
                 <div className="column__item sort_item title__workplace">
-                  <p className="column__title">Description: </p>
-                  {transactionData?.description}
+                  <p className="column__title">Postal Code: </p>
+                  {transactionSpot?.postal_code}
                 </div>
-              </p>
-              <p className="column__item sort_item title__role">
-                <p className="column__title">Amount: </p>
-                {transactionData?.amount}
               </p>
               <div className="column__item manager__edit">
                 <Button
                   text={"Xoá người dùng này"}
                   className={"danger"}
-                  onClick={() => {
-                    window["manager_popup"].close();
-                    deleteManager(userChoosen?._id);
-                  }}
+                  onClick={() => {}}
                 />
               </div>
             </Column>
@@ -218,7 +187,7 @@ const TransactionPageMobile = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(listManager.length / ((0.73 * height) / 60))
+            Math.ceil(listTransactionSpot.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
@@ -242,7 +211,7 @@ const TransactionPageMobile = () => {
       <Popup
         className="add_manager_popup"
         popup_id={"add_manager_popup"}
-        title={"Thêm tài khoản quản lý"}
+        title={"Thêm điểm giao dịch"}
       >
         <div className="popup__body__content">
           <Input
@@ -250,62 +219,25 @@ const TransactionPageMobile = () => {
             placeholder={"Họ"}
             type="text"
             name="first_name"
-            onChange={handleChange}
           />
           <Input
             className="add_manager_popup__input"
             placeholder={"Tên"}
             type="text"
             name="last_name"
-            onChange={handleChange}
           />
           <Input
             className="add_manager_popup__input"
             placeholder={"Số điện thoại"}
             type="tel"
             name="phone_number"
-            onChange={handleChange}
           />
           <Input
             className="add_manager_popup__input"
             placeholder="Email"
             type="email"
             name="email"
-            onChange={handleChange}
           />
-          <div className="add_manager_role">
-            <p>Vai trò:</p>
-            <div className="checkbox">
-              <input
-                type="radio"
-                name="role"
-                value="WAREHOUSE_MANAGER"
-                id="warehouse_role"
-                onClick={(e) => {
-                  setNewUser({
-                    ...newUser,
-                    workplace: { role: e.target.value },
-                  });
-                }}
-              />
-              <label htmlFor="warehouse_role">Quản lý điểm tập kết</label>
-            </div>
-            <div className="checkbox">
-              <input
-                type="radio"
-                name="role"
-                value="WAREHOUSE_MANAGER"
-                id="transaction_role"
-                onClick={(e) => {
-                  setNewUser({
-                    ...newUser,
-                    workplace: { role: e.target.value },
-                  });
-                }}
-              />
-              <label htmlFor="transaction_role">Quản lý điểm giao dịch</label>
-            </div>
-          </div>
           <p className="warn" id="add_manager_warn">
             Bạn cần nhập đầy đủ thông tin
           </p>
@@ -314,21 +246,7 @@ const TransactionPageMobile = () => {
               text={"Thêm quản lý"}
               className={"submit"}
               onClick={() => {
-                console.log(newUser.workplace);
-                if (
-                  !newUser?.phone_number ||
-                  !newUser?.first_name ||
-                  !newUser?.last_name ||
-                  !newUser?.email ||
-                  !newUser?.workplace?.role
-                ) {
-                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
-                  window["add_manager_warn"].className = "warn show";
-                  return;
-                }
                 window["add_manager_popup"].close();
-                createManager(newUser);
-                setNewUser({});
               }}
             />
             <Button
@@ -336,13 +254,13 @@ const TransactionPageMobile = () => {
               className={"cancel"}
               onClick={() => {
                 window["add_manager_popup"].close();
-                setNewUser({});
               }}
             />
           </div>
         </div>
       </Popup>
-      {userloading ? <Loading /> : <></>}
+      <Popup></Popup>
+      {/* {transactionSpotLoading ? <Loading /> : <></>} */}
       <ToastContainer className="toasify" />
     </div>
   );

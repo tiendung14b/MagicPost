@@ -26,7 +26,6 @@ const ManagerPageMobile = () => {
   } = useUser(toast);
   //state for user
   const [newUser, setNewUser] = useState({});
-  const [userChoosen, setUserChoosen] = useState({});
   //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -104,7 +103,7 @@ const ManagerPageMobile = () => {
           <Row className={"dashboard_rowForColumn"}>
             <Input
               placeholder={`Tìm kiếm theo ${
-                searchBy === "first_name" ? "first name" : searchBy
+                searchBy === "first_name" ? "first_name" : searchBy
               }`}
               className={"manager__search__mobile"}
               onChange={(e) => setSearch(e.target.value)}
