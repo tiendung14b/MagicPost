@@ -26,12 +26,15 @@
 .manager__todo input:focus {
   outline: none;
   border: 0px solid transparent;
-  padding: 12px 0px;
 }
 
 .manager__search {
   margin-left: auto;
   width: 100%;
+}
+
+.manager__search input {
+  border: none;
 }
 
 .selected__search {
@@ -176,12 +179,14 @@
   margin-left: auto;
   flex-direction: row;  
   border: 1px solid #dfe3e8;
+  align-items: center;
 }
 
 .search_icon {
-  width: 40px;
+  width: 30px;
   padding: 5px;
   color: #777;
+  align-self: center;
 }
 
 .dropdown__div {

@@ -41,7 +41,7 @@ const Login = () => {
         user.workplace.role == role.TRANSACTION_MANAGER &&
         user.workplace.workplace_name == "TRANSACTION"
       ) {
-        return navigate("/transaction");
+        return navigate("/transaction/manager");
       } else {
         Toast.warn("Bạn không có quyền truy cập vào trang này", toast);
       }

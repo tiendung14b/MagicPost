@@ -13,7 +13,7 @@ const RedirectHandler = () => {
   if (user.workplace?.role == role.DIRECTOR) {
     return <Navigate to="/director" />;
   } else if (user.workplace?.role == role.TRANSACTION_MANAGER) {
-    return <Navigate to="/transaction" />;
+    return <Navigate to="/transaction/manager" />;
   }
   return <Navigate to="/login" />;
 }
@@ -41,7 +41,7 @@ const AppRouter = () => {
         sessionStorage.getItem('user') ? <RedirectHandler /> : <Login />
       } />
       <Route path='/director' element={<ProtectRoute role={role.DIRECTOR}><Director /></ProtectRoute>} />
-      <Route path='/transaction' element={
+      <Route path='/transaction/manager' element={
         <ProtectRoute
           role={role.TRANSACTION_MANAGER}
           workplace_name="TRANSACTION">

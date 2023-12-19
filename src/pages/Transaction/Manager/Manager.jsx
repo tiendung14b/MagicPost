@@ -24,7 +24,7 @@ const Manager = () => {
           className="sidebar__item__content box clicked"
           title="Quản lý nhân sự"
           id="director__human"
-          onClick={() => handleChooseItem("director__human")}
+          onClick={() => handleChooseItem("director__human")} 
         >
           <img className="sidebar__icon" src={human} alt="Hello" />
           <p className="sidebar__item__text">Quản lý nhân sự</p>

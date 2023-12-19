@@ -13,13 +13,17 @@
     padding: 20px;
 }
 
+.sidebar.close~.container__mobile {
+    margin-left: 110px;
+}
+
 .manager__detail__mobile {
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: space-around;
     align-items: flex-start;
-    width: 125%;
+    width: 175%;
     padding: 20px;
 }
 
@@ -36,4 +40,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 15px;
+    padding: 0px 15px;
 }
