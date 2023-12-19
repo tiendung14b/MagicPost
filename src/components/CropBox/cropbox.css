@@ -1,0 +1,19 @@
+.cropbox__upload {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cropbox__upload img {
+  width: 70px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.cropbox__upload p {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ccc;
+  margin: 0;
+  padding: 0;
+}

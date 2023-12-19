@@ -6,6 +6,9 @@ import { useDebounceEffect } from "./useDebounceEffect";
 import Button from "../../ui/Button/Button";
 import axios from "axios";
 
+import upload from "../../assets/upload.svg";
+import "./cropbox.css";
+
 import "react-image-crop/dist/ReactCrop.css";
 
 import ReactCrop, {
@@ -180,13 +183,22 @@ const CropBox = () => {
           onChange={onSelectFile}
         />
         {!imgSrc && (
-          <Button
-            className={"action"}
-            text={"Chọn ảnh"}
+          // <Button
+          //   className={"action"}
+          //   text={"Chọn ảnh"}
+          //   onClick={() => {
+          //     document.getElementById("upload").click();
+          //   }}
+          // />
+          <div
+            className="cropbox__upload"
             onClick={() => {
               document.getElementById("upload").click();
             }}
-          />
+          >
+            <img src={upload} alt="" />
+            <p>Cập nhật lại ảnh đại diện của bạn</p>
+          </div>
         )}
       </div>
       {!!imgSrc && (
