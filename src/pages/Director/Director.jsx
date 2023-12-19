@@ -19,6 +19,8 @@ import WarehousePage from "./WarehouseManagement/WarehousePage";
 import LogisticPage from "./LogisticManagement/LogisticPage";
 
 import ManagerPageMobile from "./HumanManagement/ManagerPageMobile";
+import TransactionPageMobile from "./TransactionPointManagement/TransactionPageMobile";
+import WarehousePageMobile from "./WarehouseManagement/WarehousePageMobile";
 
 function Director() {
   const { loading, listManager, getListManager } = useUser();
@@ -83,8 +85,12 @@ function Director() {
           {itemChoosen === "director__human" && (
             width > 768 ? <ManagerPage /> : <ManagerPageMobile />
           )}
-          {itemChoosen === "director__transaction" && <TransactionPage />}
-          {itemChoosen === "director__warehouse" && <WarehousePage />}
+          {itemChoosen === "director__transaction" && (
+            width > 768 ? <TransactionPage /> : <TransactionPageMobile />
+          )}
+          {itemChoosen === "director__warehouse" && (
+            width > 768 ? <WarehousePage /> : <WarehousePageMobile />
+          )}
           {itemChoosen === "director__stat" && <LogisticPage />}
         </div>
       </div>

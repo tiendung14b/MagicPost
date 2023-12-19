@@ -5,14 +5,13 @@ import useUser from "../../../hooks/useUser";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
 import Popup from "../../../ui/Popup/Popup";
-import "./manager_page.css";
-import "./manager_page_mobile.css";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
-import useWindowScreen from "../../../hooks/useWindowScreen";
 import Column from "../../../components/DashBoard/Column";
+import useWindowScreen from "../../../hooks/useWindowScreen";
 import Dropdown from "../../../ui/Dropdown/Dropdown";
+import "../Director.css";
 
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
@@ -25,21 +24,26 @@ const ManagerPageMobile = () => {
     createManager,
     deleteManager,
   } = useUser(toast);
+  //state for user
   const [newUser, setNewUser] = useState({});
   const [userChoosen, setUserChoosen] = useState({});
-
+  //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
-
-  const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("first_name");
-
+  //state for pagination
+  const { height } = useWindowScreen();
+  const [numPage, setNumPage] = useState(0);
+  //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
-
+  //state for search
+  const [search, setSearch] = useState("");
+  //state for choosen type
+  const [searchBy, setSearchBy] = useState("first_name");
+  //state for selected value to fitler
   const [selected, setSelected] = useState(null);
-
+  //state for values of dropdown and selected
   const values = ["first_name", "phone_number", "email"];
-
+  //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
     setSelected(value);
@@ -62,16 +66,22 @@ const ManagerPageMobile = () => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
 
-  const sortedManager = listManager?.slice().sort((a, b) => {
-    const columnA = a[sortedColumn];
-    const columnB = b[sortedColumn];
+  //list manager sorted to sortedManager
+  const sortedManager = listManager
+    ?.slice(
+      numPage * ((0.67 * height) / 60),
+      numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
+    )
+    .sort((a, b) => {
+      const columnA = a[sortedColumn];
+      const columnB = b[sortedColumn];
 
-    if (sortOrder === "asc") {
-      return columnA < columnB ? -1 : columnA > columnB ? 1 : 0;
-    } else {
-      return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
-    }
-  });
+      if (sortOrder === "asc") {
+        return columnA < columnB ? -1 : columnA > columnB ? 1 : 0;
+      } else {
+        return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
+      }
+    });
 
   useEffect(() => {
     getListManager();
@@ -82,13 +92,15 @@ const ManagerPageMobile = () => {
       <h1 className="page__title">Manager Dashboard</h1>
       <DashBoard>
         <Column className="manager__todo__mobile">
-          <Button
-            text={"Thêm quản lý"}
-            className={"action"}
-            onClick={() => {
-              window["add_manager_popup"].showModal();
-            }}
-          />
+          <div className="button__layout__mobile">
+            <Button
+              text={"Thêm quản lý"}
+              className={"action"}
+              onClick={() => {
+                window["add_manager_popup"].showModal();
+              }}
+            />
+          </div>
           <Row className={"dashboard_rowForColumn"}>
             <Input
               placeholder={`Tìm kiếm theo ${
@@ -125,63 +137,13 @@ const ManagerPageMobile = () => {
               )}
             </div>
           </Row>
-          <Row className={"dashboard_rowForColumn"}>
-            {/* <div className="manager__fiter__type">
-              <select
-                className="selected__search"
-                onChange={(e) => {
-                  handleSort(e.target.value);
-                  console.log(e.target.value);
-                }}
-              >
-                <option value="first_name">First Name</option>
-                <option value="phone_number">Phone Number</option>
-                <option value="workplace">Workplace</option>
-              </select>
-            </div> */}
-          </Row>
         </Column>
-        {/* <Column className="title">
-          <div className="column__item sort_item title__name">
-            Họ Tên
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("first_name");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="column__item sort_item title__phone">
-            Số điện thoại
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("phone_number");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="column__item sort_item title__workplace">
-            Điểm quản lý
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("workplace");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="column__item title__edit">Quản lý tài khoản</div>
-        </Column> */}
         {sortedManager
           ?.filter((manager) => {
             const searchValue = search.toLowerCase();
             if (searchBy === "first_name") {
-              return manager?.first_name.toLowerCase().includes(searchValue);
+              const fullName = manager?.first_name + " " + manager?.last_name;
+              return fullName.toLowerCase().includes(searchValue);
             }
             if (searchBy === "phone_number") {
               return manager?.phone_number.toLowerCase().includes(searchValue);
@@ -222,58 +184,37 @@ const ManagerPageMobile = () => {
                   text={"Xoá người dùng này"}
                   className={"danger"}
                   onClick={() => {
-                    window["manager_popup"].close();
-                    deleteManager(userChoosen?._id);
+                    deleteManager(manager?._id);
                   }}
                 />
               </div>
             </Column>
           ))}
       </DashBoard>
-      {/* <Popup
-        className="manager_popup"
-        popup_id={"manager_popup"}
-        title={"Thông tin quản lý"}
-      >
-        <div className="popup__body__content">
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Họ tên:</p>
-            <p className="manager_popup__field__value">
-              {userChoosen?.first_name + " " + userChoosen?.last_name}
-            </p>
-          </div>
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Số điện thoại:</p>
-            <p className="manager_popup__field__value">
-              {userChoosen?.phone_number}
-            </p>
-          </div>
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Email:</p>
-            <p className="manager_popup__field__value">{userChoosen?.email}</p>
-          </div>
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Nơi làm việc:</p>
-            <p className="manager_popup__field__value">
-              {userChoosen?.workplace?.name || "Chưa có"}
-            </p>
-          </div>
-          <div className="manager_popup__field">
-            <p className="manager_popup__field__title">Vai trò:</p>
-            <p className="manager_popup__field__value">
-              {userChoosen?.workplace?.role || "Chưa có"}
-            </p>
-          </div>
-          <Button
-            text={"Xoá người dùng này"}
-            className={"danger"}
-            onClick={() => {
-              window["manager_popup"].close();
-              deleteManager(userChoosen?._id);
+      <div className="pagination" id="pagination">
+        {[
+          ...Array(
+            Math.ceil(listManager.length / ((0.73 * height) / 60))
+          ).keys(),
+        ].map((i) => (
+          <div
+            id={"page_" + i}
+            className="pagination__item"
+            onClick={(e) => {
+              if (i == 0 && numPage == i)
+                window["page_" + i].classList.toggle("active");
+              if (numPage === i) return;
+              window["page_" + numPage].classList.toggle("active");
+              e.target.classList.toggle("active");
+              setNumPage(i);
+              if (i < 5 || i > 15) return;
+              window["pagination"].scrollLeft = (i - 5) * 40;
             }}
-          />
-        </div>
-      </Popup> */}
+          >
+            {i + 1}
+          </div>
+        ))}
+      </div>
       <Popup
         className="add_manager_popup"
         popup_id={"add_manager_popup"}
