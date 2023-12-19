@@ -309,7 +309,10 @@ const ManagerPage = () => {
                 onClick={(e) => {
                   setNewUser({
                     ...newUser,
-                    workplace: { role: e.target.value },
+                    workplace: {
+                      role: e.target.value,
+                      workplace_name: "WAREHOUSE",
+                    },
                   });
                 }}
               />
@@ -319,12 +322,15 @@ const ManagerPage = () => {
               <input
                 type="radio"
                 name="role"
-                value="WAREHOUSE_MANAGER"
+                value="TRANSACTION_MANAGER"
                 id="transaction_role"
                 onClick={(e) => {
                   setNewUser({
                     ...newUser,
-                    workplace: { role: e.target.value },
+                    workplace: {
+                      role: e.target.value,
+                      workplace_name: "TRANSACTION",
+                    },
                   });
                 }}
               />
