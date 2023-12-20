@@ -22,6 +22,7 @@ const TransactionPageMobile = () => {
     listTransactionSpot,
     transactionSpotLoading,
     getListTransactionSpot,
+    deleteTransactionManager,
   } = useTransactionSpot(toast);
 
   //state for sort

@@ -21,20 +21,22 @@ const TransactionPage = () => {
     listTransactionSpot,
     transactionSpotLoading,
     getListTransactionSpot,
+    setTransactionManager,
+    deleteTransactionManager,
   } = useTransactionSpot(toast);
 
   //state for user
-  const {
-    userloading,
-    listManager,
-    getListManager,
-  } = useUser(toast);
+  const { userloading, listManager, getListManager } = useUser(toast);
 
   //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
-  //state for choose user
+  //state for choose transaction manager
   const [userChoosen, setUserChoosen] = useState({});
+  //state for choose new manager
+  const [newManager, setNewManager] = useState({});
+  //state for choose get the current transaction spot info
+  const [currentTransactionSpot, setCurrentTransactionSpot] = useState({});
   //state for pagination
   const { height } = useWindowScreen();
   const [numPage, setNumPage] = useState(0);
@@ -64,7 +66,9 @@ const TransactionPage = () => {
 
   //get all transaction manager from list user
   const listManagerSpot = listManager?.filter(
-    (user) => user?.workplace?.role === "TRANSACTION_MANAGER" && user?.workplace?.workplace_id == undefined
+    (user) =>
+      user?.workplace?.role === "TRANSACTION_MANAGER" &&
+      user?.workplace?.workplace_id == undefined
   );
 
   //list manager sorted to sortedManager
@@ -213,6 +217,7 @@ const TransactionPage = () => {
               <p
                 className="row__item transaction_manager"
                 onClick={() => {
+                  setCurrentTransactionSpot(transactionSpot);
                   setUserChoosen(transactionSpot?.transaction_manager);
                   window["manager_popup"].showModal();
                 }}
@@ -288,6 +293,15 @@ const TransactionPage = () => {
               window["update_manager_popup"].showModal();
             }}
           />
+          <Button
+            text={"Xóa người quản lý"}
+            className={"danger"}
+            onClick={() => {
+              deleteTransactionManager(userChoosen?.workplace?.workplace_id);
+              toast.success("Xóa người quản lý thành công");
+              window["manager_popup"].close();
+            }}
+          />
         </div>
       </Popup>
       <Popup
@@ -342,10 +356,13 @@ const TransactionPage = () => {
           {listManagerSpot?.map((user) => (
             <Row className="manager__detail popup__item">
               <p className="row__item transaction_manager popup__item">
-                <img src={user?.url_avatar} />
-                {user?.first_name +
-                  " " +
-                  user?.last_name}
+                <img
+                  src={user?.url_avatar}
+                  onClick={() => {
+                    setNewManager(user);
+                  }}
+                />
+                {user?.first_name + " " + user?.last_name}
               </p>
               <p className="row__item transaction_manager popup__item">
                 {user?.phone_number}
@@ -356,7 +373,17 @@ const TransactionPage = () => {
             </Row>
           ))}
           <div className="add_manager_submit">
-            <Button text={"Cập nhật"} className={"submit"} onClick={() => {}} />
+            <Button
+              text={"Cập nhật"}
+              className={"submit"}
+              onClick={() => {
+                setTransactionManager(
+                  currentTransactionSpot?._id,
+                  newManager?._id
+                );
+                toast.success("Cập nhật người quản lý thành công");
+              }}
+            />
             <Button
               text={"Hủy"}
               className={"danger"}

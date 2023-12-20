@@ -25,7 +25,7 @@ const useTransactionSpot = (toast) => {
   const getListTransactionSpot = async () => {
     try {
       setTransactionSpotLoading(true);
-      const response = await clientAxios.get("/transaction_spot/get_all");
+      const response = await clientAxios.get('/transaction_spot/get_all');
       setListTransactionSpot(response?.result);
     } catch (err) {
       setTransactionSpotLoading(false);
@@ -34,12 +34,27 @@ const useTransactionSpot = (toast) => {
     }
   };
 
-  const deleteTransactionSpot = async (id) => {
+  const deleteTransactionManager = async (id) => {
     try {
       setTransactionSpotLoading(true);
-      await clientAxios.delete(`/transaction_spot/` + id);
+      await clientAxios.delete(`/transaction_spot/remove_manager/` + id);
       getListTransactionSpot();
       Toast.success("Xóa thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const setTransactionManager = async (id, manager_id) => {
+    try {
+      console.log(id, manager_id);
+      setTransactionSpotLoading(true);
+      await clientAxios.put(`/transaction_spot/set_manager/` + id, {
+        manager_id,
+      });
+      getListTransactionSpot();
+      Toast.success("Đặt quản lý thành công", toast);
     } catch (err) {
       setTransactionSpotLoading(false);
       responseToast(err, toast);
@@ -51,7 +66,8 @@ const useTransactionSpot = (toast) => {
     transactionSpotLoading,
     listTransactionSpot,
     getTransactionSpotInfo,
-    deleteTransactionSpot,
+    setTransactionManager,
+    deleteTransactionManager,
     getListTransactionSpot,
   };
 };
