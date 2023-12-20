@@ -173,12 +173,31 @@ const TransactionPageMobile = () => {
                   {transactionSpot?.postal_code}
                 </div>
               </p>
+              <p className="column__item manager__workplace">
+                <div className="column__item sort_item title__workplace">
+                  <p className="column__title">Transaction Manager: </p>
+                  <img
+                    src={transactionSpot?.transaction_manager?.url_avatar}
+                    alt=""
+                  />
+                  {transactionSpot?.transaction_manager?.first_name +
+                    " " +
+                    transactionSpot?.transaction_manager?.last_name}
+                </div>
+              </p>
               <div className="column__item manager__edit">
-                <Button
-                  text={"Xoá người dùng này"}
-                  className={"danger"}
-                  onClick={() => {}}
-                />
+                <div className="manager__edit__button">
+                  <Button
+                    text={"Sửa thông tin"}
+                    className={"action"}
+                    onClick={() => {}}
+                  />
+                  <Button
+                    text={"Xoá"}
+                    className={"danger"}
+                    onClick={() => {}}
+                  />
+                </div>
               </div>
             </Column>
           ))}

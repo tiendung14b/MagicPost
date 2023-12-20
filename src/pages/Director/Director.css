@@ -252,3 +252,9 @@
   flex-direction: row;
   justify-content: space-around;
 }
+
+.manager__edit__button {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}

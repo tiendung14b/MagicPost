@@ -64,7 +64,7 @@ const TransactionPage = () => {
 
   //get all transaction manager from list user
   const listManagerSpot = listManager?.filter(
-    (user) => user?.workplace?.role === "TRANSACTION_MANAGER"
+    (user) => user?.workplace?.role === "TRANSACTION_MANAGER" && user?.workplace?.workplace_id == undefined
   );
 
   //list manager sorted to sortedManager
