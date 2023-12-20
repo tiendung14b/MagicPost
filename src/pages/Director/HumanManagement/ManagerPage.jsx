@@ -263,7 +263,7 @@ const ManagerPage = () => {
         </div>
       </Popup>
       <Popup
-        className="add_manager_popup"
+        className="add_mzanager_popup"
         popup_id={"add_manager_popup"}
         title={"Thêm tài khoản quản lý"}
       >

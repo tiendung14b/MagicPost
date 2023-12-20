@@ -23,6 +23,13 @@ const TransactionPage = () => {
     getListTransactionSpot,
   } = useTransactionSpot(toast);
 
+  //state for user
+  const {
+    userloading,
+    listManager,
+    getListManager,
+  } = useUser(toast);
+
   //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -54,6 +61,12 @@ const TransactionPage = () => {
       setSortOrder("asc");
     }
   };
+
+  //get all transaction manager from list user
+  const listManagerSpot = listManager?.filter(
+    (user) => user?.workplace?.role === "TRANSACTION_MANAGER"
+  );
+
   //list manager sorted to sortedManager
   const sortedTransaction = listTransactionSpot
     ?.slice(
@@ -72,6 +85,7 @@ const TransactionPage = () => {
     });
   //useEffect
   useEffect(() => {
+    getListManager();
     getListTransactionSpot();
   }, []);
 
@@ -196,14 +210,16 @@ const TransactionPage = () => {
               <p className="row__item manager__workplace">
                 {transactionSpot?.postal_code}
               </p>
-              <p className="row__item transaction_manager">
+              <p
+                className="row__item transaction_manager"
+                onClick={() => {
+                  setUserChoosen(transactionSpot?.transaction_manager);
+                  window["manager_popup"].showModal();
+                }}
+              >
                 <img
-                  src={transactionSpot?.transaction_manager?.urlAvatar}
+                  src={transactionSpot?.transaction_manager?.url_avatar}
                   alt=""
-                  onClick={() => {
-                    setUserChoosen(transactionSpot?.transaction_manager);
-                    window["manager_popup"].showModal();
-                  }}
                 />
                 {transactionSpot?.transaction_manager?.first_name +
                   " " +
@@ -213,9 +229,7 @@ const TransactionPage = () => {
                 <Button
                   text={"Xem chi tiết"}
                   className={"action"}
-                  onClick={() => {
-                    window["manager_popup"].showModal();
-                  }}
+                  onClick={() => {}}
                 />
               </div>
             </Row>
@@ -269,9 +283,9 @@ const TransactionPage = () => {
           </div>
           <Button
             text={"Thay đổi thông tin người quản lý"}
-            className={"danger"}
+            className={"action"}
             onClick={() => {
-              window["manager_popup"].close();
+              window["update_manager_popup"].showModal();
             }}
           />
         </div>
@@ -305,7 +319,7 @@ const TransactionPage = () => {
           </p>
           <div className="add_manager_submit">
             <Button
-              text={"Thêm quản lý"}
+              text={"Thêm điểm giao dịch"}
               className={"submit"}
               onClick={() => {}}
             />
@@ -314,6 +328,40 @@ const TransactionPage = () => {
               className={"danger"}
               onClick={() => {
                 window["add_manager_popup"].close();
+              }}
+            />
+          </div>
+        </div>
+      </Popup>
+      <Popup
+        className="update_manager_popup"
+        popup_id={"update_manager_popup"}
+        title={"Danh sách người quản lý điểm giao dịch"}
+      >
+        <div className="popup__body__content">
+          {listManagerSpot?.map((user) => (
+            <Row className="manager__detail popup__item">
+              <p className="row__item transaction_manager popup__item">
+                <img src={user?.url_avatar} />
+                {user?.first_name +
+                  " " +
+                  user?.last_name}
+              </p>
+              <p className="row__item transaction_manager popup__item">
+                {user?.phone_number}
+              </p>
+              <p className="row__item transaction_manager popup__item">
+                {user?.email}
+              </p>
+            </Row>
+          ))}
+          <div className="add_manager_submit">
+            <Button text={"Cập nhật"} className={"submit"} onClick={() => {}} />
+            <Button
+              text={"Hủy"}
+              className={"danger"}
+              onClick={() => {
+                window["update_manager_popup"].close();
               }}
             />
           </div>
