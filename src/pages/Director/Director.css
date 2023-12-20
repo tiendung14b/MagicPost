@@ -246,3 +246,9 @@
   margin-top: 10px;
   margin-left: 25px;
 }
+
+.add_manager_submit {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}

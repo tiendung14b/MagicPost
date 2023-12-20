@@ -4,11 +4,13 @@
   align-items: center;
   justify-content: center;
   background-color: white;
-  margin: 0 auto;
+  margin: 0 10px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   width: auto !important;
   padding-top: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
 }
 
 .dashboard__mobile {

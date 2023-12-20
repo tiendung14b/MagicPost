@@ -362,7 +362,7 @@ const ManagerPage = () => {
             />
             <Button
               text={"Hủy"}
-              className={"cancel"}
+              className={"danger"}
               onClick={() => {
                 window["add_manager_popup"].close();
                 setNewUser({});

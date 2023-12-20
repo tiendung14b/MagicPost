@@ -1,7 +1,6 @@
 import Toast from "../../../ui/Toast/Toast";
 import DashBoard from "../../../components/DashBoard/DashBoard";
 import Row from "../../../components/DashBoard/Row";
-import useUser from "../../../hooks/useUser";
 import useTransactionSpot from "../../../hooks/useTransactionSpot";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
