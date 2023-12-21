@@ -38,11 +38,12 @@ const useTransactionSpot = (toast) => {
     try {
       setTransactionSpotLoading(true);
       await clientAxios.delete(`/transaction_spot/remove_manager/` + id);
-      getListTransactionSpot();
       Toast.success("Xóa thành công", toast);
     } catch (err) {
       setTransactionSpotLoading(false);
-      responseToast(err, toast);
+      // responseToast(err, toast);
+      Toast.error(err, toast);
+      console.log(err);
     }
   };
 

@@ -297,7 +297,8 @@ const TransactionPage = () => {
             text={"Xóa người quản lý"}
             className={"danger"}
             onClick={() => {
-              deleteTransactionManager(userChoosen?.workplace?.workplace_id);
+              deleteTransactionManager(currentTransactionSpot?._id);
+              getListManager();
               toast.success("Xóa người quản lý thành công");
               window["manager_popup"].close();
             }}

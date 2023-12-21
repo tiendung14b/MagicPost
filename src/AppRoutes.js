@@ -2,10 +2,9 @@ import { Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom'
 import Login from './pages/Login/Login';
 import Director from './pages/Director/Director';
 import role from './util/role';
-import Manager from './pages/Transaction/Manager/Manager';
+import TransactionManager from './pages/Transaction/Manager/Manager';
 
 const RedirectHandler = () => {
-  const navigate = useNavigate();
   const user = JSON.parse(sessionStorage.getItem('user'));
   if (!user) {
     return <Navigate to="/login" />;
@@ -45,7 +44,14 @@ const AppRouter = () => {
         <ProtectRoute
           role={role.TRANSACTION_MANAGER}
           workplace_name="TRANSACTION">
-          <Manager />
+          <TransactionManager />
+        </ProtectRoute>}
+      />
+      <Route path='/transaction/employee' element={
+        <ProtectRoute
+          role={role.TRANSACTION_EMPLOYEE}
+          workplace_name="TRANSACTION">
+          <TransactionManager />
         </ProtectRoute>}
       />
     </Routes>

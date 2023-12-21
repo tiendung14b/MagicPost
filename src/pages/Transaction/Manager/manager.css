@@ -1,0 +1,10 @@
+.container {
+}
+
+.row__item {
+  min-width: 16vw;
+}
+
+.sidebar.close ~ .container .row__item {
+  min-width: 20vw;
+}
