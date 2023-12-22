@@ -37,7 +37,7 @@ const WarehousePage = () => {
   //state for choose new manager
   const [newManager, setNewManager] = useState({});
   //state for choose get the current transaction spot info
-  const [currentTransactionSpot, setCurrentTransactionSpot] = useState({});
+  const [currentWarehouse, setcurrentWarehouse] = useState({});
   //state for pagination
   const { height } = useWindowScreen();
   const [numPage, setNumPage] = useState(0);
@@ -218,12 +218,12 @@ const WarehousePage = () => {
               <p
                 className="row__item transaction_manager"
                 onClick={() => {
-                  setCurrentTransactionSpot(warehouseSpot);
+                  setcurrentWarehouse(warehouseSpot);
                   setUserChoosen(warehouseSpot?.warehouse_manager);
                   window["manager_popup"].showModal();
                 }}
               >
-                {warehouseSpot?.warehouse_manager?.workplace?.workplace_id == undefined ? (
+                {warehouseSpot?.warehouse_manager ? (
                   <>
                     <img
                       src={warehouseSpot.warehouse_manager.url_avatar}
@@ -308,7 +308,7 @@ const WarehousePage = () => {
             className={"danger"}
             onClick={() => {
               window["manager_popup"].close();
-              deleteWarehouseManager(currentTransactionSpot?._id);
+              deleteWarehouseManager(currentWarehouse?._id);
             }}
           />
         </div>
@@ -389,7 +389,7 @@ const WarehousePage = () => {
               className={"submit"}
               onClick={() => {
                 setWarehouseManager(
-                  currentTransactionSpot?._id,
+                  currentWarehouse?._id,
                   newManager?._id
                 );
                 toast.success("Cập nhật người quản lý thành công");

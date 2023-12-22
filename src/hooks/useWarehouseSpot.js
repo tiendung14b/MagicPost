@@ -34,7 +34,7 @@ const useWarehouseSpot = (toast) => {
   const deleteWarehouseManager = async (id) => {
     try {
       setWarehouseSpotLoading(true);
-      await clientAxios.delete(`/warehouse/remove_manager/` + id);
+      await clientAxios.delete(`/warehouse/manager/` + id);
       getListWarehouseSpot();
       Toast.success("Xóa thành công", toast);
     } catch (err) {
