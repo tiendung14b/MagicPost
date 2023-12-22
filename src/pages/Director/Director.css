@@ -18,6 +18,10 @@
   min-width: 20vw;
 }
 
+.row__item.transaction_manager:hover {
+  cursor: pointer;
+}
+
 .manager__todo {
   width: 100%;
   display: flex;
