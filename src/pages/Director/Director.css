@@ -258,3 +258,9 @@
   align-items: flex-start;
   gap: 15px;
 }
+
+.choose_list_manager {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}

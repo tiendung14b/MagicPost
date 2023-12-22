@@ -21,7 +21,7 @@ const useUser = (toast) => {
 
   const getListManager = async () => {
     try {
-      console.log(userloading);
+      console.log("user Loading", userloading);
       const response = await clientAxios.get('/user/get_list_manager')
       setUserLoading(false)
       setListManager(response?.result)
