@@ -47,6 +47,8 @@ const TransactionPage = () => {
   const [search, setSearch] = useState("");
   //state for choosen type
   const [searchBy, setSearchBy] = useState("name");
+  //state for choosed the selected row
+  const [selectedRow, setSelectedRow] = useState(null);
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
@@ -363,15 +365,24 @@ const TransactionPage = () => {
       >
         <div className="popup__body__content">
           {listManagerSpot?.map((user) => (
-            <Row className="manager__detail popup__item">
+            <Row
+              key={user.id} // Add a unique key to each row
+              className={`manager__detail popup__item ${
+                selectedRow === user ? "selected-row" : ""
+              }`}
+            >
               <div
                 className="choose_list_manager"
                 onClick={() => {
+                  setSelectedRow(user);
                   setNewManager(user);
                 }}
               >
                 <p className="row__item transaction_manager popup__item">
-                  <img src={user?.url_avatar} />
+                  <img
+                    src={user?.url_avatar}
+                    alt={`Avatar of ${user?.first_name}`}
+                  />
                   {user?.first_name + " " + user?.last_name}
                 </p>
                 <p className="row__item transaction_manager popup__item">

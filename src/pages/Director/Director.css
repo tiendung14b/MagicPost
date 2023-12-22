@@ -264,3 +264,7 @@
   flex-direction: row;
   gap: 10px;
 }
+
+.selected-row {
+  background-color: #e8eff9;
+}

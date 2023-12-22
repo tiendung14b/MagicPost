@@ -17,7 +17,7 @@ import filter_icon from "../../../assets/filter.svg";
 
 const WarehousePage = () => {
   const {
-    //state for transaction 
+    //state for transaction
     listWarehouse,
     warehouseLoading,
     getListWarehouse,
@@ -47,6 +47,8 @@ const WarehousePage = () => {
   const [search, setSearch] = useState("");
   //state for choosen type
   const [searchBy, setSearchBy] = useState("name");
+  //state for choosed the selected row
+  const [selectedRow, setSelectedRow] = useState(null);
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
@@ -185,9 +187,7 @@ const WarehousePage = () => {
               return warehouse?.name?.toLowerCase().includes(searchValue);
             }
             if (searchBy === "location") {
-              return warehouse?.location
-                ?.toLowerCase()
-                .includes(searchValue);
+              return warehouse?.location?.toLowerCase().includes(searchValue);
             }
             // if (searchBy === "postal_code") {
             //   return warehouse?.postal_code
@@ -208,9 +208,7 @@ const WarehousePage = () => {
           ?.map((warehouse) => (
             <Row className="manager__detail">
               <p className="manager__name row__item">{warehouse?.name}</p>
-              <p className="row__item manager__phone">
-                {warehouse?.location}
-              </p>
+              <p className="row__item manager__phone">{warehouse?.location}</p>
               {/* <p className="row__item manager__workplace">
                 {warehouse?.postal_code}
               </p> */}
@@ -224,10 +222,7 @@ const WarehousePage = () => {
               >
                 {warehouse?.warehouse_manager ? (
                   <>
-                    <img
-                      src={warehouse.warehouse_manager.url_avatar}
-                      alt=""
-                    />
+                    <img src={warehouse.warehouse_manager.url_avatar} alt="" />
                     {warehouse.warehouse_manager.first_name +
                       " " +
                       warehouse.warehouse_manager.last_name}
@@ -362,21 +357,30 @@ const WarehousePage = () => {
       >
         <div className="popup__body__content">
           {listWareHouseManager?.map((user) => (
-            <Row className="manager__detail popup__item">
+            <Row
+              key={user.id} // Add a unique key to each row
+              className={`manager__detail popup__item ${
+                selectedRow === user ? "selected-row" : ""
+              }`}
+            >
               <div
                 className="choose_list_manager"
                 onClick={() => {
+                  setSelectedRow(user);
                   setNewManager(user);
                 }}
               >
-                <p className="row__item warehouse_manager popup__item">
-                  <img src={user?.url_avatar} />
+                <p className="row__item transaction_manager popup__item">
+                  <img
+                    src={user?.url_avatar}
+                    alt={`Avatar of ${user?.first_name}`}
+                  />
                   {user?.first_name + " " + user?.last_name}
                 </p>
-                <p className="row__item warehouse_manager popup__item">
+                <p className="row__item transaction_manager popup__item">
                   {user?.phone_number}
                 </p>
-                <p className="row__item warehouse_manager popup__item">
+                <p className="row__item transaction_manager popup__item">
                   {user?.email}
                 </p>
               </div>
@@ -387,10 +391,7 @@ const WarehousePage = () => {
               text={"Cập nhật"}
               className={"submit"}
               onClick={() => {
-                setWarehouseManager(
-                  currentWarehouse?._id,
-                  newManager?._id
-                );
+                setWarehouseManager(currentWarehouse?._id, newManager?._id);
                 toast.success("Cập nhật người quản lý thành công");
                 window["update_manager_popup"].close();
                 window["manager_popup"].close();
