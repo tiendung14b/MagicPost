@@ -15,6 +15,8 @@ import Dropdown from "../../../ui/Dropdown/Dropdown";
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
 
+import default_avatar from "../../../assets/default_avatar.png";
+
 const WarehousePage = () => {
   const {
     //state for transaction
@@ -222,7 +224,13 @@ const WarehousePage = () => {
               >
                 {warehouse?.warehouse_manager ? (
                   <>
-                    <img src={warehouse.warehouse_manager.url_avatar} alt="" />
+                    <img
+                      src={
+                        warehouse.warehouse_manager.url_avatar ||
+                        default_avatar
+                      }
+                      alt=""
+                    />
                     {warehouse.warehouse_manager.first_name +
                       " " +
                       warehouse.warehouse_manager.last_name}

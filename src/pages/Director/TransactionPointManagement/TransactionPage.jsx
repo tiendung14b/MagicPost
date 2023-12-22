@@ -15,6 +15,8 @@ import Dropdown from "../../../ui/Dropdown/Dropdown";
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
 
+import default_avatar from "../../../assets/default_avatar.png";
+
 const TransactionPage = () => {
   const {
     //state for transaction spot
@@ -228,7 +230,7 @@ const TransactionPage = () => {
                   ?.workplace_id ? (
                   <>
                     <img
-                      src={transactionSpot.transaction_manager.url_avatar}
+                      src={transactionSpot.transaction_manager.url_avatar || default_avatar}
                       alt=""
                     />
                     {transactionSpot.transaction_manager.first_name +
