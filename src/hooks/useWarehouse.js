@@ -62,6 +62,66 @@ const useWarehouse = (toast) => {
     }
   };
 
+  const createWarehouse = async (data) => {
+    try {
+      setWarehouseLoading(true);
+      await clientAxios.post("/warehouse/", data);
+      getListWarehouse();
+      Toast.success("Thêm mới thành công", toast);
+    } catch (err) {
+      setWarehouseLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const receiveTransactionFromWarehouse = async (transaction_id) => {
+    try {
+      setWarehouseLoading(true);
+      await clientAxios.put(`/warehouse/transaction_from_warehouse/` + transaction_id);
+      getListWarehouse();
+      Toast.success("Nhận thành công", toast);
+    } catch (err) {
+      setWarehouseLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const receiveTransactionFromTransactionSpot = async (transaction_id) => {
+    try {
+      setWarehouseLoading(true);
+      await clientAxios.put(`/warehouse/transaction_from_transaction_spot/` + transaction_id);
+      getListWarehouse();
+      Toast.success("Nhận thành công", toast);
+    } catch (err) {
+      setWarehouseLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const sendTransactionToWarehouse = async (transaction_id) => {
+    try {
+      setWarehouseLoading(true);
+      await clientAxios.put(`/warehouse/transaction_to_warehouse/` + transaction_id);
+      getListWarehouse();
+      Toast.success("Gửi thành công", toast);
+    } catch (err) {
+      setWarehouseLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const sendTransactionToTransactionSpot = async (transaction_id) => {
+    try {
+      setWarehouseLoading(true);
+      await clientAxios.put(`/warehouse/transaction_to_transaction_spot/` + transaction_id);
+      getListWarehouse();
+      Toast.success("Gửi thành công", toast);
+    } catch (err) {
+      setWarehouseLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
   return {
     listWarehouse,
     warehouseInfo,

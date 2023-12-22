@@ -63,6 +63,70 @@ const useTransactionSpot = (toast) => {
     }
   };
 
+  const sendToWarehouse = async (id) => {
+    try {
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/transaction_spot/send_to_warehouse`, {
+        transaction_spot_id: id,
+      });
+      getListTransactionSpot();
+      Toast.success("Gửi thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const delivery = async (id) => {
+    try {
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/transaction_spot/delivery`, {
+        transaction_spot_id: id,
+      });
+      getListTransactionSpot();
+      Toast.success("Giao thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const createTransactionSpot = async (data) => {
+    try {
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/transaction_spot/`, data);
+      getListTransactionSpot();
+      Toast.success("Tạo thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const getUnconfirmedTransaction = async () => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(`/transaction_spot/get_unconfirmed`);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const getFromClientTransaction = async (id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(`/transaction_spot/get_from_client_transactions/` + id);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
   return {
     transactionSpotInfo,
     transactionSpotLoading,
@@ -71,6 +135,11 @@ const useTransactionSpot = (toast) => {
     setTransactionManager,
     deleteTransactionManager,
     getListTransactionSpot,
+    sendToWarehouse,
+    delivery,
+    createTransactionSpot,
+    getUnconfirmedTransaction,
+    getFromClientTransaction
   };
 };
 
