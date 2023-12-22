@@ -1,8 +1,7 @@
 import Toast from "../../../ui/Toast/Toast";
 import DashBoard from "../../../components/DashBoard/DashBoard";
 import Row from "../../../components/DashBoard/Row";
-import useWarehouseSpot from "../../../hooks/useWarehouseSpot";
-import useTransactionSpot from "../../../hooks/useTransactionSpot";
+import useWarehouse from "../../../hooks/useWarehouse";
 import useUser from "../../../hooks/useUser";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
@@ -18,13 +17,13 @@ import filter_icon from "../../../assets/filter.svg";
 
 const WarehousePage = () => {
   const {
-    //state for transaction spot
-    listWarehouseSpot,
-    warehouseSpotLoading,
-    getListWarehouseSpot,
+    //state for transaction 
+    listWarehouse,
+    warehouseLoading,
+    getListWarehouse,
     setWarehouseManager,
     deleteWarehouseManager,
-  } = useWarehouseSpot(toast);
+  } = useWarehouse(toast);
 
   //state for user
   const { userloading, listManager, getListManager } = useUser(toast);
@@ -36,7 +35,7 @@ const WarehousePage = () => {
   const [userChoosen, setUserChoosen] = useState({});
   //state for choose new manager
   const [newManager, setNewManager] = useState({});
-  //state for choose get the current transaction spot info
+  //state for choose get the current transaction  info
   const [currentWarehouse, setcurrentWarehouse] = useState({});
   //state for pagination
   const { height } = useWindowScreen();
@@ -66,14 +65,14 @@ const WarehousePage = () => {
   };
 
   //get all transaction manager from list user
-  const listManagerSpot = listManager?.filter(
+  const listWareHouseManager = listManager?.filter(
     (user) =>
       user?.workplace?.role === "WAREHOUSE_MANAGER" &&
       user?.workplace?.workplace_id == null
   );
 
   //list manager sorted to sortedManager
-  const sortedTransaction = listWarehouseSpot
+  const sortedTransaction = listWarehouse
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -91,7 +90,7 @@ const WarehousePage = () => {
   //useEffect
   useEffect(() => {
     getListManager();
-    getListWarehouseSpot();
+    getListWarehouse();
   }, []);
 
   return (
@@ -180,58 +179,58 @@ const WarehousePage = () => {
           <div className="row__item title__edit">Quản lý tài khoản</div>
         </Row>
         {sortedTransaction
-          ?.filter((warehouseSpot) => {
+          ?.filter((warehouse) => {
             const searchValue = search.toLowerCase();
             if (searchBy === "name") {
-              return warehouseSpot?.name?.toLowerCase().includes(searchValue);
+              return warehouse?.name?.toLowerCase().includes(searchValue);
             }
             if (searchBy === "location") {
-              return warehouseSpot?.location
+              return warehouse?.location
                 ?.toLowerCase()
                 .includes(searchValue);
             }
             // if (searchBy === "postal_code") {
-            //   return warehouseSpot?.postal_code
+            //   return warehouse?.postal_code
             //     ?.toLowerCase()
             //     .includes(searchValue);
             // }
             if (searchBy === "warehouse_manager") {
               return (
-                warehouseSpot?.warehouse_manager?.first_name
+                warehouse?.warehouse_manager?.first_name
                   ?.toLowerCase()
                   .includes(searchValue) ||
-                warehouseSpot?.warehouse_manager?.last_name
+                warehouse?.warehouse_manager?.last_name
                   ?.toLowerCase()
                   .includes(searchValue)
               );
             }
           })
-          ?.map((warehouseSpot) => (
+          ?.map((warehouse) => (
             <Row className="manager__detail">
-              <p className="manager__name row__item">{warehouseSpot?.name}</p>
+              <p className="manager__name row__item">{warehouse?.name}</p>
               <p className="row__item manager__phone">
-                {warehouseSpot?.location}
+                {warehouse?.location}
               </p>
               {/* <p className="row__item manager__workplace">
-                {warehouseSpot?.postal_code}
+                {warehouse?.postal_code}
               </p> */}
               <p
                 className="row__item transaction_manager"
                 onClick={() => {
-                  setcurrentWarehouse(warehouseSpot);
-                  setUserChoosen(warehouseSpot?.warehouse_manager);
+                  setcurrentWarehouse(warehouse);
+                  setUserChoosen(warehouse?.warehouse_manager);
                   window["manager_popup"].showModal();
                 }}
               >
-                {warehouseSpot?.warehouse_manager ? (
+                {warehouse?.warehouse_manager ? (
                   <>
                     <img
-                      src={warehouseSpot.warehouse_manager.url_avatar}
+                      src={warehouse.warehouse_manager.url_avatar}
                       alt=""
                     />
-                    {warehouseSpot.warehouse_manager.first_name +
+                    {warehouse.warehouse_manager.first_name +
                       " " +
-                      warehouseSpot.warehouse_manager.last_name}
+                      warehouse.warehouse_manager.last_name}
                   </>
                 ) : (
                   "Chưa có"
@@ -362,7 +361,7 @@ const WarehousePage = () => {
         title={"Danh sách người quản lý điểm giao dịch"}
       >
         <div className="popup__body__content">
-          {listManagerSpot?.map((user) => (
+          {listWareHouseManager?.map((user) => (
             <Row className="manager__detail popup__item">
               <div
                 className="choose_list_manager"
@@ -407,7 +406,7 @@ const WarehousePage = () => {
           </div>
         </div>
       </Popup>
-      {warehouseSpotLoading ? <Loading /> : <></>}
+      {warehouseLoading ? <Loading /> : <></>}
       <ToastContainer className="toasify" />
     </div>
   );

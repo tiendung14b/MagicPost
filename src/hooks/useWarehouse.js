@@ -3,42 +3,42 @@ import clientAxios from "../api/clientAxios";
 import responseToast from "../util/response";
 import Toast from "../ui/Toast/Toast";
 
-const useWarehouseSpot = (toast) => {
-  const [listWarehouseSpot, setListWarehouseSpot] = useState([]);
-  const [warehouseSpotInfo, setWarehouseSpotInfo] = useState({});
-  const [warehouseSpotLoading, setWarehouseSpotLoading] = useState(false);
+const useWarehouse = (toast) => {
+  const [listWarehouse, setListWarehouse] = useState([]);
+  const [warehouseInfo, setWarehouseInfo] = useState({});
+  const [warehouseLoading, setWarehouseLoading] = useState(false);
 
-  const getWarehouseSpotInfo = async (id) => {
+  const getWarehouseInfo = async (id) => {
     try {
       const response = await clientAxios.get(`/warehouse/${id}`);
-      setWarehouseSpotInfo(response?.result);
+      setWarehouseInfo(response?.result);
     } catch (err) {
       console.log(err);
       responseToast(err, toast);
     }
   };
 
-  const getListWarehouseSpot = async () => {
+  const getListWarehouse = async () => {
     try {
-      console.log("warehouse loading", warehouseSpotLoading);
+      console.log("warehouse loading", warehouseLoading);
       const response = await clientAxios.get("/warehouse/all");
-      setWarehouseSpotLoading(false);
-      setListWarehouseSpot(response?.result);
+      setWarehouseLoading(false);
+      setListWarehouse(response?.result);
     } catch (err) {
-      setWarehouseSpotLoading(false);
-      console.log("Cant get list warehouse spot", err);
+      setWarehouseLoading(false);
+      console.log("Cant get list warehouse ", err);
       responseToast(err, toast);
     }
   };
 
   const deleteWarehouseManager = async (id) => {
     try {
-      setWarehouseSpotLoading(true);
+      setWarehouseLoading(true);
       await clientAxios.delete(`/warehouse/manager/` + id);
-      getListWarehouseSpot();
+      getListWarehouse();
       Toast.success("Xóa thành công", toast);
     } catch (err) {
-      setWarehouseSpotLoading(false);
+      setWarehouseLoading(false);
       // responseToast(err, toast);
       Toast.error(err, toast);
       console.log(err);
@@ -48,14 +48,14 @@ const useWarehouseSpot = (toast) => {
   const setWarehouseManager = async (id, manager_id) => {
     try {
       console.log(id, manager_id);
-      setWarehouseSpotLoading(true);
+      setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/manager/` + id, {
         manager_id,
       });
-      getListWarehouseSpot();
+      getListWarehouse();
       Toast.success("Đặt quản lý thành công", toast);
     } catch (err) {
-      setWarehouseSpotLoading(false);
+      setWarehouseLoading(false);
       // responseToast(err, toast);
       Toast.error(err, toast);
       console.log(err);
@@ -63,14 +63,14 @@ const useWarehouseSpot = (toast) => {
   };
 
   return {
-    listWarehouseSpot,
-    warehouseSpotInfo,
-    warehouseSpotLoading,
-    getWarehouseSpotInfo,
-    getListWarehouseSpot,
+    listWarehouse,
+    warehouseInfo,
+    warehouseLoading,
+    getWarehouseInfo,
+    getListWarehouse,
     deleteWarehouseManager,
     setWarehouseManager,
   };
 };
 
-export default useWarehouseSpot;
+export default useWarehouse;
