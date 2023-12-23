@@ -15,6 +15,8 @@ import Dropdown from "../../../ui/Dropdown/Dropdown";
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
 
+import default_avatar from "../../../assets/default_avatar.png";
+
 const TransactionPage = () => {
   const {
     //state for transaction spot
@@ -47,6 +49,8 @@ const TransactionPage = () => {
   const [search, setSearch] = useState("");
   //state for choosen type
   const [searchBy, setSearchBy] = useState("name");
+  //state for choosed the selected row
+  const [selectedRow, setSelectedRow] = useState(null);
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
@@ -68,7 +72,7 @@ const TransactionPage = () => {
   const listManagerSpot = listManager?.filter(
     (user) =>
       user?.workplace?.role === "TRANSACTION_MANAGER" &&
-      user?.workplace?.workplace_id == undefined
+      user?.workplace?.workplace_id == null
   );
 
   //list manager sorted to sortedManager
@@ -215,21 +219,29 @@ const TransactionPage = () => {
                 {transactionSpot?.postal_code}
               </p>
               <p
-                className="row__item transaction_manager"
+                className="row__item transaction_manager "
                 onClick={() => {
                   setCurrentTransactionSpot(transactionSpot);
                   setUserChoosen(transactionSpot?.transaction_manager);
                   window["manager_popup"].showModal();
                 }}
               >
-                <img
-                  src={transactionSpot?.transaction_manager?.url_avatar}
-                  alt=""
-                />
-                {transactionSpot?.transaction_manager?.first_name +
-                  " " +
-                  transactionSpot?.transaction_manager?.last_name}
+                {transactionSpot?.transaction_manager?.workplace
+                  ?.workplace_id ? (
+                  <>
+                    <img
+                      src={transactionSpot.transaction_manager.url_avatar || default_avatar}
+                      alt=""
+                    />
+                    {transactionSpot.transaction_manager.first_name +
+                      " " +
+                      transactionSpot.transaction_manager.last_name}
+                  </>
+                ) : (
+                  "Chưa có"
+                )}
               </p>
+
               <div className="row__item manager__edit">
                 <Button
                   text={"Xem chi tiết"}
@@ -273,7 +285,9 @@ const TransactionPage = () => {
           <div className="manager_popup__field">
             <p className="manager_popup__field__title">Họ tên:</p>
             <p className="manager_popup__field__value">
-              {userChoosen?.first_name + " " + userChoosen?.last_name}
+              {userChoosen
+                ? userChoosen.first_name + " " + userChoosen.last_name
+                : "Chưa có"}
             </p>
           </div>
           <div className="manager_popup__field">
@@ -297,10 +311,8 @@ const TransactionPage = () => {
             text={"Xóa người quản lý"}
             className={"danger"}
             onClick={() => {
-              deleteTransactionManager(currentTransactionSpot?._id);
-              getListManager();
-              toast.success("Xóa người quản lý thành công");
               window["manager_popup"].close();
+              deleteTransactionManager(currentTransactionSpot?._id);
             }}
           />
         </div>
@@ -355,22 +367,33 @@ const TransactionPage = () => {
       >
         <div className="popup__body__content">
           {listManagerSpot?.map((user) => (
-            <Row className="manager__detail popup__item">
-              <p className="row__item transaction_manager popup__item">
-                <img
-                  src={user?.url_avatar}
-                  onClick={() => {
-                    setNewManager(user);
-                  }}
-                />
-                {user?.first_name + " " + user?.last_name}
-              </p>
-              <p className="row__item transaction_manager popup__item">
-                {user?.phone_number}
-              </p>
-              <p className="row__item transaction_manager popup__item">
-                {user?.email}
-              </p>
+            <Row
+              key={user.id} // Add a unique key to each row
+              className={`manager__detail popup__item ${
+                selectedRow === user ? "selected-row" : ""
+              }`}
+            >
+              <div
+                className="choose_list_manager"
+                onClick={() => {
+                  setSelectedRow(user);
+                  setNewManager(user);
+                }}
+              >
+                <p className="row__item transaction_manager popup__item">
+                  <img
+                    src={user?.url_avatar}
+                    alt={`Avatar of ${user?.first_name}`}
+                  />
+                  {user?.first_name + " " + user?.last_name}
+                </p>
+                <p className="row__item transaction_manager popup__item">
+                  {user?.phone_number}
+                </p>
+                <p className="row__item transaction_manager popup__item">
+                  {user?.email}
+                </p>
+              </div>
             </Row>
           ))}
           <div className="add_manager_submit">
@@ -383,6 +406,8 @@ const TransactionPage = () => {
                   newManager?._id
                 );
                 toast.success("Cập nhật người quản lý thành công");
+                window["update_manager_popup"].close();
+                window["manager_popup"].close();
               }}
             />
             <Button
@@ -395,7 +420,7 @@ const TransactionPage = () => {
           </div>
         </div>
       </Popup>
-      {/* {userloading ? <Loading /> : <></>} */}
+      {transactionSpotLoading ? <Loading /> : <></>}
       <ToastContainer className="toasify" />
     </div>
   );

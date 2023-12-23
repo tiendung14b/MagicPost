@@ -18,6 +18,10 @@
   min-width: 20vw;
 }
 
+.row__item.transaction_manager:hover {
+  cursor: pointer;
+}
+
 .manager__todo {
   width: 100%;
   display: flex;
@@ -257,4 +261,14 @@
   display: flex;
   align-items: flex-start;
   gap: 15px;
+}
+
+.choose_list_manager {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.selected-row {
+  background-color: #e8eff9;
 }

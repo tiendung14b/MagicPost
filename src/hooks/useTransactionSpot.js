@@ -11,7 +11,6 @@ const useTransactionSpot = (toast) => {
 
   const getTransactionSpotInfo = async (id) => {
     try {
-      setTransactionSpotLoading(true);
       const response = await clientAxios.get(
         `/transaction_spot/${id}`
       );
@@ -25,8 +24,9 @@ const useTransactionSpot = (toast) => {
 
   const getListTransactionSpot = async () => {
     try {
-      setTransactionSpotLoading(true);
+      console.log("transaction loading", transactionSpotLoading);
       const response = await clientAxios.get('/transaction_spot/get_all');
+      setTransactionSpotLoading(false);
       setListTransactionSpot(response?.result);
     } catch (err) {
       setTransactionSpotLoading(false);
@@ -39,6 +39,7 @@ const useTransactionSpot = (toast) => {
     try {
       setTransactionSpotLoading(true);
       await clientAxios.delete(`/transaction_spot/remove_manager/` + id);
+      getListTransactionSpot();
       Toast.success("Xóa thành công", toast);
     } catch (err) {
       setTransactionSpotLoading(false);
@@ -102,6 +103,64 @@ const useTransactionSpot = (toast) => {
       await clientAxios.post(`/user/transaction_employee`, data);
       getListTransactionSpot();
       Toast.success("Đặt quản lý thành công", toast);
+  const sendToWarehouse = async (id) => {
+    try {
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/transaction_spot/send_to_warehouse`, {
+        transaction_spot_id: id,
+      });
+      getListTransactionSpot();
+      Toast.success("Gửi thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const delivery = async (id) => {
+    try {
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/transaction_spot/delivery`, {
+        transaction_spot_id: id,
+      });
+      getListTransactionSpot();
+      Toast.success("Giao thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const createTransactionSpot = async (data) => {
+    try {
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/transaction_spot/`, data);
+      getListTransactionSpot();
+      Toast.success("Tạo thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const getUnconfirmedTransaction = async () => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(`/transaction_spot/get_unconfirmed`);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const getFromClientTransaction = async (id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(`/transaction_spot/get_from_client_transactions/` + id);
+      setTransactionSpotLoading(false);
+      return response?.result;
     } catch (err) {
       setTransactionSpotLoading(false);
       responseToast(err, toast);
@@ -120,6 +179,11 @@ const useTransactionSpot = (toast) => {
     getListTransactionEmployee,
     deleteTransactionEmployee,
     addTransactionEmployee,
+    sendToWarehouse,
+    delivery,
+    createTransactionSpot,
+    getUnconfirmedTransaction,
+    getFromClientTransaction
   };
 };
 

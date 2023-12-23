@@ -42,7 +42,7 @@
   transform: rotate(0deg);
 }
 
-.row__item.transaction_manager:hover {
+.row__item.field_manager:hover {
   cursor: pointer;
 }
 
