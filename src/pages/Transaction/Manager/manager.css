@@ -1,10 +1,274 @@
-.container {
+.manager {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+}
+
+.page_title {
+  font-size: 23px;
+  font-weight: 600;
+  margin-bottom: 30px;
 }
 
 .row__item {
   min-width: 16vw;
 }
 
-.sidebar.close ~ .container .row__item {
+.sidebar.close~.container .row__item {
   min-width: 20vw;
+}
+
+.row__item.transaction_manager:hover {
+  cursor: pointer;
+}
+
+.manager__todo {
+  width: 100%;
+  display: flex;
+}
+
+.manager__todo input:focus {
+  outline: none;
+  border: 0px solid transparent;
+}
+
+.manager__search {
+  margin-left: auto;
+  width: 100%;
+}
+
+.manager__search input {
+  border: none;
+}
+
+.selected__search {
+  padding: 10px;
+  font-size: 16px;
+  width: 150px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.selected__search option {
+  background-color: #fff;
+  color: #333;
+}
+
+.selected__search {
+  border: none;
+}
+
+.add_manager_popup .warn {
+  display: none;
+}
+
+.add_manager_popup .warn.show {
+  display: block;
+  color: red;
+  font-size: 12px;
+  padding-left: 10px;
+}
+
+.add_manager_popup__input {
+  min-width: 40vw;
+}
+
+.popup__body__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.toasify {
+  z-index: 100000;
+}
+
+.add_manager_role {
+  padding-left: 10px;
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  gap: 20px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.checkbox label {
+  width: auto;
+}
+
+.pagination {
+  display: flex;
+  margin-top: 20px;
+  gap: 10px;
+  max-width: 30vw;
+  padding: 0 5px;
+  padding-bottom: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pagination::-webkit-scrollbar {
+  height: 3px;
+  border-radius: 999px;
+}
+
+/* Track */
+.pagination::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.pagination::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.pagination::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.pagination__item {
+  padding: 5px 10px;
+  background-color: white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  color: black;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.pagination__item:hover {
+  background-color: #ff6969;
+  color: white;
+}
+
+.pagination__item.active {
+  background-color: #fa5a5a;
+  color: white;
+}
+
+/* dropdrown container css */
+.manager__search__type {
+  position: absolute;
+  right: 6.65rem;
+  font-size: 14px;
+  border: none;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #dfe3e8;
+  border-radius: 10px;
+  margin-left: auto;
+  color: #888;
+}
+
+.manager__search__type:focus {
+  outline: none;
+}
+
+.manager__search__type::before {
+  content: " ";
+  position: absolute;
+  transform: rotate(45deg);
+}
+
+.input__div {
+  display: flex;
+  margin-left: auto;
+  flex-direction: row;
+  border: 1px solid #dfe3e8;
+  align-items: center;
+}
+
+.search_icon {
+  width: 30px;
+  padding: 5px;
+  color: #777;
+  align-self: center;
+}
+
+.dropdown__div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+}
+
+.manager__mobile {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+}
+
+.manager__todo__mobile {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px;
+}
+
+.sidebar.close~.container__mobile {
+  margin-left: 110px;
+}
+
+.manager__detail__mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 175%;
+  padding: 20px;
+}
+
+.manager__search__mobile {
+  width: 100%;
+}
+
+.column__title {
+  font-weight: 600;
+  color: #016a70;
+}
+
+.dropdown__image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 0px 15px;
+}
+
+.button__layout__mobile {
+  margin-top: 10px;
+  margin-left: 25px;
+}
+
+.add_manager_submit {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.manager__edit__button {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.choose_list_manager {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.selected-row {
+  background-color: #e8eff9;
 }

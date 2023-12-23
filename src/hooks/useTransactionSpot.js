@@ -63,7 +63,6 @@ const useTransactionSpot = (toast) => {
 
   const getListTransactionEmployee = async (transaction_spot_id) => {
     try {
-      setTransactionSpotLoading(true);
       const response = await clientAxios.get(
         "/transaction_spot/get_all_employee/" + transaction_spot_id
       );
@@ -82,8 +81,11 @@ const useTransactionSpot = (toast) => {
         Toast.error("Bạn không có quyền xóa nhân viên", toast);
         return;
       }
-      setTransactionSpotLoading(true);
       await clientAxios.delete(`/user/transaction_employee/` + id);
+      getListTransactionEmployee(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
+      setTransactionSpotLoading(false);
       Toast.success("Xóa thành công", toast);
     } catch (err) {
       setTransactionSpotLoading(false);
@@ -98,10 +100,10 @@ const useTransactionSpot = (toast) => {
         Toast.error("Bạn không có quyền thêm nhân viên", toast);
         return;
       }
-      setTransactionSpotLoading(true);
       await clientAxios.post(`/user/transaction_employee`, data);
-      getListTransactionSpot();
+      getListTransactionEmployee(JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id);
       Toast.success("Đặt quản lý thành công", toast);
+      setTransactionSpotLoading(false);
     } catch (err) {
       setTransactionSpotLoading(false);
       responseToast(err, toast);
@@ -142,7 +144,6 @@ const useTransactionSpot = (toast) => {
       await clientAxios.post(`/transaction_spot/`, data);
       getListTransactionSpot();
       Toast.success("Tạo thành công", toast);
-      
     } catch (err) {
       setTransactionSpotLoading(false);
       responseToast(err, toast);
@@ -180,17 +181,18 @@ const useTransactionSpot = (toast) => {
   return {
     transactionSpotInfo,
     transactionSpotLoading,
+    listTransactionEmployee,
     listTransactionSpot,
     getTransactionSpotInfo,
     setTransactionManager,
     deleteTransactionManager,
     getListTransactionSpot,
-    listTransactionEmployee,
     getListTransactionEmployee,
     deleteTransactionEmployee,
     addTransactionEmployee,
     sendToWarehouse,
     delivery,
+    setTransactionSpotLoading,
     createTransactionSpot,
     getUnconfirmedTransaction,
     getFromClientTransaction,

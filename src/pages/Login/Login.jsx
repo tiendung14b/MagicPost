@@ -47,6 +47,11 @@ const Login = () => {
         user.workplace.workplace_name == "TRANSACTION"
       ) {
         return navigate("/transaction/employee");
+      } else if (
+        user.workplace.role == role.WAREHOUSE_MANAGER &&
+        user.workplace.workplace_name == "WAREHOUSE"
+      ) {
+        return navigate("/warehouse/manager");
       } else {
         Toast.warn("Bạn không có quyền truy cập vào trang này", toast);
       }

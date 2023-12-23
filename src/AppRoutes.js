@@ -13,6 +13,8 @@ const RedirectHandler = () => {
     return <Navigate to="/director" />;
   } else if (user.workplace?.role == role.TRANSACTION_MANAGER) {
     return <Navigate to="/transaction/manager" />;
+  } else if (user.workplace?.role == role.WAREHOUSE_MANAGER) {
+    return <Navigate to="/warehouse/manager" />;
   }
   return <Navigate to="/login" />;
 }
@@ -44,6 +46,13 @@ const AppRouter = () => {
         <ProtectRoute
           role={role.TRANSACTION_MANAGER}
           workplace_name="TRANSACTION">
+          <TransactionManager />
+        </ProtectRoute>}
+      />
+      <Route path='/warehouse/manager' element={
+        <ProtectRoute
+          role={role.WAREHOUSE_MANAGER}
+          workplace_name="WAREHOUSE">
           <TransactionManager />
         </ProtectRoute>}
       />

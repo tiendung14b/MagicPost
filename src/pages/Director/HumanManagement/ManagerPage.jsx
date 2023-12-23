@@ -9,10 +9,12 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
 import useWindowScreen from "../../../hooks/useWindowScreen";
-import "../Director.css"
+
 import Dropdown from "../../../ui/Dropdown/Dropdown";
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
+
+import "../Director.css";
 
 const ManagerPage = () => {
   const {
@@ -197,7 +199,7 @@ const ManagerPage = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(listManager.length / ((0.73 * height) / 60))
+            Math.ceil(listManager.length / ((0.6 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
