@@ -1,8 +1,6 @@
 import axios from 'axios'
 import Toast from '../ui/Toast/Toast'
 
-
-
 const clientAxios = axios.create({
   baseURL: 'http://localhost:8000/api/',
   timeout: 10000,
@@ -30,6 +28,9 @@ clientAxios.interceptors.response.use(
     return response?.data;
   },
   (error) => {
+    if (!error?.response) {
+      return new Error("API error - no response")
+    }
     throw error.response
   }
 )
