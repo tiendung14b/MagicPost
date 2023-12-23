@@ -120,9 +120,9 @@ const useTransactionSpot = (toast) => {
       Toast.success("Gửi thành công", toast);
     } catch (err) {
       setTransactionSpotLoading(false);
-      responseToast(err, toast);
+      responseToast(err, toast)
     }
-  };
+  }
 
   const delivery = async (id) => {
     try {
@@ -197,6 +197,6 @@ const useTransactionSpot = (toast) => {
     getUnconfirmedTransaction,
     getFromClientTransaction,
   };
-};
+}
 
 export default useTransactionSpot;
