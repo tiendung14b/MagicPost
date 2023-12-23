@@ -7,6 +7,7 @@ const useTransactionSpot = (toast) => {
   const [listTransactionSpot, setListTransactionSpot] = useState([]);
   const [transactionSpotInfo, setTransactionSpotInfo] = useState({});
   const [transactionSpotLoading, setTransactionSpotLoading] = useState(false);
+  const [listTransactionEmployee, setListTransactionEmployee] = useState([]);
 
   const getTransactionSpotInfo = async (id) => {
     try {
@@ -62,6 +63,51 @@ const useTransactionSpot = (toast) => {
     }
   };
 
+  const getListTransactionEmployee = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get('/transaction_spot/get_all_employee/' + transaction_spot_id);
+      setListTransactionEmployee(response?.result);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      console.log(err);
+      responseToast(err, toast);
+    }
+  };
+
+  const deleteTransactionEmployee = async (id) => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      if (user?.workplace?.role !== "TRANSACTION_MANAGER") {
+        Toast.error("Bạn không có quyền xóa nhân viên", toast);
+        return;
+      }
+      setTransactionSpotLoading(true);
+      await clientAxios.delete(`/user/transaction_employee/` + id);
+      Toast.success("Xóa thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const addTransactionEmployee = async (data) => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      if (user?.workplace?.role !== "TRANSACTION_MANAGER") {
+        Toast.error("Bạn không có quyền thêm nhân viên", toast);
+        return;
+      }
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/user/transaction_employee`, data);
+      getListTransactionSpot();
+      Toast.success("Đặt quản lý thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
   return {
     transactionSpotInfo,
     transactionSpotLoading,
@@ -70,6 +116,10 @@ const useTransactionSpot = (toast) => {
     setTransactionManager,
     deleteTransactionManager,
     getListTransactionSpot,
+    listTransactionEmployee,
+    getListTransactionEmployee,
+    deleteTransactionEmployee,
+    addTransactionEmployee,
   };
 };
 
