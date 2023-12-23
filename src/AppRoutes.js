@@ -3,6 +3,8 @@ import Login from './pages/Login/Login';
 import Director from './pages/Director/Director';
 import role from './util/role';
 import TransactionManager from './pages/Transaction/Manager/Manager';
+import WarehouseManager from './pages/Warehouse/Manager/Manager';
+
 
 const RedirectHandler = () => {
   const user = JSON.parse(sessionStorage.getItem('user'));
@@ -53,7 +55,7 @@ const AppRouter = () => {
         <ProtectRoute
           role={role.WAREHOUSE_MANAGER}
           workplace_name="WAREHOUSE">
-          <TransactionManager />
+          <WarehouseManager />
         </ProtectRoute>}
       />
       <Route path='/transaction/employee' element={

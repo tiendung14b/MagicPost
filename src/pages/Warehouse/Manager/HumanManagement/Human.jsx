@@ -24,16 +24,23 @@ const Human = () => {
   } = useUser(toast);
 
   //state to get the transaction employee
-  const {
-    listTransactionEmployee,
-    transactionSpotLoading,
-    getListTransactionEmployee,
-    addTransactionEmployee,
-    deleteTransactionEmployee,
-    setTransactionSpotLoading,
-  } = useTransactionSpot(toast);
+  // const {
+  //   listTransactionEmployee,
+  //   transactionSpotLoading,
+  //   getListTransactionEmployee,
+  //   addTransactionEmployee,
+  //   deleteTransactionEmployee,
+  //   setTransactionSpotLoading,
+  // } = useTransactionSpot(toast);
 
-  
+  const {
+    listWarehouseEmployee,
+    warehouseLoading,
+    getListWarehouseEmployee,
+    addWarehouseEmployee,
+    deleteWarehouseEmployee,
+    setWarehouseLoading,
+  } = useWarehouse(toast);
 
   //state for user
   const [newUser, setNewUser] = useState({});
@@ -73,7 +80,7 @@ const Human = () => {
     }
   };
   //list manager sorted to sortedEmployee
-  const sortedEmployee = listTransactionEmployee
+  const sortedEmployee = listWarehouseEmployee
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -90,14 +97,12 @@ const Human = () => {
     });
   //useEffect
   useEffect(() => {
-    getListTransactionEmployee(
-      JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
-    );
+    getListWarehouseEmployee(JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id);
   }, []);
 
   return (
     <div className="manager">
-      <h1 className="page_title">Transaction Manager Dashboard</h1>
+      <h1 className="page_title">Warehouse Manager Dashboard</h1>
       <DashBoard>
         <Row className="manager__todo">
           <Button
@@ -270,9 +275,9 @@ const Human = () => {
             text={"Xoá người dùng này"}
             className={"danger"}
             onClick={() => {
-              setTransactionSpotLoading(true);
+              setWarehouseLoading(true);
               window["manager_popup"].close();
-              deleteTransactionEmployee(userChoosen?._id);
+              deleteWarehouseEmployee(userChoosen?._id);
             }}
           />
         </div>
@@ -327,12 +332,10 @@ const Human = () => {
                   window["add_manager_warn"].className = "warn show";
                   return;
                 }
-                setTransactionSpotLoading(true);
+                setWarehouseLoading(true);
                 window["add_manager_popup"].close();
-                addTransactionEmployee(newUser);
+                addWarehouseEmployee(newUser);
                 setNewUser({});
-                
-                
               }}
             />
             <Button
@@ -346,7 +349,7 @@ const Human = () => {
           </div>
         </div>
       </Popup>
-      {transactionSpotLoading ? <Loading /> : <></>}
+      {warehouseLoading ? <Loading /> : <></>}
 
       <ToastContainer className="toasify" />
     </div>

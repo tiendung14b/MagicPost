@@ -7,6 +7,7 @@ const useWarehouse = (toast) => {
   const [listWarehouse, setListWarehouse] = useState([]);
   const [warehouseInfo, setWarehouseInfo] = useState({});
   const [warehouseLoading, setWarehouseLoading] = useState(false);
+  const [listWarehouseEmployee, setListWarehouseEmployee] = useState([]);
 
   const getWarehouseInfo = async (id) => {
     try {
@@ -122,15 +123,68 @@ const useWarehouse = (toast) => {
     }
   }
 
+  const getListWarehouseEmployee = async (warehouse_id) => {
+    try {
+      const response = await clientAxios.get(`/warehouse/employee_warehouse/` + warehouse_id);
+      setListWarehouseEmployee(response?.result);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
+  const addWarehouseEmployee = async (data) => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      if (user?.workplace?.role !== "WAREHOUSE_MANAGER") {
+        Toast.error("Bạn không có quyền thêm nhân viên", toast);
+        return;
+      }
+      await clientAxios.post(`/user/warehouse_employee`, data);
+      getListWarehouseEmployee(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
+      Toast.success("Thêm thành công", toast);
+      setWarehouseLoading(false);
+    } catch (err) {
+      setWarehouseLoading(false);
+      responseToast(err, toast);
+    }
+  } 
+
+  const deleteWarehouseEmployee = async (id) => {
+    try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      if (user?.workplace?.role !== "WAREHOUSE_MANAGER") {
+        Toast.error("Bạn không có quyền xóa nhân viên", toast);
+        return;
+      }
+      await clientAxios.delete(`/user/warehouse_employee/` + id);
+      getListWarehouseEmployee(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
+      setWarehouseLoading(false);
+      Toast.success("Xóa thành công", toast);
+    } catch (err) {
+      setWarehouseLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
   return {
     listWarehouse,
     warehouseInfo,
     warehouseLoading,
+    listWarehouseEmployee,
     getWarehouseInfo,
     createWarehouse,
     getListWarehouse,
     deleteWarehouseManager,
     setWarehouseManager,
+    getListWarehouseEmployee,
+    addWarehouseEmployee,
+    deleteWarehouseEmployee,
+    setWarehouseLoading,
   };
 };
 
