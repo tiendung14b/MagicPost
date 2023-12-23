@@ -11,10 +11,9 @@ const useTransactionSpot = (toast) => {
   const getTransactionSpotInfo = async (id) => {
     try {
       const response = await clientAxios.get(
-        `/transaction_spot/${id}`
+        `/transaction_spot/get_info/${id}`
       );
         setTransactionSpotInfo(response?.result);
-        
     } catch (err) {
         console.log(err);
       responseToast(err, toast);
@@ -23,7 +22,6 @@ const useTransactionSpot = (toast) => {
 
   const getListTransactionSpot = async () => {
     try {
-      console.log("transaction loading", transactionSpotLoading);
       const response = await clientAxios.get('/transaction_spot/get_all');
       setTransactionSpotLoading(false);
       setListTransactionSpot(response?.result);
@@ -50,7 +48,6 @@ const useTransactionSpot = (toast) => {
 
   const setTransactionManager = async (id, manager_id) => {
     try {
-      console.log(id, manager_id);
       setTransactionSpotLoading(true);
       await clientAxios.put(`/transaction_spot/set_manager/` + id, {
         manager_id,
