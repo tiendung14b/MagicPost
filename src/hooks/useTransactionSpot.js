@@ -142,6 +142,7 @@ const useTransactionSpot = (toast) => {
       await clientAxios.post(`/transaction_spot/`, data);
       getListTransactionSpot();
       Toast.success("Tạo thành công", toast);
+      
     } catch (err) {
       setTransactionSpotLoading(false);
       responseToast(err, toast);

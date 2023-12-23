@@ -23,13 +23,15 @@ const WarehousePage = () => {
     listWarehouse,
     warehouseLoading,
     getListWarehouse,
+    createWarehouse,
     setWarehouseManager,
     deleteWarehouseManager,
   } = useWarehouse(toast);
 
   //state for user
   const { userloading, listManager, getListManager } = useUser(toast);
-
+  //state for new warehouse
+  const [newWarehouse, setNewWarehouse] = useState({});
   //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -57,6 +59,11 @@ const WarehousePage = () => {
     setSearchBy(value);
     setSearch("");
   };
+
+  const handleChanged = (name, value) => {
+    setNewWarehouse({ ...newWarehouse, [name]: value });
+  };
+  
 
   //handle sort
   const handleSort = (column) => {
@@ -226,8 +233,7 @@ const WarehousePage = () => {
                   <>
                     <img
                       src={
-                        warehouse.warehouse_manager.url_avatar ||
-                        default_avatar
+                        warehouse.warehouse_manager.url_avatar || default_avatar
                       }
                       alt=""
                     />
@@ -318,35 +324,59 @@ const WarehousePage = () => {
       <Popup
         className="add_manager_popup"
         popup_id={"add_manager_popup"}
-        title={"Thêm điểm giao dịch quản lý"}
+        title={"Thêm kho mới"}
       >
         <div className="popup__body__content">
           <Input
             className="add_manager_popup__input"
             placeholder={"Tên"}
             type="text"
-            name="Name"
+            name="name"
+            onChange={(e) => handleChanged("name", e.target.value)}
           />
           <Input
             className="add_manager_popup__input"
-            placeholder={"Location City"}
+            placeholder={"location"}
             type="text"
-            name="location_city"
+            name="location"
+            onChange={(e) => handleChanged("location", e.target.value)}
           />
-          <Input
-            className="add_manager_popup__input"
-            placeholder={"Postal Code"}
-            type="text"
-            name="postal_code"
-          />
+          <div className="choose_warehouse_manager">
+            <select
+              name="warehouse_manager"
+              id="warehouse_manager"
+              onChange={(e) => {
+                handleChanged("warehouse_manager", e.target.value);
+              }}
+            >
+              {listWareHouseManager?.map((user) => (
+                <option value={user._id}>
+                  {user.first_name + " " + user.last_name}
+                </option>
+              ))}
+            </select>
+          </div>
           <p className="warn" id="add_manager_warn">
             Bạn cần nhập đầy đủ thông tin
           </p>
           <div className="add_manager_submit">
             <Button
-              text={"Thêm điểm giao dịch"}
+              text={"Thêm kho mới"}
               className={"submit"}
-              onClick={() => {}}
+              onClick={() => {
+                console.log(newWarehouse);
+                if (
+                  !newWarehouse.name ||
+                  !newWarehouse.location ||
+                  !newWarehouse.warehouse_manager
+                ) {
+                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
+                  return;
+                }
+                window["add_manager_popup"].close();
+                createWarehouse(newWarehouse);
+                setNewWarehouse({});
+              }}
             />
             <Button
               text={"Hủy"}
