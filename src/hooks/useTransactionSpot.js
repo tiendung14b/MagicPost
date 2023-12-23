@@ -12,10 +12,9 @@ const useTransactionSpot = (toast) => {
   const getTransactionSpotInfo = async (id) => {
     try {
       const response = await clientAxios.get(
-        `/transaction_spot/${id}`
+        `/transaction_spot/get_info/${id}`
       );
       setTransactionSpotInfo(response?.result);
-        
     } catch (err) {
       console.log(err);
       responseToast(err, toast);
@@ -24,8 +23,7 @@ const useTransactionSpot = (toast) => {
 
   const getListTransactionSpot = async () => {
     try {
-      console.log("transaction loading", transactionSpotLoading);
-      const response = await clientAxios.get('/transaction_spot/get_all');
+      const response = await clientAxios.get("/transaction_spot/get_all");
       setTransactionSpotLoading(false);
       setListTransactionSpot(response?.result);
     } catch (err) {
@@ -51,7 +49,6 @@ const useTransactionSpot = (toast) => {
 
   const setTransactionManager = async (id, manager_id) => {
     try {
-      console.log(id, manager_id);
       setTransactionSpotLoading(true);
       await clientAxios.put(`/transaction_spot/set_manager/` + id, {
         manager_id,
@@ -67,7 +64,9 @@ const useTransactionSpot = (toast) => {
   const getListTransactionEmployee = async (transaction_spot_id) => {
     try {
       setTransactionSpotLoading(true);
-      const response = await clientAxios.get('/transaction_spot/get_all_employee/' + transaction_spot_id);
+      const response = await clientAxios.get(
+        "/transaction_spot/get_all_employee/" + transaction_spot_id
+      );
       setListTransactionEmployee(response?.result);
     } catch (err) {
       setTransactionSpotLoading(false);
@@ -103,19 +102,20 @@ const useTransactionSpot = (toast) => {
       await clientAxios.post(`/user/transaction_employee`, data);
       getListTransactionSpot();
       Toast.success("Đặt quản lý thành công", toast);
-      const sendToWarehouse = async (id) => {
-        try {
-          setTransactionSpotLoading(true);
-          await clientAxios.post(`/transaction_spot/send_to_warehouse`, {
-            transaction_spot_id: id,
-          });
-          getListTransactionSpot();
-          Toast.success("Gửi thành công", toast);
-        } catch (err) {
-          setTransactionSpotLoading(false);
-          responseToast(err, toast);
-        }
-      }
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const sendToWarehouse = async (id) => {
+    try {
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/transaction_spot/send_to_warehouse`, {
+        transaction_spot_id: id,
+      });
+      getListTransactionSpot();
+      Toast.success("Gửi thành công", toast);
     } catch (err) {
       setTransactionSpotLoading(false);
       responseToast(err, toast)
@@ -134,7 +134,7 @@ const useTransactionSpot = (toast) => {
       setTransactionSpotLoading(false);
       responseToast(err, toast);
     }
-  }
+  };
 
   const createTransactionSpot = async (data) => {
     try {
@@ -142,6 +142,7 @@ const useTransactionSpot = (toast) => {
       await clientAxios.post(`/transaction_spot/`, data);
       getListTransactionSpot();
       Toast.success("Tạo thành công", toast);
+      
     } catch (err) {
       setTransactionSpotLoading(false);
       responseToast(err, toast);
@@ -151,7 +152,9 @@ const useTransactionSpot = (toast) => {
   const getUnconfirmedTransaction = async () => {
     try {
       setTransactionSpotLoading(true);
-      const response = await clientAxios.get(`/transaction_spot/get_unconfirmed`);
+      const response = await clientAxios.get(
+        `/transaction_spot/get_unconfirmed`
+      );
       setTransactionSpotLoading(false);
       return response?.result;
     } catch (err) {
@@ -163,14 +166,16 @@ const useTransactionSpot = (toast) => {
   const getFromClientTransaction = async (id) => {
     try {
       setTransactionSpotLoading(true);
-      const response = await clientAxios.get(`/transaction_spot/get_from_client_transactions/` + id);
+      const response = await clientAxios.get(
+        `/transaction_spot/get_from_client_transactions/` + id
+      );
       setTransactionSpotLoading(false);
       return response?.result;
     } catch (err) {
       setTransactionSpotLoading(false);
       responseToast(err, toast);
     }
-  }
+  };
 
   return {
     transactionSpotInfo,
@@ -188,7 +193,7 @@ const useTransactionSpot = (toast) => {
     delivery,
     createTransactionSpot,
     getUnconfirmedTransaction,
-    getFromClientTransaction
+    getFromClientTransaction,
   };
 }
 

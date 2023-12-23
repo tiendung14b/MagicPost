@@ -2,6 +2,8 @@ import Toast from "../../../ui/Toast/Toast";
 import DashBoard from "../../../components/DashBoard/DashBoard";
 import Row from "../../../components/DashBoard/Row";
 import useTransactionSpot from "../../../hooks/useTransactionSpot";
+import useLocation from "../../../hooks/useLocation";
+import useWarehouse from "../../../hooks/useWarehouse";
 import useUser from "../../../hooks/useUser";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
@@ -24,11 +26,32 @@ const TransactionPage = () => {
     transactionSpotLoading,
     getListTransactionSpot,
     setTransactionManager,
+    createTransactionSpot,
     deleteTransactionManager,
   } = useTransactionSpot(toast);
 
+  const {
+    provinceData,
+    districtData,
+    locationLoading,
+    getProvince,
+    getDistrict,
+  } = useLocation(toast);
+
+  const {
+    //state for transaction
+    listWarehouse,
+    warehouseLoading,
+    getListWarehouse,
+    setWarehouseManager,
+    deleteWarehouseManager,
+  } = useWarehouse(toast);
+
   //state for user
   const { userloading, listManager, getListManager } = useUser(toast);
+
+  //state for new transaction spot
+  const [newTransactionSpot, setNewTransactionSpot] = useState({});
 
   //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
@@ -56,6 +79,10 @@ const TransactionPage = () => {
     setIsDropdown(false);
     setSearchBy(value);
     setSearch("");
+  };
+
+  const handleChange = (name, value) => {
+    setNewTransactionSpot({ ...newTransactionSpot, [name]: value });
   };
 
   //handle sort
@@ -95,6 +122,11 @@ const TransactionPage = () => {
   useEffect(() => {
     getListManager();
     getListTransactionSpot();
+    getProvince();
+    getDistrict("01");
+    getListWarehouse();
+    // handleProvince();
+    // handleDistrict("30");
   }, []);
 
   return (
@@ -230,12 +262,15 @@ const TransactionPage = () => {
                   ?.workplace_id ? (
                   <>
                     <img
-                      src={transactionSpot.transaction_manager.url_avatar || default_avatar}
+                      src={
+                        transactionSpot.transaction_manager.url_avatar ||
+                        default_avatar
+                      }
                       alt=""
                     />
-                    {transactionSpot.transaction_manager.first_name +
+                    {/* {transactionSpot.transaction_manager.first_name +
                       " " +
-                      transactionSpot.transaction_manager.last_name}
+                      transactionSpot.transaction_manager.last_name} */}
                   </>
                 ) : (
                   "Chưa có"
@@ -328,18 +363,108 @@ const TransactionPage = () => {
             placeholder={"Tên"}
             type="text"
             name="Name"
+            onChange={(e) => {
+              handleChange("name", e.target.value);
+            }}
           />
+          <div className="choose_location">
+            <select
+              name="province"
+              id="province"
+              onChange={(e) => {
+                getDistrict(e.target.value);
+                let text = e.target.options[e.target.selectedIndex].text;
+                text = text.replace("Tỉnh ", "");
+                text = text.replace("Thành phố ", "");
+                console.log(text);
+                setNewTransactionSpot({
+                  ...newTransactionSpot,
+                  location: {
+                    ...newTransactionSpot.location,
+                    city: text,
+                  },
+                });
+              }}
+            >
+              <option value="" disabled>
+                Select Province
+              </option>
+              {provinceData?.map((province) => (
+                <option value={province.province_id}>
+                  {province.province_name}
+                </option>
+              ))}
+            </select>
+            <select
+              name="district"
+              id="district"
+              onChange={(e) => {
+                console.log(e.target.options[e.target.selectedIndex].text);
+                let text = e.target.options[e.target.selectedIndex].text;
+                text = text.replace("Quận ", "");
+                text = text.replace("Huyện ", "");
+                console.log(text);
+                setNewTransactionSpot({
+                  ...newTransactionSpot,
+                  location: {
+                    ...newTransactionSpot.location,
+                    district: text,
+                  },
+                });
+              }}
+            >
+              <option value="" disabled>
+                Select District
+              </option>
+              {districtData?.map((district) => (
+                <option value={district.district_id}>
+                  {district.district_name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="choose_warehouse">
+            <select
+              name="warehouse"
+              id="warehouse"
+              onChange={(e) => {
+                handleChange("warehouse", e.target.value);
+              }}
+            >
+              {listWarehouse?.map((warehouse) => (
+                <option value={warehouse._id}>{warehouse.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="choose_transaction_manager">
+            <select
+              name="transaction_manager"
+              id="transaction_manager"
+              onChange={(e) => {
+                handleChange("transaction_manager", e.target.value);
+              }}
+            >
+              {listManagerSpot?.map((user) => (
+                <option value={user._id}>
+                  {user.first_name + " " + user.last_name}
+                </option>
+              ))}
+            </select>
+          </div>
           <Input
             className="add_manager_popup__input"
-            placeholder={"Location City"}
+            placeholder={"Chi tiết"}
             type="text"
-            name="location_city"
-          />
-          <Input
-            className="add_manager_popup__input"
-            placeholder={"Postal Code"}
-            type="text"
-            name="postal_code"
+            name="Detail"
+            onChange={(e) => {
+              setNewTransactionSpot({
+                ...newTransactionSpot,
+                location: {
+                  ...newTransactionSpot.location,
+                  detail: e.target.value,
+                },
+              });
+            }}
           />
           <p className="warn" id="add_manager_warn">
             Bạn cần nhập đầy đủ thông tin
@@ -348,7 +473,22 @@ const TransactionPage = () => {
             <Button
               text={"Thêm điểm giao dịch"}
               className={"submit"}
-              onClick={() => {}}
+              onClick={() => {
+                console.log(newTransactionSpot);
+                if (
+                  !newTransactionSpot?.name ||
+                  !newTransactionSpot?.location?.city ||
+                  !newTransactionSpot?.location?.district ||
+                  !newTransactionSpot?.warehouse ||
+                  !newTransactionSpot?.transaction_manager
+                ) {
+                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
+                  return;
+                }
+                window["add_manager_popup"].close();
+                createTransactionSpot(newTransactionSpot);
+                setNewTransactionSpot({});
+              }}
             />
             <Button
               text={"Hủy"}
@@ -421,6 +561,7 @@ const TransactionPage = () => {
         </div>
       </Popup>
       {transactionSpotLoading ? <Loading /> : <></>}
+      {/* {locationLoading ? <Loading /> : <></>} */}
       <ToastContainer className="toasify" />
     </div>
   );

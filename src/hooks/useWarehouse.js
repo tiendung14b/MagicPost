@@ -127,6 +127,7 @@ const useWarehouse = (toast) => {
     warehouseInfo,
     warehouseLoading,
     getWarehouseInfo,
+    createWarehouse,
     getListWarehouse,
     deleteWarehouseManager,
     setWarehouseManager,
