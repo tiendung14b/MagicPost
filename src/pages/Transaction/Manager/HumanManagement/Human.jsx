@@ -16,7 +16,9 @@ import Dropdown from "../../../../ui/Dropdown/Dropdown";
 import arrow from "../../../../assets/arrow.svg";
 import filter_icon from "../../../../assets/filter.svg";
 
-import "../manager.css";
+import default_avatar from "../../../../assets/default_avatar.png";
+
+import "../../../CSS/Director.css";
 
 const Human = () => {
   const {
@@ -101,7 +103,7 @@ const Human = () => {
       <DashBoard>
         <Row className="manager__todo">
           <Button
-            text={"Thêm quản lý"}
+            text={"Thêm nhân viên điểm giao dịch"}
             className={"action"}
             onClick={() => {
               window["add_manager_popup"].showModal();
@@ -156,7 +158,7 @@ const Human = () => {
               }}
             />
           </div>
-          <div className="row__item sort_item title__workplace">
+          {/* <div className="row__item sort_item title__workplace">
             Điểm quản lý
             <img
               src={arrow}
@@ -166,7 +168,7 @@ const Human = () => {
                 e.target.classList.toggle("active");
               }}
             />
-          </div>
+          </div> */}
           <div className="row__item title__edit">Quản lý tài khoản</div>
         </Row>
         {sortedEmployee
@@ -185,15 +187,21 @@ const Human = () => {
           })
           ?.map((manager) => (
             <Row className="manager__detail">
-              <p className="manager__name row__item">
-                {manager?.first_name + " " + manager?.last_name}
+              <p className="manager__name row__item user_management">
+                <img
+                  src={
+                    manager?.url_avatar ||
+                    default_avatar
+                  }
+                />
+                {" " + manager?.first_name + " " + manager?.last_name}
               </p>
               <p className="row__item manager__phone">
                 {manager?.phone_number}
               </p>
-              <p className="row__item manager__workplace">
+              {/* <p className="row__item manager__workplace">
                 {manager?.workplace?.name || "Chưa có"}
-              </p>
+              </p> */}
               <div className="row__item manager__edit">
                 <Button
                   text={"Xem chi tiết"}
@@ -254,12 +262,12 @@ const Human = () => {
             <p className="manager_popup__field__title">Email:</p>
             <p className="manager_popup__field__value">{userChoosen?.email}</p>
           </div>
-          <div className="manager_popup__field">
+          {/* <div className="manager_popup__field">
             <p className="manager_popup__field__title">Nơi làm việc:</p>
             <p className="manager_popup__field__value">
               {userChoosen?.workplace?.name || "Chưa có"}
             </p>
-          </div>
+          </div> */}
           <div className="manager_popup__field">
             <p className="manager_popup__field__title">Vai trò:</p>
             <p className="manager_popup__field__value">
@@ -324,15 +332,12 @@ const Human = () => {
                   !newUser?.email
                 ) {
                   Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
-                  window["add_manager_warn"].className = "warn show";
                   return;
                 }
                 setTransactionSpotLoading(true);
                 window["add_manager_popup"].close();
                 addTransactionEmployee(newUser);
                 setNewUser({});
-                
-                
               }}
             />
             <Button

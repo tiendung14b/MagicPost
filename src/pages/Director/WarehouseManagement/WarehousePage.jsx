@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
 import useWindowScreen from "../../../hooks/useWindowScreen";
-import "../Director.css";
+import "../../CSS/Director.css";
 import Dropdown from "../../../ui/Dropdown/Dropdown";
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";

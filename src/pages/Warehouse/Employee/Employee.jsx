@@ -1,13 +1,14 @@
-import "../../CSS/Director.css";
+import "./employee.css";
 import Layout from "../../../components/Layout/Layout";
 import SideBar from "../../../components/SideBar/SideBar";
 import React from "react";
 import human from "../../../assets/human.svg";
 import transaction from "../../../assets/transaction.svg";
-import Human from "./HumanManagement/Human";
 
-const Manager = () => {
-  const [itemChoosen, setItemChoosen] = React.useState("transaction_human");
+import TransactionManagement from "./Management/TransactionManagement";
+
+const Employee = () => {
+  const [itemChoosen, setItemChoosen] = React.useState("warehouse_human");
 
   const handleChooseItem = (id) => {
     document.getElementById(itemChoosen).classList.remove("clicked");
@@ -17,12 +18,12 @@ const Manager = () => {
 
   return (
     <Layout>
-      <SideBar title="Transaction Manager">
+      <SideBar title="Warehouse Employee">
         <div
           className="sidebar__item__content box clicked"
           title="Quản lý nhân sự"
-          id="transaction_human"
-          onClick={() => handleChooseItem("transaction_human")}
+          id="warehouse_human"
+          onClick={() => handleChooseItem("warehouse_human")}
         >
           <img className="sidebar__icon" src={human} alt="Hello" />
           <p className="sidebar__item__text">Quản lý nhân sự</p>
@@ -30,8 +31,8 @@ const Manager = () => {
         <div
           className="sidebar__item__content box"
           title="Quản lý điểm giao dịch"
-          id="transaction_stat"
-          onClick={() => handleChooseItem("transaction_stat")}
+          id="warehouse_stat"
+          onClick={() => handleChooseItem("warehouse_stat")}
         >
           <img className="sidebar__icon" src={transaction} alt="" />
           <p className="sidebar__item__text">Quản lý điểm giao dịch</p>
@@ -39,12 +40,12 @@ const Manager = () => {
       </SideBar>
       <div className="container">
         <div className="director__content">
-          {itemChoosen === "transaction_human" && <Human />}
-          {itemChoosen === "transaction_stat" && <h1>Transaction</h1>}
+          {itemChoosen === "warehouse_human" && <TransactionManagement />}
+          {itemChoosen === "warehouse_stat" && <h1>Warehouse</h1>}
         </div>
       </div>
     </Layout>
   );
 };
 
-export default Manager;
+export default Employee;

@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../ui/Loading/Loading";
 import useWindowScreen from "../../../hooks/useWindowScreen";
-import "../Director.css";
+import "../../CSS/Director.css";
 import Dropdown from "../../../ui/Dropdown/Dropdown";
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
@@ -30,13 +30,8 @@ const TransactionPage = () => {
     deleteTransactionManager,
   } = useTransactionSpot(toast);
 
-  const {
-    provinceData,
-    districtData,
-    locationLoading,
-    getProvince,
-    getDistrict,
-  } = useLocation(toast);
+  const { provinceData, districtData, getProvince, getDistrict } =
+    useLocation(toast);
 
   const {
     //state for transaction
@@ -49,10 +44,8 @@ const TransactionPage = () => {
 
   //state for user
   const { userloading, listManager, getListManager } = useUser(toast);
-
   //state for new transaction spot
   const [newTransactionSpot, setNewTransactionSpot] = useState({});
-
   //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -125,8 +118,6 @@ const TransactionPage = () => {
     getProvince();
     getDistrict("01");
     getListWarehouse();
-    // handleProvince();
-    // handleDistrict("30");
   }, []);
 
   return (
@@ -190,7 +181,7 @@ const TransactionPage = () => {
               }}
             />
           </div>
-          <div className="row__item sort_item title__workplace">
+          {/* <div className="row__item sort_item title__workplace">
             Postal Code
             <img
               src={arrow}
@@ -200,7 +191,7 @@ const TransactionPage = () => {
                 e.target.classList.toggle("active");
               }}
             />
-          </div>
+          </div> */}
           <div className="row__item sort_item title__workplace">
             Người quản lý
             <img
@@ -247,9 +238,9 @@ const TransactionPage = () => {
               <p className="row__item manager__phone">
                 {transactionSpot?.location?.city}
               </p>
-              <p className="row__item manager__workplace">
+              {/* <p className="row__item manager__workplace">
                 {transactionSpot?.postal_code}
-              </p>
+              </p> */}
               <p
                 className="row__item transaction_manager "
                 onClick={() => {
@@ -268,9 +259,9 @@ const TransactionPage = () => {
                       }
                       alt=""
                     />
-                    {/* {transactionSpot.transaction_manager.first_name +
+                    {transactionSpot.transaction_manager.first_name +
                       " " +
-                      transactionSpot.transaction_manager.last_name} */}
+                      transactionSpot.transaction_manager.last_name}
                   </>
                 ) : (
                   "Chưa có"
@@ -510,13 +501,14 @@ const TransactionPage = () => {
             <Row
               key={user.id} // Add a unique key to each row
               className={`manager__detail popup__item ${
-                selectedRow === user ? "selected-row" : ""
+                selectedRow === user ? "selected" : ""
               }`}
             >
               <div
                 className="choose_list_manager"
                 onClick={() => {
                   setSelectedRow(user);
+                  console.log(selectedRow);
                   setNewManager(user);
                 }}
               >

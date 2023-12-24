@@ -32,6 +32,16 @@
   transition: all ease 0.3s;
 }
 
+.row__item.user_management img {
+  margin-bottom: -11px;
+  width: 35px;
+  height: 35px;
+  margin-top: -30px;
+  transition: all ease 0.3s;
+  border-radius: 10px;
+  transform: rotate(0deg);
+}
+
 .row__item.transaction_manager img {
   margin-bottom: -20px;
   width: 40px;
@@ -45,10 +55,4 @@
 .row__item.field_manager:hover {
   cursor: pointer;
 }
-
-.manager__detail.popup__item:hover {
-  cursor: pointer;
-  background-color: #e8eff9;
-}
-
 

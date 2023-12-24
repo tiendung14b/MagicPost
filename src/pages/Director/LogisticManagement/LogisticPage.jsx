@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../Director.css";
+import "../../CSS/Director.css";
 import useLocation from "../../../hooks/useLocation";
 import { toast } from "react-toastify";
 import Row from "../../../components/DashBoard/Row";

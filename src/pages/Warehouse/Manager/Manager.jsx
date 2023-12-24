@@ -1,4 +1,4 @@
-import "./manager.css";
+import "../../CSS/Director.css";
 import Layout from "../../../components/Layout/Layout";
 import SideBar from "../../../components/SideBar/SideBar";
 import React from "react";
@@ -17,7 +17,7 @@ const Manager = () => {
 
   return (
     <Layout>
-      <SideBar title="Manager">
+      <SideBar title="Warehouse Manager">
         <div
           className="sidebar__item__content box clicked"
           title="Quản lý nhân sự"

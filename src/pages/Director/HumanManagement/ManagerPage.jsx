@@ -14,7 +14,7 @@ import Dropdown from "../../../ui/Dropdown/Dropdown";
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
 
-import "../Director.css";
+import "../../CSS/Director.css";
 
 const ManagerPage = () => {
   const {
@@ -145,7 +145,7 @@ const ManagerPage = () => {
             />
           </div>
           <div className="row__item sort_item title__workplace">
-            Điểm quản lý
+            Chức vụ
             <img
               src={arrow}
               alt=""
@@ -180,7 +180,7 @@ const ManagerPage = () => {
                 {manager?.phone_number}
               </p>
               <p className="row__item manager__workplace">
-                {manager?.workplace?.name || "Chưa có"}
+                {manager?.workplace?.role || "Chưa có"}
               </p>
               <div className="row__item manager__edit">
                 <Button

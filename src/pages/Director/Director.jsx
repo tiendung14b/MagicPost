@@ -8,7 +8,7 @@ import transaction from "../../assets/transaction.svg";
 
 import useUser from "../../hooks/useUser";
 
-import "./Director.css";
+import "../CSS/Director.css";
 import Layout from "../../components/Layout/Layout";
 
 import useWindowDimensions from "../../hooks/useWindowScreen";

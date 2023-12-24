@@ -11,7 +11,7 @@ import Loading from "../../../ui/Loading/Loading";
 import Column from "../../../components/DashBoard/Column";
 import useWindowScreen from "../../../hooks/useWindowScreen";
 import Dropdown from "../../../ui/Dropdown/Dropdown";
-import "../Director.css";
+import "../../CSS/Director.css";
 
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
