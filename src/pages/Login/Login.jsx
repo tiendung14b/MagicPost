@@ -39,12 +39,14 @@ const Login = () => {
         return navigate("/director");
       } else if (
         user.workplace.role == role.TRANSACTION_MANAGER &&
-        user.workplace.workplace_name == "TRANSACTION"
+        user.workplace.workplace_name == "TRANSACTION" &&
+        user.workplace.workplace_id
       ) {
         return navigate("/transaction/manager");
       } else if (
         user.workplace.role == role.TRANSACTION_EMPLOYEE &&
-        user.workplace.workplace_name == "TRANSACTION"
+        user.workplace.workplace_name == "TRANSACTION" &&
+        user.workplace.workplace_id
       ) {
         return navigate("/transaction/employee");
       } else if (
@@ -69,6 +71,41 @@ const Login = () => {
         Toast.error(err.response?.data?.message, toast);
       }
       setLoading(false);
+    }
+  };
+
+  const onChangePassword = async () => {
+    const phone_number = window["update_password_phone_number"].value;
+    const old_password = window["update_password_old_password"].value;
+    const new_password = window["update_password_new_password"].value;
+    if (!phone_number || !old_password || !new_password) {
+      return Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
+    }
+    try {
+      const response = await clientAxios.put("/user/password", {
+        phone_number,
+        old_password,
+        new_password,
+      });
+      if (response?.status == "success") {
+        Toast.success(response?.message, toast);
+        window["update_password"].close();
+      } else {
+        Toast.warn(response?.message, toast);
+      }
+      window["update_password"].close();
+    } catch (err) {
+      if (!err.response) {
+        responseToast(err, toast);
+        console.log(err);
+        return;
+      }
+      const res = err.response.data;
+      if (res.status == "fail") {
+        Toast.warn(err.response?.data?.message, toast);
+      } else {
+        Toast.error(err.response?.data?.message, toast);
+      }
     }
   };
 
@@ -121,6 +158,13 @@ const Login = () => {
               window["test"].showModal();
             }}
           />
+          <Button
+            text={"Đổi mật khẩu"}
+            className={"action"}
+            onClick={() => {
+              window["update_password"].showModal();
+            }}
+          />
         </div>
         <p className="login__notice" style={{ color: "#777" }}>
           Không có tài khoản? Hãy liên hệ với admin tại nơi bạn làm việc.
@@ -138,6 +182,37 @@ const Login = () => {
           onChange={(e) =>
             setLoginInfo({ ...loginInfo, phone_number: e.target.value })
           }
+        />
+      </Popup>
+      <Popup
+        title={"Đổi mật khẩu"}
+        popup_id={"update_password"}
+        className={"update_password"}
+      >
+        <Input
+          labelText={"Số điện thoại"}
+          placeholder={"Số điện thoại"}
+          id="update_password_phone_number"
+          type="tel"
+        />
+        <Input
+          labelText={"Mật khẩu"}
+          type="password"
+          placeholder="Nhập mật khẩu"
+          id="update_password_old_password"
+        />
+        <Input
+          labelText={"Mật khẩu mới"}
+          type="password"
+          placeholder="Nhập mật khẩu mới"
+          id="update_password_new_password"
+        />
+        <Button
+          text={"Đổi mật khẩu"}
+          className={"submit"}
+          onClick={() => {
+            onChangePassword();
+          }}
         />
       </Popup>
     </div>
