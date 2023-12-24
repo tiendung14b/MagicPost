@@ -2,6 +2,7 @@ import Toast from "../../../ui/Toast/Toast";
 import DashBoard from "../../../components/DashBoard/DashBoard";
 import Row from "../../../components/DashBoard/Row";
 import useUser from "../../../hooks/useUser";
+import useWarehouse from "../../../hooks/useWarehouse";
 import Button from "../../../ui/Button/Button";
 import Input from "../../../ui/Input/Input";
 import Popup from "../../../ui/Popup/Popup";
@@ -15,18 +16,29 @@ import "../../CSS/Director.css";
 
 import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
+import default_avatar from "../../../assets/default_avatar.png";
 
 const WarehousePageMobile = () => {
   const {
-    userloading,
-    listManager,
-    getListManager,
-    createManager,
-    deleteManager,
-  } = useUser(toast);
+    //state for transaction
+    listWarehouse,
+    warehouseLoading,
+    getListWarehouse,
+    createWarehouse,
+    setWarehouseManager,
+    deleteWarehouseManager,
+  } = useWarehouse(toast);
+
   //state for user
-  const [newUser, setNewUser] = useState({});
+  const { userloading, listManager, getListManager } = useUser(toast);
+  //state for new warehouse
+  const [newWarehouse, setNewWarehouse] = useState({});
+  //state for user choosen
   const [userChoosen, setUserChoosen] = useState({});
+  //state for choose new manager
+  const [newManager, setNewManager] = useState({});
+  //state for choose get the current transaction  info
+  const [currentWarehouse, setcurrentWarehouse] = useState({});
   //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -38,11 +50,13 @@ const WarehousePageMobile = () => {
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
-  const [searchBy, setSearchBy] = useState("first_name");
+  const [searchBy, setSearchBy] = useState("name");
   //state for selected value to fitler
   const [selected, setSelected] = useState(null);
   //state for values of dropdown and selected
-  const values = ["first_name", "phone_number", "email"];
+  const values = ["name", "location"];
+  //state for chooose the selected column
+  const [selectedColumn, setSelectedColumn] = useState(null);
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
@@ -62,12 +76,19 @@ const WarehousePageMobile = () => {
     console.log(column);
   };
 
-  const handleChange = (e) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  const handleChanged = (name, value) => {
+    setNewWarehouse({ ...newWarehouse, [name]: value });
   };
 
+  //get all transaction manager from list user
+  const listWareHouseManager = listManager?.filter(
+    (user) =>
+      user?.workplace?.role === "WAREHOUSE_MANAGER" &&
+      user?.workplace?.workplace_id == null
+  );
+
   //list manager sorted to sortedManager
-  const sortedManager = listManager
+  const sortedWarehouse = listWarehouse
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -85,6 +106,7 @@ const WarehousePageMobile = () => {
 
   useEffect(() => {
     getListManager();
+    getListWarehouse();
   }, []);
 
   return (
@@ -94,7 +116,7 @@ const WarehousePageMobile = () => {
         <Column className="manager__todo__mobile">
           <div className="button__layout__mobile">
             <Button
-              text={"Thêm quản lý"}
+              text={"Thêm kho mới"}
               className={"action"}
               onClick={() => {
                 window["add_manager_popup"].showModal();
@@ -138,55 +160,68 @@ const WarehousePageMobile = () => {
             </div>
           </Row>
         </Column>
-        {sortedManager
-          ?.filter((manager) => {
+        {sortedWarehouse
+          ?.filter((warehouse) => {
             const searchValue = search.toLowerCase();
-            if (searchBy === "first_name") {
-              return manager?.first_name.toLowerCase().includes(searchValue);
+            if (searchBy === "name") {
+              return warehouse?.name.toLowerCase().includes(searchValue);
             }
-            if (searchBy === "phone_number") {
-              return manager?.phone_number.toLowerCase().includes(searchValue);
-            }
-            if (searchBy === "email") {
-              return manager?.email.toLowerCase().includes(searchValue);
+            if (searchBy === "location") {
+              return warehouse?.location.toLowerCase().includes(searchValue);
             }
           })
-          ?.map((manager) => (
+          ?.map((warehouse) => (
             <Column className="manager__detail__mobile">
               <p className="manager__name column__item">
                 <div className="column__item sort_item title__name">
-                  <p className="column__title">Họ Tên: </p>
-                  {manager?.first_name + " " + manager?.last_name}
+                  <p className="column__title">Name: </p>
+                  {warehouse?.name}
                 </div>
               </p>
               <p className="column__item manager__phone">
                 <div className="column__item sort_item title__phone">
-                  <p className="column__title">Số điện thoại: </p>
-                  {manager?.phone_number}
+                  <p className="column__title">Location City: </p>
+                  {warehouse?.location}
                 </div>
               </p>
               <p className="column__item manager__workplace">
                 <div className="column__item sort_item title__workplace">
-                  <p className="column__title">Điểm quản lý: </p>
-                  {manager?.workplace?.name || "Chưa có"}
+                  <p className="column__title">Transaction Manager: </p>
+                  {warehouse?.warehouse_manager?.workplace?.workplace_id ? (
+                    <>
+                      <img
+                        src={
+                          warehouse.warehouse_manager.url_avatar ||
+                          default_avatar
+                        }
+                        alt=""
+                      />
+                      {warehouse.warehouse_manager.first_name +
+                        " " +
+                        warehouse.warehouse_manager.last_name}
+                    </>
+                  ) : (
+                    "Chưa có"
+                  )}
                 </div>
               </p>
-              <p className="column__item sort_item title__email">
-                <p className="column__title">Email: </p> {manager?.email}
-              </p>
-              <p className="column__item sort_item title__role">
-                <p className="column__title">Vai Trò: </p>
-                {manager?.workplace?.role || "Chưa có"}
-              </p>
               <div className="column__item manager__edit">
-                <Button
-                  text={"Xoá người dùng này"}
-                  className={"danger"}
-                  onClick={() => {
-                    window["manager_popup"].close();
-                    deleteManager(userChoosen?._id);
-                  }}
-                />
+                <div className="manager__edit__button">
+                  <Button
+                    text={"Xem chi tiết"}
+                    className={"action"}
+                    onClick={() => {
+                      window["manager_popup"].showModal();
+                      setUserChoosen(warehouse?.warehouse_manager);
+                      setcurrentWarehouse(warehouse);
+                    }}
+                  />
+                  <Button
+                    text={"Xoá"}
+                    className={"danger"}
+                    onClick={() => {}}
+                  />
+                </div>
               </div>
             </Column>
           ))}
@@ -194,7 +229,7 @@ const WarehousePageMobile = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(listManager.length / ((0.73 * height) / 60))
+            Math.ceil(sortedWarehouse.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
@@ -216,109 +251,174 @@ const WarehousePageMobile = () => {
         ))}
       </div>
       <Popup
+        className="manager_popup"
+        popup_id={"manager_popup"}
+        title={"Thông tin quản lý"}
+      >
+        <div className="popup__body__content">
+          <div className="manager_popup__field">
+            <p className="manager_popup__field__title">Họ tên:</p>
+            <p className="manager_popup__field__value">
+              {userChoosen
+                ? userChoosen.first_name + " " + userChoosen.last_name
+                : "Chưa có"}
+            </p>
+          </div>
+          <div className="manager_popup__field">
+            <p className="manager_popup__field__title">Số điện thoại:</p>
+            <p className="manager_popup__field__value">
+              {userChoosen?.phone_number}
+            </p>
+          </div>
+          <div className="manager_popup__field">
+            <p className="manager_popup__field__title">Email:</p>
+            <p className="manager_popup__field__value">{userChoosen?.email}</p>
+          </div>
+          <Button
+            text={"Thay đổi thông tin người quản lý"}
+            className={"action"}
+            onClick={() => {
+              window["update_manager_popup"].showModal();
+            }}
+          />
+          <Button
+            text={"Xóa người quản lý"}
+            className={"danger"}
+            onClick={() => {
+              window["manager_popup"].close();
+              deleteWarehouseManager(currentWarehouse?._id);
+            }}
+          />
+        </div>
+      </Popup>
+      <Popup
         className="add_manager_popup"
         popup_id={"add_manager_popup"}
-        title={"Thêm tài khoản quản lý"}
+        title={"Thêm kho mới"}
       >
         <div className="popup__body__content">
           <Input
             className="add_manager_popup__input"
-            placeholder={"Họ"}
-            type="text"
-            name="first_name"
-            onChange={handleChange}
-          />
-          <Input
-            className="add_manager_popup__input"
             placeholder={"Tên"}
             type="text"
-            name="last_name"
-            onChange={handleChange}
+            name="name"
+            onChange={(e) => handleChanged("name", e.target.value)}
           />
           <Input
             className="add_manager_popup__input"
-            placeholder={"Số điện thoại"}
-            type="tel"
-            name="phone_number"
-            onChange={handleChange}
+            placeholder={"location"}
+            type="text"
+            name="location"
+            onChange={(e) => handleChanged("location", e.target.value)}
           />
-          <Input
-            className="add_manager_popup__input"
-            placeholder="Email"
-            type="email"
-            name="email"
-            onChange={handleChange}
-          />
-          <div className="add_manager_role">
-            <p>Vai trò:</p>
-            <div className="checkbox">
-              <input
-                type="radio"
-                name="role"
-                value="WAREHOUSE_MANAGER"
-                id="warehouse_role"
-                onClick={(e) => {
-                  setNewUser({
-                    ...newUser,
-                    workplace: { role: e.target.value },
-                  });
-                }}
-              />
-              <label htmlFor="warehouse_role">Quản lý điểm tập kết</label>
-            </div>
-            <div className="checkbox">
-              <input
-                type="radio"
-                name="role"
-                value="WAREHOUSE_MANAGER"
-                id="transaction_role"
-                onClick={(e) => {
-                  setNewUser({
-                    ...newUser,
-                    workplace: { role: e.target.value },
-                  });
-                }}
-              />
-              <label htmlFor="transaction_role">Quản lý điểm giao dịch</label>
-            </div>
+          <div className="choose_warehouse_manager">
+            <select
+              name="warehouse_manager"
+              id="warehouse_manager"
+              onChange={(e) => {
+                handleChanged("warehouse_manager", e.target.value);
+              }}
+            >
+              {listWareHouseManager?.map((user) => (
+                <option value={user._id}>
+                  {user.first_name + " " + user.last_name}
+                </option>
+              ))}
+            </select>
           </div>
           <p className="warn" id="add_manager_warn">
             Bạn cần nhập đầy đủ thông tin
           </p>
           <div className="add_manager_submit">
             <Button
-              text={"Thêm quản lý"}
+              text={"Thêm kho mới"}
               className={"submit"}
               onClick={() => {
-                console.log(newUser.workplace);
+                console.log(newWarehouse);
                 if (
-                  !newUser?.phone_number ||
-                  !newUser?.first_name ||
-                  !newUser?.last_name ||
-                  !newUser?.email ||
-                  !newUser?.workplace?.role
+                  !newWarehouse.name ||
+                  !newWarehouse.location ||
+                  !newWarehouse.warehouse_manager
                 ) {
                   Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
-                  window["add_manager_warn"].className = "warn show";
                   return;
                 }
                 window["add_manager_popup"].close();
-                createManager(newUser);
-                setNewUser({});
+                createWarehouse(newWarehouse);
+                setNewWarehouse({});
               }}
             />
             <Button
               text={"Hủy"}
-              className={"cancel"}
+              className={"danger"}
               onClick={() => {
                 window["add_manager_popup"].close();
-                setNewUser({});
               }}
             />
           </div>
         </div>
       </Popup>
-      {userloading ? <Loading /> : <></>}
+      <Popup
+        className="update_manager_popup"
+        popup_id={"update_manager_popup"}
+        title={"Danh sách người quản lý điểm giao dịch"}
+      >
+        <div className="popup__body__content">
+          {listWareHouseManager?.map((user) => (
+            <Column
+              key={user.id} // Add a unique key to each row
+              className={`manager__detail popup__item ${
+                selectedColumn === user ? "selected" : ""
+              }`}
+            >
+              <div
+                className="choose_list_manager_mobile"
+                onClick={() => {
+                  setSelectedColumn(user);
+                  setNewManager(user);
+                }}
+              >
+                <div className="column__item sort_item title__name pop__up">
+                  <p className="column__title">Name: </p>
+                  <img
+                    src={user?.url_avatar || default_avatar}
+                    alt={`Avatar of ${user?.first_name}`}
+                  />
+                  {user?.first_name + " " + user?.last_name}
+                </div>
+                <div className="column__item sort_item title__name pop__up">
+                  <p className="column__title">Phone: </p>
+                  {user?.phone_number}
+                </div>
+                <div className="column__item sort_item title__name pop__up">
+                  <p className="column__title">Email: </p>
+                  {user?.email}
+                </div>
+              </div>
+            </Column>
+          ))}
+          <div className="add_manager_submit">
+            <Button
+              text={"Cập nhật"}
+              className={"submit"}
+              onClick={() => {
+                setWarehouseManager(currentWarehouse?._id, newManager?._id);
+                toast.success("Cập nhật người quản lý thành công");
+                window["update_manager_popup"].close();
+                window["manager_popup"].close();
+              }}
+            />
+            <Button
+              text={"Hủy"}
+              className={"danger"}
+              onClick={() => {
+                window["update_manager_popup"].close();
+              }}
+            />
+          </div>
+        </div>
+      </Popup>
+      {warehouseLoading ? <Loading /> : <></>}
       <ToastContainer className="toasify" />
     </div>
   );

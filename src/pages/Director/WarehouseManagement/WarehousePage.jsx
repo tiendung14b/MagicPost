@@ -83,7 +83,7 @@ const WarehousePage = () => {
   );
 
   //list manager sorted to sortedManager
-  const sortedTransaction = listWarehouse
+  const sortedWarehouse = listWarehouse
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -189,7 +189,7 @@ const WarehousePage = () => {
           </div>
           <div className="row__item title__edit">Quản lý tài khoản</div>
         </Row>
-        {sortedTransaction
+        {sortedWarehouse
           ?.filter((warehouse) => {
             const searchValue = search.toLowerCase();
             if (searchBy === "name") {
@@ -259,7 +259,7 @@ const WarehousePage = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(sortedTransaction.length / ((0.73 * height) / 60))
+            Math.ceil(sortedWarehouse.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
@@ -398,7 +398,7 @@ const WarehousePage = () => {
             <Row
               key={user.id} // Add a unique key to each row
               className={`manager__detail popup__item ${
-                selectedRow === user ? "selected-row" : ""
+                selectedRow === user ? "selected" : ""
               }`}
             >
               <div
