@@ -14,7 +14,7 @@
   min-width: 16vw;
 }
 
-.sidebar.close ~ .container .row__item {
+.sidebar.close~.container .row__item {
   min-width: 20vw;
 }
 
@@ -284,8 +284,118 @@
   background-color: #e8eff9;
 }
 
-
 .manager__detail.popup__item:hover {
   cursor: pointer;
   background-color: #e8eff9;
+}
+
+.main__form__input {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid black;
+  gap: 30px;
+  justify-content: space-around;
+  padding: 30px;
+}
+
+.sender__input {
+  display: flex;
+  width: 45%;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  gap: 20px;
+  padding: 30px;
+}
+
+.receiver__output {
+  display: flex;
+  width: 45%;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  gap: 20px;
+  padding: 30px;
+}
+
+.form__input {
+  width: 60%;
+}
+
+.extra__form__input {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid black;
+  border-top: 0px;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 30px;
+}
+
+.extra__form__input__left {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.extra__form__input__right {
+  display: flex;
+  width: 45%;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input__form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input__dropdown {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.transaction__value {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.form__input__value {
+  display: flex;
+  width: 80%;
+}
+
+.choose__location {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.transaction__form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+  background-color: white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.transaction__package__container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 90%;
+}
+
+.transaction__delivery__container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+  background-color: white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }

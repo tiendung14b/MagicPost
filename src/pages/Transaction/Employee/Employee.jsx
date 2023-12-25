@@ -6,6 +6,7 @@ import human from "../../../assets/human.svg";
 import transaction from "../../../assets/transaction.svg";
 
 import GetTransaction from "./Management/GetTransaction";
+import CreateTransaction from "./Management/CreateTransaction";
 
 const Employee = () => {
   const [itemChoosen, setItemChoosen] = React.useState("get_transaction");
@@ -39,18 +40,19 @@ const Employee = () => {
         </div>
         <div
           className="sidebar__item__content box"
-          title="Danh sách giao dịch"
-          id="manage_transaction"
-          onClick={() => handleChooseItem("manage_transaction")}
+          title="Tạo đơn hàng"
+          id="create_transaction"
+          onClick={() => handleChooseItem("create_transaction")}
         >
           <img className="sidebar__icon" src={transaction} alt="" />
-          <p className="sidebar__item__text">Danh sách giao dịch</p>
+          <p className="sidebar__item__text">Tạo giao dịch</p>
         </div>
       </SideBar>
       <div className="container">
         <div className="director__content">
           {itemChoosen === "get_transaction" && <GetTransaction />}
           {itemChoosen === "manage_transaction" && <h1>Warehouse</h1>}
+          {itemChoosen === "create_transaction" && <CreateTransaction />}
         </div>
       </div>
     </Layout>

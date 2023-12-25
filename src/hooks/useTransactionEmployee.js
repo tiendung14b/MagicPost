@@ -39,7 +39,7 @@ const useTransactionEmployee = (toast) => {
   const createTransaction = async (data) => {
     try {
       setTransactionEmployeeLoading(true);
-      await clientAxios.post(`/transaction_employee/`, data);
+      await clientAxios.post(`/transaction/`, data);
       getListTransaction();
       Toast.success("Tạo giao dịch thành công", toast);
     } catch (err) {
