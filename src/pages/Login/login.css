@@ -85,3 +85,7 @@ body {
   gap: 10px;
   width: 300px;
 }
+
+.toast_container {
+  z-index: 999;
+}

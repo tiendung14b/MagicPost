@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import Popup from "../../ui/Popup/Popup";
 import responseToast from "../../util/response";
 import role from "../../util/role";
+import axios from "axios";
 
 const Login = () => {
   const { width } = useWindowDimensions();
@@ -155,7 +156,7 @@ const Login = () => {
             text={"Lấy lại mật khẩu"}
             className={"action"}
             onClick={() => {
-              window["test"].showModal();
+              window["reset_password"].showModal();
             }}
           />
           <Button
@@ -170,7 +171,7 @@ const Login = () => {
           Không có tài khoản? Hãy liên hệ với admin tại nơi bạn làm việc.
         </p>
       </div>
-      <ToastContainer />
+      <ToastContainer className={"toast_container"} />
       {loading ? <Loading /> : <></>}
       <Popup title={"Hello"} popup_id={"test"}>
         <p>This is popup</p>
@@ -214,6 +215,70 @@ const Login = () => {
             onChangePassword();
           }}
         />
+      </Popup>
+      <Popup
+        title={"Lấy lại mật khẩu"}
+        popup_id={"reset_password"}
+        className={"reset_password"}
+      >
+        <Input
+          labelText={"Số điện thoại"}
+          placeholder={"Số điện thoại"}
+          id="reset_password_phone_number"
+          type="tel"
+        />
+        <p
+          onClick={async () => {
+            if (!window["reset_password_phone_number"].value) {
+              return Toast.warn("Bạn cần nhập số điện thoại", toast);
+            }
+            await clientAxios.post("/user/send_verify_code", {
+              phone_number: window["reset_password_phone_number"].value,
+            });
+          }}
+        >
+          Gửi mã xác nhận
+        </p>
+        <Input
+          labelText={"Mã xác nhận"}
+          type="text"
+          placeholder="Nhập mã xác nhận"
+          id="reset_password_verify_code"
+        />
+        <Button
+          text={"Lấy lại mật khẩu"}
+          className={"submit"}
+          onClick={async () => {
+            try {
+              if (
+                !window["reset_password_phone_number"].value ||
+                !window["reset_password_verify_code"].value
+              ) {
+                return Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
+              }
+              await clientAxios.post("/user/reset_password", {
+                phone_number: window["reset_password_phone_number"].value,
+                verify_code: window["reset_password_verify_code"].value,
+              });
+              Toast.success("Mật khẩu mới được gửi qua email của bạn", toast);
+              window["reset_password"].close();
+            } catch (err) {
+              window["reset_password"].close();
+              if (!err.response) {
+                responseToast(err, toast);
+                console.log(err);
+                return;
+              }
+              const res = err.response.data;
+              if (res.status == "fail") {
+                Toast.warn(err.response?.data?.message, toast);
+              } else {
+                Toast.error(err.response?.data?.message, toast);
+              }
+            }
+          }}
+        />
+        <p>Bạn cần nhập đầy đủ thông tin</p>
       </Popup>
     </div>
   );

@@ -1,0 +1,16 @@
+.search_transaction {
+  background-image: url("https://images.unsplash.com/photo-1493406300581-484b937cdc41?q=80&w=3570&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
+  height: 100vh;
+}
+
+.content {
+  display: flex;
+  background-color: #fff8;
+  backdrop-filter: blur(10px);
+
+  -webkit-backdrop-filter: blur(10px);
+  padding: 20px;
+  width: 50vw;
+  margin: 0 auto;
+}

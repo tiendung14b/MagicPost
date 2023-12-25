@@ -7,6 +7,7 @@ import WarehouseManager from "./pages/Warehouse/Manager/Manager";
 
 import TransactionEmployee from "./pages/Transaction/Employee/Employee";
 import WarehouseEmployee from "./pages/Warehouse/Employee/Employee";
+import SearchTransaction from "./pages/SearchTransaction/SearchTransaction";
 
 const RedirectHandler = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
@@ -15,13 +16,13 @@ const RedirectHandler = () => {
   }
   if (user.workplace?.role == role.DIRECTOR) {
     return <Navigate to="/director" />;
-  } else if (user.workplace?.role == role.TRANSACTION_MANAGER) {
+  } else if (user.workplace?.role == role.TRANSACTION_MANAGER && user.workplace?.workplace_id) {
     return <Navigate to="/transaction/manager" />;
-  } else if (user.workplace?.role == role.WAREHOUSE_MANAGER) {
+  } else if (user.workplace?.role == role.WAREHOUSE_MANAGER && user.workplace?.workplace_id) {
     return <Navigate to="/warehouse/manager" />;
-  } else if (user.workplace?.role == role.TRANSACTION_EMPLOYEE) {
+  } else if (user.workplace?.role == role.TRANSACTION_EMPLOYEE && user.workplace?.workplace_id) {
     return <Navigate to="/transaction/employee" />;
-  } else if (user.workplace?.role == role.WAREHOUSE_EMPLOYEE) {
+  } else if (user.workplace?.role == role.WAREHOUSE_EMPLOYEE && user.workplace?.workplace_id) {
     return <Navigate to="/warehouse/employee" />;
   }
   return <Navigate to="/login" />;
@@ -108,6 +109,11 @@ const AppRouter = () => {
           </ProtectRoute>
         }
       />
+
+      <Route path="/view/transaction">
+        <Route path="" element={<SearchTransaction />} />
+        <Route path=":id" element={<SearchTransaction />} />
+      </Route>
     </Routes>
   );
 };
