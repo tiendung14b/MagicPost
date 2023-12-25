@@ -6,6 +6,7 @@ import human from "../../../assets/human.svg";
 import transaction from "../../../assets/transaction.svg";
 
 import GetTransaction from "./Management/GetTransaction";
+import ListTransaction from "./Management/ListTransaction";
 import CreateTransaction from "./Management/CreateTransaction";
 
 const Employee = () => {
@@ -51,7 +52,7 @@ const Employee = () => {
       <div className="container">
         <div className="director__content">
           {itemChoosen === "get_transaction" && <GetTransaction />}
-          {itemChoosen === "manage_transaction" && <h1>Warehouse</h1>}
+          {itemChoosen === "manage_transaction" && <ListTransaction />}
           {itemChoosen === "create_transaction" && <CreateTransaction />}
         </div>
       </div>

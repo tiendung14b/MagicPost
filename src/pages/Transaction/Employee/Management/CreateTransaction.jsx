@@ -135,6 +135,7 @@ const CreateTransaction = () => {
         description: window[`package_description_input_${i + 1}`].value,
         type: window[`package_type_input_${i + 1}`].value,
         weight: window[`package_weight_input_${i + 1}`].value,
+        postage: window[`package_postage_input_${i + 1}`].value,
         quantity: window[`package_quantity_input_${i + 1}`].value,
       });
     }
@@ -254,6 +255,7 @@ const CreateTransaction = () => {
                 <div className="transaction__value">
                   <div className="input__form">
                     <Input
+                      type="number"
                       id={`package_weight_input_${form.id}`}
                       className="form__input__value"
                       placeholder="Cân nặng"
@@ -261,9 +263,18 @@ const CreateTransaction = () => {
                   </div>
                   <div className="input__form">
                     <Input
+                      type="number"
                       id={`package_quantity_input_${form.id}`}
                       className="form__input__value"
                       placeholder="Số lượng"
+                    />
+                  </div>
+                  <div className="input__form">
+                    <Input
+                      type="number"
+                      id={`package_postage_input_${form.id}`}
+                      className="form__input__value"
+                      placeholder="Giá trị"
                     />
                   </div>
                   <div className="delete__button"></div>
@@ -299,15 +310,18 @@ const CreateTransaction = () => {
             <div className="input__dropdown">
               <h4>Chọn phương thức vận chuyển</h4>
               <select id="package_transaction_type_input">
-                <option value="COD">COD</option>
-                <option value="Chuyển Khoản">Chuyển Khoản</option>
+                <option value="Hoả tốc">Hoả tốc</option>
+                <option value="Nhanh">Nhanh</option>
+                <option value="Tiết kiệm">Tiết Kiệm</option>
               </select>
             </div>
             <Input
               id="package_prepaid_input"
+              type="number"
               className="form__input"
               placeholder="Nhập phí trả trước"
             />
+            
           </div>
 
           <Button

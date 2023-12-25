@@ -9,6 +9,8 @@ const useTransactionSpot = (toast) => {
   const [transactionSpotLoading, setTransactionSpotLoading] = useState(false);
   const [listTransactionEmployee, setListTransactionEmployee] = useState([]);
 
+  const [clientTransaction, setClientTransaction] = useState([]);
+
   const getTransactionSpotInfo = async (id) => {
     try {
       const response = await clientAxios.get(
@@ -110,13 +112,13 @@ const useTransactionSpot = (toast) => {
     }
   };
 
-  const sendToWarehouse = async (id) => {
+  const sendToWarehouse = async (transaction_spot_id, transaction_id) => {
     try {
       setTransactionSpotLoading(true);
       await clientAxios.post(`/transaction_spot/send_to_warehouse`, {
-        transaction_spot_id: id,
+        transaction_spot_id: transaction_spot_id, transaction_id: transaction_id
       });
-      getListTransactionSpot();
+      getFromClientTransaction(transaction_spot_id);
       Toast.success("Gửi thành công", toast);
     } catch (err) {
       setTransactionSpotLoading(false);
@@ -170,6 +172,8 @@ const useTransactionSpot = (toast) => {
       const response = await clientAxios.get(
         `/transaction_spot/get_from_client_transactions/` + id
       );
+      setClientTransaction(response?.result);
+      console.log(response?.result);
       setTransactionSpotLoading(false);
       return response?.result;
     } catch (err) {
@@ -180,6 +184,7 @@ const useTransactionSpot = (toast) => {
 
   return {
     transactionSpotInfo,
+    clientTransaction,
     transactionSpotLoading,
     listTransactionEmployee,
     listTransactionSpot,

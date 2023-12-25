@@ -241,6 +241,28 @@
   color: #016a70;
 }
 
+.manager_popup__field__title {
+  font-weight: 600;
+  color: #016a70;
+  margin-bottom: 5px;
+}
+
+.popup__body__row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.manager_popup__field :first-child:not(img, button) {
+  min-width: 400px;
+}
+
+.manager_popup__field {
+  padding: 0px 20px 0px 0px;
+  overflow: wrap;
+}
+
 .dropdown__image {
   display: flex;
   justify-content: center;
@@ -391,6 +413,11 @@
   width: 90%;
 }
 
+.transaction__order__logo {
+  width: auto;
+  height: 150px;
+}
+
 .transaction__delivery__container {
   display: flex;
   flex-direction: column;
@@ -398,4 +425,17 @@
   gap: 20px;
   background-color: white;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 5px;
+}
+
+th {
+  background-color: #016a70;
+  color: white;
 }
