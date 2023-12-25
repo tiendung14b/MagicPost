@@ -49,7 +49,7 @@ const Human = () => {
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
   //state for values of dropdown and selected
-  const values = ["first_name", "phone", "email"];
+  const values = ["first_name", "phone", "email", "create_at"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
@@ -158,6 +158,18 @@ const Human = () => {
               }}
             />
           </div>
+          <div className="row__item sort_item title__date">
+            Ngày tạo
+            <img
+              src={arrow}
+              alt=""
+              onClick={(e) => {
+                handleSort("create_at");
+                e.target.classList.toggle("active");
+              }}
+            />
+          </div>
+
           {/* <div className="row__item sort_item title__workplace">
             Điểm quản lý
             <img
@@ -184,24 +196,23 @@ const Human = () => {
             if (searchBy === "email") {
               return manager?.email.toLowerCase().includes(searchValue);
             }
+            if (searchBy === "create_at") {
+              const date = new Date(manager?.create_at).toLocaleDateString();
+              return date.toLowerCase().includes(searchValue);
+            }
           })
           ?.map((manager) => (
             <Row className="manager__detail">
               <p className="manager__name row__item user_management">
-                <img
-                  src={
-                    manager?.url_avatar ||
-                    default_avatar
-                  }
-                />
+                <img src={manager?.url_avatar || default_avatar} />
                 {" " + manager?.first_name + " " + manager?.last_name}
               </p>
               <p className="row__item manager__phone">
                 {manager?.phone_number}
               </p>
-              {/* <p className="row__item manager__workplace">
-                {manager?.workplace?.name || "Chưa có"}
-              </p> */}
+              <p className="row__item manager__workplace">
+                {new Date(manager?.create_at).toLocaleDateString()}
+              </p>
               <div className="row__item manager__edit">
                 <Button
                   text={"Xem chi tiết"}

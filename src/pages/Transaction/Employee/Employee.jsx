@@ -5,10 +5,10 @@ import React from "react";
 import human from "../../../assets/human.svg";
 import transaction from "../../../assets/transaction.svg";
 
-import TransactionManagement from "./Management/TransactionManagement";
+import GetTransaction from "./Management/GetTransaction";
 
 const Employee = () => {
-  const [itemChoosen, setItemChoosen] = React.useState("warehouse_human");
+  const [itemChoosen, setItemChoosen] = React.useState("get_transaction");
 
   const handleChooseItem = (id) => {
     document.getElementById(itemChoosen).classList.remove("clicked");
@@ -21,27 +21,36 @@ const Employee = () => {
       <SideBar title="Transaction Employee">
         <div
           className="sidebar__item__content box clicked"
-          title="Quản lý nhân sự"
-          id="warehouse_human"
-          onClick={() => handleChooseItem("warehouse_human")}
+          title="Đơn hàng đến từ điểm tập kết"
+          id="get_transaction"
+          onClick={() => handleChooseItem("get_transaction")}
         >
           <img className="sidebar__icon" src={human} alt="Hello" />
-          <p className="sidebar__item__text">Quản lý nhân sự</p>
+          <p className="sidebar__item__text">Đơn hàng đến từ điểm tập kết</p>
         </div>
         <div
           className="sidebar__item__content box"
-          title="Quản lý điểm giao dịch"
-          id="warehouse_stat"
-          onClick={() => handleChooseItem("warehouse_stat")}
+          title="Danh sách giao dịch"
+          id="manage_transaction"
+          onClick={() => handleChooseItem("manage_transaction")}
         >
           <img className="sidebar__icon" src={transaction} alt="" />
-          <p className="sidebar__item__text">Quản lý điểm giao dịch</p>
+          <p className="sidebar__item__text">Danh sách giao dịch</p>
+        </div>
+        <div
+          className="sidebar__item__content box"
+          title="Danh sách giao dịch"
+          id="manage_transaction"
+          onClick={() => handleChooseItem("manage_transaction")}
+        >
+          <img className="sidebar__icon" src={transaction} alt="" />
+          <p className="sidebar__item__text">Danh sách giao dịch</p>
         </div>
       </SideBar>
       <div className="container">
         <div className="director__content">
-          {itemChoosen === "warehouse_human" && <TransactionManagement />}
-          {itemChoosen === "warehouse_stat" && <h1>Warehouse</h1>}
+          {itemChoosen === "get_transaction" && <GetTransaction />}
+          {itemChoosen === "manage_transaction" && <h1>Warehouse</h1>}
         </div>
       </div>
     </Layout>

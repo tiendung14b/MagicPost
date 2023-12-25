@@ -56,7 +56,7 @@ const Human = () => {
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
   //state for values of dropdown and selected
-  const values = ["first_name", "phone", "email"];
+  const values = ["first_name", "phone", "email", "create_at"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
@@ -163,6 +163,17 @@ const Human = () => {
               }}
             />
           </div>
+          <div className="row__item sort_item title__phone">
+            Ngày tạo
+            <img
+              src={arrow}
+              alt=""
+              onClick={(e) => {
+                handleSort("create_at");
+                e.target.classList.toggle("active");
+              }}
+            />
+          </div>
           <div className="row__item title__edit">Quản lý tài khoản</div>
         </Row>
         {sortedEmployee
@@ -178,6 +189,10 @@ const Human = () => {
             if (searchBy === "email") {
               return manager?.email.toLowerCase().includes(searchValue);
             }
+            if (searchBy === "create_at") {
+              const date = new Date(manager?.create_at).toLocaleDateString();
+              return date.toLowerCase().includes(searchValue);
+            }
           })
           ?.map((manager) => (
             <Row className="manager__detail">
@@ -187,6 +202,9 @@ const Human = () => {
               </p>
               <p className="row__item manager__phone">
                 {manager?.phone_number}
+              </p>
+              <p className="row__item manager__workplace">
+                {new Date(manager?.create_at).toLocaleDateString()}
               </p>
               <div className="row__item manager__edit">
                 <Button

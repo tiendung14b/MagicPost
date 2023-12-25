@@ -5,6 +5,7 @@ import React from "react";
 import human from "../../../assets/human.svg";
 import transaction from "../../../assets/transaction.svg";
 import Human from "./HumanManagement/Human";
+import Stat from "./HumanManagement/Stat";
 
 const Manager = () => {
   const [itemChoosen, setItemChoosen] = React.useState("transaction_human");
@@ -29,18 +30,20 @@ const Manager = () => {
         </div>
         <div
           className="sidebar__item__content box"
-          title="Quản lý điểm giao dịch"
+          title="Thống Kê"
           id="transaction_stat"
           onClick={() => handleChooseItem("transaction_stat")}
         >
           <img className="sidebar__icon" src={transaction} alt="" />
-          <p className="sidebar__item__text">Quản lý điểm giao dịch</p>
+          <p className="sidebar__item__text">Thống kê</p>
         </div>
       </SideBar>
       <div className="container">
         <div className="director__content">
           {itemChoosen === "transaction_human" && <Human />}
-          {itemChoosen === "transaction_stat" && <h1>Transaction</h1>}
+          {itemChoosen === "transaction_stat" && (
+            <Stat />
+          )}
         </div>
       </div>
     </Layout>
