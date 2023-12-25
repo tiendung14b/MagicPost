@@ -31,8 +31,8 @@ const LocationInput = ({ id }) => {
         onChange={(e) => {
           getDistrict(e.target.value);
           let text = e.target.options[e.target.selectedIndex].text;
-          text = text.replace("Tỉnh ", "");
-          text = text.replace("Thành phố ", "");
+          //   text = text.replace("Tỉnh ", "");
+          //   text = text.replace("Thành phố ", "");
           console.log(text);
         }}
       >
@@ -49,8 +49,8 @@ const LocationInput = ({ id }) => {
         onChange={(e) => {
           console.log(e.target.options[e.target.selectedIndex].text);
           let text = e.target.options[e.target.selectedIndex].text;
-          text = text.replace("Quận ", "");
-          text = text.replace("Huyện ", "");
+          //   text = text.replace("Quận ", "");
+          //   text = text.replace("Huyện ", "");
           console.log(text);
         }}
       >
@@ -69,6 +69,9 @@ const CreateTransaction = () => {
   const [forms, setForms] = useState([{ id: 1 }]); // Initial form
   const [packageCount, setPackageCount] = useState(1);
 
+  const { listTransaction, transactionEmployeeLoading, createTransaction } =
+    useTransactionEmployee(toast);
+
   const handleAddButtonClick = () => {
     const newForm = { id: forms.length + 1 };
     setForms([...forms, newForm]);
@@ -85,8 +88,13 @@ const CreateTransaction = () => {
     return {
       name: window["sender_name_input"].value,
       address: {
-        city: window["sender_city_input"].value,
-        district: window["sender_district_input"].value,
+        city: window["sender_city_input"].options[
+          window["sender_city_input"].selectedIndex
+        ].text,
+        district:
+          window["sender_district_input"].options[
+            window["sender_district_input"].selectedIndex
+          ].text,
         detail: window["sender_detail_input"].value,
       },
       phoneNumber: window["sender_phoneNumber_input"].value,
@@ -98,8 +106,13 @@ const CreateTransaction = () => {
     return {
       name: window["receiver_name_input"].value,
       address: {
-        city: window["receiver_city_input"].value,
-        district: window["receiver_district_input"].value,
+        city: window["receiver_city_input"].options[
+          window["receiver_city_input"].selectedIndex
+        ].text,
+        district:
+          window["receiver_district_input"].options[
+            window["receiver_district_input"].selectedIndex
+          ].text,
         detail: window["receiver_detail_input"].value,
       },
       phoneNumber: window["receiver_phoneNumber_input"].value,
@@ -180,7 +193,7 @@ const CreateTransaction = () => {
             placeholder="Tên người gửi"
           />
           <Input
-            id="receiver_phoneNumber_phone"
+            id="receiver_phoneNumber_input"
             className="form__input"
             placeholder="Số điện thoại"
           />
@@ -301,12 +314,24 @@ const CreateTransaction = () => {
             className={"action"}
             text={"Tạo đơn hàng"}
             onClick={() => {
-              console.log(getPackageInput());
+              createTransaction({
+                transaction_qr_tracker:
+                  "http://localhost:3000/view/transaction/",
+                sender: getSenderInput(),
+                receiver: getReceiverInput(),
+                list_package: getPackageInput(),
+                source_transaction_spot: JSON.parse(
+                  sessionStorage.getItem("user")
+                ).workplace.workplace_id,
+                transaction_type: getDeliveryInput().transaction_type,
+                prepaid: getDeliveryInput().prepaid,
+              });
             }}
           />
         </div>
       </div>
       <ToastContainer className="toasify" />
+      {transactionEmployeeLoading && <Loading />}
     </div>
   );
 };
