@@ -1,14 +1,17 @@
 import React from "react";
+import { useRef } from "react";
 import "./popup.css";
 import xsymbol from "../../assets/x-symbol.svg";
 
-const Popup = ({ children, title, popup_id, className, onClose, ...props }) => {
+const Popup = ({ children, title, popup_id, className, ref, onClose, ...props }) => {
   const [original, setOriginal] = React.useState("");
+
   return (
     <dialog
       className={`popup__orverlay ${className}`}
       id={popup_id}
       onClose={onClose}
+      ref={ref}
     >
       <div className="popup__content">
         <div className="popup__header">

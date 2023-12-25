@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import Toast from "../../../../ui/Toast/Toast";
 import DashBoard from "../../../../components/DashBoard/DashBoard";
 import Row from "../../../../components/DashBoard/Row";
@@ -17,6 +18,8 @@ import arrow from "../../../../assets/arrow.svg";
 import filter_icon from "../../../../assets/filter.svg";
 
 import logo from "../../../../assets/logo.png";
+
+import { useReactToPrint } from "react-to-print";
 
 import "../../../CSS/Director.css";
 
@@ -51,6 +54,12 @@ const ListTransaction = () => {
     setSearchBy(value);
     setSearch("");
   };
+
+  const componentRef = useRef();
+  //handle print
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   //handle sort
   const handleSort = (column) => {
@@ -89,13 +98,6 @@ const ListTransaction = () => {
       <h1 className="page_title">Danh sách đơn hàng</h1>
       <DashBoard>
         <Row className="manager__todo">
-          <Button
-            text={"Thêm nhân viên điểm giao dịch"}
-            className={"action"}
-            onClick={() => {
-              window["add_manager_popup"].showModal();
-            }}
-          />
           <div className="input__div">
             <Input
               placeholder={`Tìm kiếm theo ${
@@ -203,6 +205,7 @@ const ListTransaction = () => {
           </div>
         ))}
       </div>
+
       <Popup
         className="manager_popup"
         popup_id={"manager_popup"}
@@ -300,7 +303,7 @@ const ListTransaction = () => {
             </div>
           </div>
 
-          <div className="manager_popup__package__list">
+          <div className="manager__package__list">
             <p className="manager_popup__field__title">Chi tiết gói hàng:</p>
             <table>
               <tr>
@@ -325,22 +328,141 @@ const ListTransaction = () => {
           </div>
           <div className="popup__body__row">
             <Button
-              text={"Xuất ra PDF"}
-              className={"danger"}
-              onClick={() => {}}
-            />
-            <Button
               text={"Gửi tới điểm tập kết"}
               className={"action"}
               onClick={() => {
-                  window["manager_popup"].close();
-                
+                window["manager_popup"].close();
                 sendToWarehouse(
                   transactionChoosen?.source_transaction_spot?._id,
                   transactionChoosen?._id
                 );
               }}
             />
+            <Button
+              text={"Xuất Ra PDF"}
+              className={"danger"}
+              onClick={() => {
+                handlePrint();
+              }}
+            />
+          </div>
+        </div>
+      </Popup>
+      <Popup>
+        <div className="popup__body__content pdf" ref={componentRef}>
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <img src={logo} className="transaction__order__logo" alt="" />
+            </div>
+            <div className="manager_popup__field">
+              <img src={transactionChoosen?.transaction_qr_tracker} alt="" />
+            </div>
+          </div>
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Mã đơn hàng:</p>
+              <p className="manager_popup__field__value">
+                {transactionChoosen?._id}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">
+                Hình thức vận chuyển:
+              </p>
+              <p className="manager_popup__field__value">
+                {transactionChoosen?.transaction_type}
+              </p>
+            </div>
+          </div>
+
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Địa chỉ bên gửi:</p>
+              <p className="manager_popup__field__value">
+                {transactionChoosen?.sender?.address?.detail +
+                  " " +
+                  transactionChoosen?.sender?.address?.district +
+                  " " +
+                  transactionChoosen?.sender?.address?.city}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Địa chỉ bên nhận:</p>
+              <p className="manager_popup__field__value">
+                {transactionChoosen?.receiver?.address?.detail +
+                  " " +
+                  transactionChoosen?.receiver?.address?.district +
+                  " " +
+                  transactionChoosen?.receiver?.address?.city}
+              </p>
+            </div>
+          </div>
+
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Người gửi:</p>
+              <p className="manager_popup__field__value">
+                {transactionChoosen?.sender?.name}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Người nhận:</p>
+              <p className="manager_popup__field__value">
+                {transactionChoosen?.receiver?.name}
+              </p>
+            </div>
+          </div>
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Ngày tạo:</p>
+              <p className="manager_popup__field__value">
+                {new Date(transactionChoosen?.send_date).toLocaleDateString()}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Phí vận chuyển:</p>
+              <p className="manager_popup__field__value">
+                {Math.round(transactionChoosen?.shipping_cost / 1000) * 100}
+              </p>
+            </div>
+          </div>
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Tổng số gói hàng:</p>
+              <p className="manager_popup__field__value">
+                {transactionChoosen?.list_package?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Phí Trả trước:</p>
+              <p className="manager_popup__field__value">
+                {transactionChoosen?.prepaid}
+              </p>
+            </div>
+          </div>
+
+          <div className="manager__package__list__pdf">
+            <p className="manager_popup__field__title">Chi tiết gói hàng:</p>
+            <table>
+              <tr>
+                <th>Tên</th>
+                <th>Mô tả</th>
+                <th>Phân loại</th>
+                <th>Số lượng</th>
+                <th>Khối lượng</th>
+                <th>Giá trị</th>
+              </tr>
+              {transactionChoosen?.list_package?.map((packageItem) => (
+                <tr>
+                  <td>{packageItem.name}</td>
+                  <td>{packageItem.description}</td>
+                  <td>{packageItem.type}</td>
+                  <td>{packageItem.quantity}</td>
+                  <td>{packageItem.weight}</td>
+                  <td>{packageItem.postage}</td>
+                </tr>
+              ))}
+            </table>
           </div>
         </div>
       </Popup>

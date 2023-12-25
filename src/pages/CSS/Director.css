@@ -439,3 +439,12 @@ th {
   background-color: #016a70;
   color: white;
 }
+
+.manager__package__list__pdf {
+  margin-left: 16px;
+}
+
+.popup__body__content.pdf {
+  padding-top: 5%;
+  margin-left: 50px;
+}
