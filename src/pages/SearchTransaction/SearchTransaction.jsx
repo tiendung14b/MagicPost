@@ -1,17 +1,29 @@
 import "./search_transaction.css";
 import Button from "../../ui/Button/Button";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "../../ui/Input/Input";
+import clientAxios from "../../api/clientAxios";
+import responseToast from "../../util/response";
+import Toast from "../../ui/Toast/Toast";
+import { ToastContainer, toast } from "react-toastify";
 
 const SearchTransaction = () => {
   const searchRef = useRef(null);
+  const [data, setData] = useState({});
   const queryParam = new URLSearchParams(window.location.search);
-  const search = queryParam.get("transaction");
+  const transaction_id = queryParam.get("transaction");
 
-  useEffect(() => {
-    console.log(search);
-    if (search) {
-      searchRef.current.scrollIntoView({ behavior: "smooth" });
+  useEffect(async () => {
+    try {
+      if (transaction_id) {
+        searchRef.current.scrollIntoView({ behavior: "smooth" });
+        const response = await clientAxios.get(
+          "/transaction/get_info/" + transaction_id
+        );
+        setData(response.result);
+      }
+    } catch (error) {
+      responseToast(error, toast);
     }
   }, []);
 
@@ -52,6 +64,20 @@ const SearchTransaction = () => {
           }}
         />
       </div>
+      <div className="search_result">
+        {/* {data && <p>{JSON.stringify(data)}</p>} */}
+        {data?.status?.map((status, index) => (
+          <div className="search_result_item" key={index}>
+            <div className="search_result_item_left">
+              <h3>{status.status}</h3>
+              <p>{new Date(status.date).toLocaleString()}</p>
+            </div>
+            <div className="search_result_item_right">
+              <p>{status.location}</p>
+            </div>
+          </div>
+        ))}
+      </div>
       <div className="footer">
         <div className="footer_content">
           <div className="footer_content_left">
@@ -67,6 +93,7 @@ const SearchTransaction = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

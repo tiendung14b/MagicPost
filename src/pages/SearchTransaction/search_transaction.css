@@ -68,6 +68,10 @@
   width: 100px;
 }
 
+.search_result {
+  padding: 0 100px;
+}
+
 .footer {
   background-color: #016a70;
   color: white;
