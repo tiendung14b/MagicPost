@@ -9,6 +9,10 @@ const useWarehouse = (toast) => {
   const [warehouseLoading, setWarehouseLoading] = useState(false);
   const [listWarehouseEmployee, setListWarehouseEmployee] = useState([]);
 
+  const [listUnconfirmedTransaction, setListUnconfirmedTransaction] = useState([]);
+
+  const [listTransactionfromTransactionSpot, setListTransactionfromTransactionSpot] = useState([]);
+
   const getWarehouseInfo = async (id) => {
     try {
       const response = await clientAxios.get(`/warehouse/${id}`);
@@ -91,7 +95,7 @@ const useWarehouse = (toast) => {
     try {
       setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/transaction_from_transaction_spot/` + transaction_id);
-      getListWarehouse();
+      sendTransactionToTransactionSpot(transaction_id);
       Toast.success("Nhận thành công", toast);
     } catch (err) {
       setWarehouseLoading(false);
@@ -176,6 +180,7 @@ const useWarehouse = (toast) => {
     warehouseInfo,
     warehouseLoading,
     listWarehouseEmployee,
+    listUnconfirmedTransaction,
     getWarehouseInfo,
     createWarehouse,
     getListWarehouse,
