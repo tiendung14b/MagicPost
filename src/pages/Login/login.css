@@ -48,6 +48,7 @@ body {
 .login__media {
   width: 70%;
   height: 100%;
+  overflow: hidden;
 }
 
 .media_img {

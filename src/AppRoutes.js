@@ -110,9 +110,8 @@ const AppRouter = () => {
         }
       />
 
-      <Route path="/view/transaction">
+      <Route path="/view/transaction/">
         <Route path="" element={<SearchTransaction />} />
-        <Route path=":id" element={<SearchTransaction />} />
       </Route>
     </Routes>
   );

@@ -321,7 +321,6 @@ const CreateTransaction = () => {
               className="form__input"
               placeholder="Nhập phí trả trước"
             />
-            
           </div>
 
           <Button
@@ -330,7 +329,7 @@ const CreateTransaction = () => {
             onClick={() => {
               createTransaction({
                 transaction_qr_tracker:
-                  "http://localhost:3000/view/transaction/",
+                  "http://localhost:3000/view/transaction/?transaction=",
                 sender: getSenderInput(),
                 receiver: getReceiverInput(),
                 list_package: getPackageInput(),
