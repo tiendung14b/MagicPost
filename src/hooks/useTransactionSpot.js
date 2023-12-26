@@ -152,12 +152,14 @@ const useTransactionSpot = (toast) => {
     }
   };
 
-  const getUnconfirmedTransaction = async () => {
+  const getFromClientTransaction = async (id) => {
     try {
       setTransactionSpotLoading(true);
       const response = await clientAxios.get(
-        `/transaction_spot/get_unconfirmed`
+        `/transaction_spot/get_from_client_transactions/` + id
       );
+      setClientTransaction(response?.result);
+      console.log(response?.result);
       setTransactionSpotLoading(false);
       return response?.result;
     } catch (err) {
@@ -166,11 +168,11 @@ const useTransactionSpot = (toast) => {
     }
   };
 
-  const getFromClientTransaction = async (id) => {
+  const getToClientTransaction = async (id) => {
     try {
       setTransactionSpotLoading(true);
       const response = await clientAxios.get(
-        `/transaction_spot/get_from_client_transactions/` + id
+        `/transaction_spot/get_to_client_transactions/` + id
       );
       setClientTransaction(response?.result);
       console.log(response?.result);
@@ -199,8 +201,8 @@ const useTransactionSpot = (toast) => {
     delivery,
     setTransactionSpotLoading,
     createTransactionSpot,
-    getUnconfirmedTransaction,
     getFromClientTransaction,
+    getToClientTransaction,
   };
 }
 

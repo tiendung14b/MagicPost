@@ -5,10 +5,10 @@ import React from "react";
 import human from "../../../assets/human.svg";
 import transaction from "../../../assets/transaction.svg";
 
-import TransactionManagement from "./Management/TransactionManagement";
+import ListTransaction from "./Management/ListTransaction";
 
 const Employee = () => {
-  const [itemChoosen, setItemChoosen] = React.useState("warehouse_human");
+  const [itemChoosen, setItemChoosen] = React.useState("warehouse_list_transaction");
 
   const handleChooseItem = (id) => {
     document.getElementById(itemChoosen).classList.remove("clicked");
@@ -21,12 +21,12 @@ const Employee = () => {
       <SideBar title="Warehouse Employee">
         <div
           className="sidebar__item__content box clicked"
-          title="Quản lý nhân sự"
-          id="warehouse_human"
-          onClick={() => handleChooseItem("warehouse_human")}
+          title="Danh sách đơn hàng"
+          id="warehouse_list_transaction"
+          onClick={() => handleChooseItem("warehouse_list_transaction")}
         >
           <img className="sidebar__icon" src={human} alt="Hello" />
-          <p className="sidebar__item__text">Quản lý nhân sự</p>
+          <p className="sidebar__item__text">Danh sách đơn hàng</p>
         </div>
         <div
           className="sidebar__item__content box"
@@ -40,7 +40,7 @@ const Employee = () => {
       </SideBar>
       <div className="container">
         <div className="director__content">
-          {itemChoosen === "warehouse_human" && <TransactionManagement />}
+          {itemChoosen === "warehouse_list_transaction" && <ListTransaction />}
           {itemChoosen === "warehouse_stat" && <h1>Warehouse</h1>}
         </div>
       </div>
