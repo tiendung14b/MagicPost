@@ -6,6 +6,7 @@ import clientAxios from "../../api/clientAxios";
 import responseToast from "../../util/response";
 import Toast from "../../ui/Toast/Toast";
 import { ToastContainer, toast } from "react-toastify";
+import logo from "../../assets/logo.png";
 
 const SearchTransaction = () => {
   const searchRef = useRef(null);
@@ -79,6 +80,10 @@ const SearchTransaction = () => {
         ))}
       </div>
       <div className="footer">
+        <div className="footer_top">
+          <img src={logo} alt="" />
+          <p>Magic Post</p>
+        </div>
         <div className="footer_content">
           <div className="footer_content_left">
             <h3>Liên hệ</h3>
