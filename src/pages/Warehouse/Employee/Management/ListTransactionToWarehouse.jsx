@@ -33,7 +33,7 @@ const ListTransactionToWarehouse = () => {
     listInWarehouseTransactionToWarehouse,
     getListInWarehouseTransactionToWarehouse,
     sendTransactionToWarehouse,
-  } = useWarehouse();
+  } = useWarehouse(toast);
 
   //state for transaction choosen
   const [transactionChoosen, setTransactionChoosen] = useState(null);

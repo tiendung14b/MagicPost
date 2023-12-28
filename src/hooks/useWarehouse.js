@@ -85,7 +85,9 @@ const useWarehouse = (toast) => {
     try {
       setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/transaction_from_warehouse/` + transaction_id);
-      
+      getListUnconfirmedTransactionfromWarehouse(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
       Toast.success("Xác nhận đơn hàng thành công", toast);
     } catch (err) {
       setWarehouseLoading(false);
@@ -97,7 +99,9 @@ const useWarehouse = (toast) => {
     try {
       setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/transaction_from_transaction_spot/` + transaction_id);
-      
+      getListUnconfirmedTransactionfromTransactionSpot(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
       Toast.success("Nhận thành công", toast);
     } catch (err) {
       setWarehouseLoading(false);
@@ -109,7 +113,9 @@ const useWarehouse = (toast) => {
     try {
       setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/transaction_to_warehouse/` + transaction_id);
-      
+      getListInWarehouseTransactionToWarehouse(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
       Toast.success("Gửi thành công", toast);
     } catch (err) {
       setWarehouseLoading(false);
@@ -121,7 +127,9 @@ const useWarehouse = (toast) => {
     try {
       setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/transaction_to_transaction_spot/` + transaction_id);
-      
+      getListInWarehouseTransactionToTransactionSpot(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
       Toast.success("Gửi thành công", toast);
     } catch (err) {
       setWarehouseLoading(false);

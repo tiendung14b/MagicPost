@@ -36,7 +36,7 @@ const ListTransactionFromTransactionSpot = () => {
     listUnconfirmedTransactionfromTransactionSpot,
     getListUnconfirmedTransactionfromTransactionSpot,
     receiveTransactionFromTransactionSpot,
-  } = useWarehouse();
+  } = useWarehouse(toast);
 
   //state for transaction choosen
   const [transactionChoosen, setTransactionChoosen] = useState(null);

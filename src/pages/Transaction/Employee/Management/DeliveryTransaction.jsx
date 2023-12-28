@@ -24,9 +24,9 @@ const DeliveryTransaction = () => {
   //state to get the transaction employee
   const {
     transactionSpotLoading,
-    clientTransaction,
-    getFromClientTransaction,
-    sendToWarehouse,
+    listUnconfirmed,
+    getUnconfirmed,
+    confirmTransaction,
   } = useTransactionSpot(toast);
 
   //state for transaction choosen
@@ -68,7 +68,7 @@ const DeliveryTransaction = () => {
     }
   };
   //list manager sorted to sortedClientTransactions
-  const sortedClientTransactions = clientTransaction
+  const sortedClientTransactions = listUnconfirmed
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -85,7 +85,7 @@ const DeliveryTransaction = () => {
     });
   //useEffect
   useEffect(() => {
-    getFromClientTransaction(
+    getUnconfirmed(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
   }, []);
@@ -194,8 +194,7 @@ const DeliveryTransaction = () => {
                 <Button
                   text={"Xác Nhận"}
                   className={"action"}
-                  onClick={() => {
-                  }}
+                  onClick={() => {}}
                 />
               </div>
             </Row>
@@ -204,7 +203,7 @@ const DeliveryTransaction = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(clientTransaction.length / ((0.73 * height) / 60))
+            Math.ceil(listUnconfirmed.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
@@ -348,12 +347,12 @@ const DeliveryTransaction = () => {
           </div>
           <div className="popup__body__row">
             <Button
-              text={"Gửi tới điểm tập kết"}
+              text={"Xác nhận đơn hàng"}
               className={"action"}
               onClick={() => {
                 window["manager_popup"].close();
-                sendToWarehouse(
-                  transactionChoosen?.source_transaction_spot?._id,
+                confirmTransaction(
+                  transactionChoosen?.destination_transaction_spot._id,
                   transactionChoosen?._id
                 );
               }}
