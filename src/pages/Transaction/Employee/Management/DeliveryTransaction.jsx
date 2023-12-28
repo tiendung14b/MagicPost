@@ -156,7 +156,6 @@ const DeliveryTransaction = () => {
             />
           </div>
           <div className="row__item title__edit">Chi tiết đơn hàng</div>
-          <div className="row__item title__edit">Xác nhận đơn hàng</div>
         </Row>
         {sortedClientTransactions
           ?.filter((manager) => {
@@ -188,13 +187,6 @@ const DeliveryTransaction = () => {
                     window["manager_popup"].showModal();
                     setTransactionChoosen(manager);
                   }}
-                />
-              </div>
-              <div className="row__item manager__edit">
-                <Button
-                  text={"Xác Nhận"}
-                  className={"action"}
-                  onClick={() => {}}
                 />
               </div>
             </Row>

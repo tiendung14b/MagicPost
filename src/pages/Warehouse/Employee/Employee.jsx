@@ -60,17 +60,15 @@ const Employee = () => {
           <p className="sidebar__item__text">Đơn hàng gửi tới điểm tập kết</p>
         </div>
         <div
-          className="sidebar__item__content box clicked"
+          className="sidebar__item__content box"
           title="Đơn hàng gửi tới điểm giao dịch"
           id="warehouse_list_transaction_to_transaction_spot"
           onClick={() =>
             handleChooseItem("warehouse_list_transaction_to_transaction_spot")
           }
         >
-          <img className="sidebar__icon" src={human} alt="Hello" />
-          <p className="sidebar__item__text">
-            Đơn hàng gửi tới điểm giao dịch
-          </p>
+          <img className="sidebar__icon" src={transaction} alt="" />
+          <p className="sidebar__item__text">Đơn hàng gửi tới điểm giao dịch</p>
         </div>
       </SideBar>
       <div className="container">
@@ -85,8 +83,7 @@ const Employee = () => {
           {itemChoosen === "warehouse_list_transaction_to_warehouse" && (
             <ListTransactionToWarehouse />
           )}
-          {itemChoosen ===
-            "warehouse_list_transaction_to_transaction_spot" && (
+          {itemChoosen === "warehouse_list_transaction_to_transaction_spot" && (
             <ListTransactionToTransactionSpot />
           )}
         </div>
