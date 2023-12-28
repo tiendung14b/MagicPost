@@ -13,13 +13,23 @@ const SearchTransaction = () => {
   const [data, setData] = useState({});
   const queryParam = new URLSearchParams(window.location.search);
   const transaction_id = queryParam.get("transaction");
+  const statusMap = {
+    SUCCESS: "Giao hàng thành công",
+    WAITING: "Đang giao hàng",
+    FAILED: "Giao hàng thất bại",
+  };
 
   useEffect(() => {
     if (transaction_id) {
       searchRef.current.scrollIntoView({ behavior: "smooth" });
-      clientAxios.get("/transaction/get_info/" + transaction_id).then((res) => {
-        setData(res.result);
-      });
+      clientAxios
+        .get("/transaction/get_info/" + transaction_id)
+        .then((res) => {
+          setData(res.result);
+        })
+        .catch((err) => {
+          console.log(data);
+        });
     }
   }, []);
 
@@ -74,21 +84,63 @@ const SearchTransaction = () => {
         />
       </div>
       <div className="search_result">
-        {data?.status?.length > 0 && (
-          <p>
-            Trạng thái đơn hàng: {data?.status[data?.status?.length - 1].status}
-          </p>
-        )}
-        {data?.status?.map((status, index) => (
-          <div className="search_result_item" key={index}>
-            <div className="search_result_item_left">
-              <p>Thời gian: {new Date(status.date).toLocaleString()}</p>
+        <h2 style={{ fontSize: "24px" }}>Kết quả tra cứu</h2>
+        {Object.keys(data).length == 0 && <p>Đơn hàng không tồn tại</p>}
+        {Object.keys(data).length > 0 && (
+          <div className="search_result_container">
+            <p>Mã đơn hàng: {data?._id}</p>
+            <div className="data_detail">
+              <div className="data_detail_left">
+                <p>Người gửi: {data?.sender?.name}</p>
+                <p>Số điện thoại: {data?.sender?.phoneNumber}</p>
+                <p>
+                  Địa chỉ:{" "}
+                  {data?.sender?.address.city +
+                    ", " +
+                    data?.sender?.address.district +
+                    ", " +
+                    data?.sender?.detail}
+                </p>
+              </div>
+              <div className="data_detail_right">
+                <p>Người nhận: {data?.receiver?.name}</p>
+                <p>Số điện thoại: {data?.receiver?.phone}</p>
+                <p>
+                  Địa chỉ: {""}
+                  {data?.receiver?.address.city +
+                    ", " +
+                    data?.receiver?.address.district +
+                    ", " +
+                    data?.receiver?.address.detail}
+                </p>
+              </div>
             </div>
-            <div className="search_result_item_right">
-              <p>Địa điểm: {status.location}</p>
+            <div className="data_detail">
+              <p>Ngày gửi: {new Date(data?.send_date).toLocaleString()}</p>
             </div>
+            {data?.status?.length > 0 && (
+              <p style={{ fontWeight: "bold", color: "#fa5a5a" }}>
+                Trạng thái đơn hàng:{" "}
+                {statusMap[data?.status[data?.status?.length - 1].status]}
+                {data?.status[data?.status?.length - 1].status == "SUCCESS" && (
+                  <p>
+                    Ngày nhận: {new Date(data?.receive_date).toLocaleString()}
+                  </p>
+                )}
+              </p>
+            )}
+            {data?.status?.map((status, index) => (
+              <div className="search_result_item" key={index}>
+                <div className="search_result_item_left">
+                  <p>Thời gian: {new Date(status.date).toLocaleString()}</p>
+                </div>
+                <div className="search_result_item_right">
+                  <p>Địa điểm: {status.location}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
       <div className="about"></div>
       <div className="footer">

@@ -62,6 +62,33 @@ const ManagerPage = () => {
       setSortOrder("asc");
     }
   };
+
+  const getAddManagerInput = () => {
+    const first_name = document.getElementById(
+      "add_manager_popup__input__first_name"
+    ).value;
+    const last_name = document.getElementById(
+      "add_manager_popup__input__last_name"
+    ).value;
+    const phone_number = document.getElementById(
+      "add_manager_popup__input__phone_number"
+    ).value;
+    const email = document.getElementById(
+      "add_manager_popup__input__email"
+    ).value;
+
+    const role = document.querySelector('input[name="role"]:checked')?.value;
+    const workplace_name =
+      role === "WAREHOUSE_MANAGER" ? "WAREHOUSE" : "TRANSACTION";
+    return {
+      first_name,
+      last_name,
+      phone_number,
+      email,
+      workplace: { role: role, workplace_name: workplace_name },
+    };
+  };
+
   //list manager sorted to sortedManager
   const sortedManager = listManager
     ?.slice(
@@ -271,32 +298,32 @@ const ManagerPage = () => {
       >
         <div className="popup__body__content">
           <Input
+            id="add_manager_popup__input__first_name"
             className="add_manager_popup__input"
             placeholder={"Họ"}
             type="text"
             name="first_name"
-            onChange={handleChange}
           />
           <Input
+            id="add_manager_popup__input__last_name"
             className="add_manager_popup__input"
             placeholder={"Tên"}
             type="text"
             name="last_name"
-            onChange={handleChange}
           />
           <Input
+            id="add_manager_popup__input__phone_number"
             className="add_manager_popup__input"
             placeholder={"Số điện thoại"}
             type="tel"
             name="phone_number"
-            onChange={handleChange}
           />
           <Input
+            id="add_manager_popup__input__email"
             className="add_manager_popup__input"
             placeholder="Email"
             type="email"
             name="email"
-            onChange={handleChange}
           />
           <div className="add_manager_role">
             <p>Vai trò:</p>
@@ -306,15 +333,6 @@ const ManagerPage = () => {
                 name="role"
                 value="WAREHOUSE_MANAGER"
                 id="warehouse_role"
-                onClick={(e) => {
-                  setNewUser({
-                    ...newUser,
-                    workplace: {
-                      role: e.target.value,
-                      workplace_name: "WAREHOUSE",
-                    },
-                  });
-                }}
               />
               <label htmlFor="warehouse_role">Quản lý điểm tập kết</label>
             </div>
@@ -324,15 +342,6 @@ const ManagerPage = () => {
                 name="role"
                 value="TRANSACTION_MANAGER"
                 id="transaction_role"
-                onClick={(e) => {
-                  setNewUser({
-                    ...newUser,
-                    workplace: {
-                      role: e.target.value,
-                      workplace_name: "TRANSACTION",
-                    },
-                  });
-                }}
               />
               <label htmlFor="transaction_role">Quản lý điểm giao dịch</label>
             </div>
@@ -345,21 +354,21 @@ const ManagerPage = () => {
               text={"Thêm quản lý"}
               className={"submit"}
               onClick={() => {
-                console.log(newUser.workplace);
+                const input = getAddManagerInput();
                 if (
-                  !newUser?.phone_number ||
-                  !newUser?.first_name ||
-                  !newUser?.last_name ||
-                  !newUser?.email ||
-                  !newUser?.workplace?.role
+                  input.first_name &&
+                  input.last_name &&
+                  input.phone_number &&
+                  input.email &&
+                  input.workplace.role &&
+                  input.workplace.workplace_name
                 ) {
-                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
-                  window["add_manager_warn"].className = "warn show";
-                  return;
+                  createManager(input);
+                  // Toast.success("Thêm quản lý thành công");
+                  window["add_manager_popup"].close();
+                } else {
+                  Toast.error("Bạn cần nhập đầy đủ thông tin", toast);
                 }
-                window["add_manager_popup"].close();
-                createManager(newUser);
-                setNewUser({});
               }}
             />
             <Button

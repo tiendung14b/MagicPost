@@ -78,7 +78,7 @@
 
 .search_content {
   padding: 0 100px;
-  padding-top: 100px;
+  padding-top: 60px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -93,11 +93,14 @@
 }
 
 .search_result {
+  padding: 0px 100px;
+  padding-top: 50px;
+}
+
+.search_result_container {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  padding: 0px 100px;
-  padding-top: 50px;
 }
 
 .search_result_item {
@@ -175,4 +178,14 @@ a {
   padding: 25px;
   margin-left: 90px;
   font-size: 14px;
+}
+
+.data_detail :first-child {
+  min-width: 380px;
+}
+
+.data_detail {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
 }

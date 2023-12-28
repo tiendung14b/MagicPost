@@ -63,7 +63,17 @@ const WarehousePage = () => {
   const handleChanged = (name, value) => {
     setNewWarehouse({ ...newWarehouse, [name]: value });
   };
-  
+
+  const getWarehouseInput = () => {
+    const name = document.getElementById("add_manager_name_input").value;
+    const location = document.getElementById(
+      "add_manager_location_input"
+    ).value;
+    const warehouse_manager = document.getElementById(
+      "add_manager_warehouse_manager_input"
+    ).value;
+    return { name, location, warehouse_manager };
+  };
 
   //handle sort
   const handleSort = (column) => {
@@ -332,22 +342,19 @@ const WarehousePage = () => {
             placeholder={"Tên"}
             type="text"
             name="name"
-            onChange={(e) => handleChanged("name", e.target.value)}
+            id="add_manager_name_input"
           />
           <Input
             className="add_manager_popup__input"
             placeholder={"location"}
             type="text"
             name="location"
-            onChange={(e) => handleChanged("location", e.target.value)}
+            id="add_manager_location_input"
           />
           <div className="choose_warehouse_manager">
             <select
               name="warehouse_manager"
-              id="warehouse_manager"
-              onChange={(e) => {
-                handleChanged("warehouse_manager", e.target.value);
-              }}
+              id="add_manager_warehouse_manager_input"
             >
               {listWareHouseManager?.map((user) => (
                 <option value={user._id}>
@@ -364,18 +371,18 @@ const WarehousePage = () => {
               text={"Thêm kho mới"}
               className={"submit"}
               onClick={() => {
-                console.log(newWarehouse);
+                const warehouse = getWarehouseInput();
                 if (
-                  !newWarehouse.name ||
-                  !newWarehouse.location ||
-                  !newWarehouse.warehouse_manager
+                  !warehouse.name ||
+                  !warehouse.location ||
+                  !warehouse.warehouse_manager
                 ) {
-                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
+                  document.getElementById("add_manager_warn").style.display =
+                    "block";
                   return;
                 }
+                createWarehouse(warehouse);
                 window["add_manager_popup"].close();
-                createWarehouse(newWarehouse);
-                setNewWarehouse({});
               }}
             />
             <Button
