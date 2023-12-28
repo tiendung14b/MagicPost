@@ -23,7 +23,7 @@ import { useReactToPrint } from "react-to-print";
 
 import "../../../CSS/Director.css";
 
-const ListTransaction = () => {
+const ListTransactionFromTransactionSpot = () => {
   //state to get the transaction employee
   const {
     clientTransaction,
@@ -33,8 +33,9 @@ const ListTransaction = () => {
   //state for warehouse
   const {
     warehouseLoading,
-    listUnconfirmedTransaction,
-    getUnconfirmedTransaction,
+    listUnconfirmedTransactionfromTransactionSpot,
+    getListUnconfirmedTransactionfromTransactionSpot,
+    receiveTransactionFromTransactionSpot,
   } = useWarehouse();
 
   //state for transaction choosen
@@ -76,7 +77,7 @@ const ListTransaction = () => {
     }
   };
   //list manager sorted to sortedClientTransactions
-  const sortedClientTransactions = listUnconfirmedTransaction
+  const sortedClientTransactions = listUnconfirmedTransactionfromTransactionSpot
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -93,12 +94,12 @@ const ListTransaction = () => {
     });
   //useEffect
   useEffect(() => {
-    
+    getListUnconfirmedTransactionfromTransactionSpot(JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id);
   }, []);
 
   return (
     <div className="manager">
-      <h1 className="page_title">Danh sách đơn hàng</h1>
+      <h1 className="page_title">Xác nhận đơn hàng từ điểm giao dịch</h1>
       <DashBoard>
         <Row className="manager__todo">
           <div className="input__div">
@@ -331,13 +332,12 @@ const ListTransaction = () => {
           </div>
           <div className="popup__body__row">
             <Button
-              text={"Gửi tới điểm tập kết"}
+              text={"Xác nhận đơn hàng"}
               className={"action"}
               onClick={() => {
                 window["manager_popup"].close();
-                sendToWarehouse(
-                  transactionChoosen?.source_transaction_spot?._id,
-                  transactionChoosen?._id
+                receiveTransactionFromTransactionSpot(
+                  transactionChoosen?._id,
                 );
               }}
             />
@@ -476,4 +476,4 @@ const ListTransaction = () => {
   );
 };
 
-export default ListTransaction;
+export default ListTransactionFromTransactionSpot;
