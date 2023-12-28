@@ -24,7 +24,7 @@ const Employee = () => {
       <SideBar title="Transaction Employee">
         <div
           className="sidebar__item__content box clicked"
-          title="Đơn hàng đến từ điểm tập kết"
+          title="Tạo đơn hàng"
           id="create_transaction"
           onClick={() => handleChooseItem("create_transaction")}
         >
@@ -42,21 +42,23 @@ const Employee = () => {
         </div>
         <div
           className="sidebar__item__content box"
-          title="Đơn hàng tới người nhận"
+          title="Xác nhận đơn hàng từ điểm tập kết"
           id="delivery_transaction"
           onClick={() => handleChooseItem("delivery_transaction")}
         >
           <img className="sidebar__icon" src={transaction} alt="" />
-          <p className="sidebar__item__text">Đơn hàng tới người nhận</p>
+          <p className="sidebar__item__text">
+            Xác nhận đơn hàng từ điểm tập kết
+          </p>
         </div>
         <div
           className="sidebar__item__content box"
-          title="Tạo đơn hàng"
+          title="Đơn hàng tới người nhận"
           id="get_transaction"
           onClick={() => handleChooseItem("get_transaction")}
         >
           <img className="sidebar__icon" src={transaction} alt="" />
-          <p className="sidebar__item__text">Đơn hàng tới</p>
+          <p className="sidebar__item__text">Đơn hàng tới người nhận</p>
         </div>
       </SideBar>
       <div className="container">
