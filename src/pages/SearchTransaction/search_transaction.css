@@ -1,9 +1,17 @@
+* {
+  scroll-behavior: smooth;
+}
+
+.search_transaction {
+  overflow-x: hidden;
+}
+
 .search_transaction .hero {
   display: flex;
   padding: 20px;
   align-items: center;
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(5px);
+  /* backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(5px); */
   position: relative;
   height: 100vh;
   width: 100vw;
@@ -21,12 +29,29 @@
   gap: 40px;
   margin-left: 50px;
   color: white;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  /* backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); */
+}
+
+.hero_title {
+  position: relative;
+}
+
+.hero_title::before {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: -5px;
+  content: "";
+  width: 80px;
+  height: 3px;
+  border-radius: 999px;
+  background-color: #fa5a5a;
 }
 
 .hero_content h1 {
   font-size: 48px;
+  color: white;
 }
 
 .search_transaction .hero_content img {
@@ -35,7 +60,7 @@
 
 .search_transaction .hero_content p {
   color: #eee;
-  width: 450px;
+  width: 43%;
 }
 
 .search_transaction button {
@@ -52,7 +77,8 @@
 }
 
 .search_content {
-  padding: 100px;
+  padding: 0 100px;
+  padding-top: 100px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -67,10 +93,38 @@
 }
 
 .search_result {
-  padding: 100px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0px 100px;
+  padding-top: 50px;
+}
+
+.search_result_item {
+  position: relative;
+  display: flex;
+  padding-left: 10px;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.search_result_item::before {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  content: "";
+  width: 3px;
+  height: 100%;
+  border-radius: 999px;
+  background-color: #016a70;
+}
+
+.search_result_item:last-child::before {
+  background-color: #fa5a5a;
 }
 
 .footer {
+  margin-top: 100px;
   background-color: #016a70;
   color: white;
   padding: 30px;
@@ -108,4 +162,17 @@
 a {
   color: white;
   text-decoration: none;
+}
+
+.nav_header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  color: white;
+  z-index: 999;
+  gap: 30px;
+  padding: 25px;
+  margin-left: 90px;
+  font-size: 14px;
 }

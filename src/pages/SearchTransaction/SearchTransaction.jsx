@@ -14,25 +14,33 @@ const SearchTransaction = () => {
   const queryParam = new URLSearchParams(window.location.search);
   const transaction_id = queryParam.get("transaction");
 
-  useEffect(async () => {
-    try {
-      if (transaction_id) {
-        searchRef.current.scrollIntoView({ behavior: "smooth" });
-        const response = await clientAxios.get(
-          "/transaction/get_info/" + transaction_id
-        );
-        setData(response.result);
-      }
-    } catch (error) {
-      responseToast(error, toast);
+  useEffect(() => {
+    if (transaction_id) {
+      searchRef.current.scrollIntoView({ behavior: "smooth" });
+      clientAxios.get("/transaction/get_info/" + transaction_id).then((res) => {
+        setData(res.result);
+      });
     }
   }, []);
 
   return (
     <div className="search_transaction">
-      <div className="hero">
+      <header className="search_transaction_header">
+        <ul className="nav_header">
+          <li>
+            <a href="#hero">Trang chủ</a>
+          </li>
+          <li>
+            <a href="#search_content">Tra cứu đơn hàng</a>
+          </li>
+          <li>
+            <a href="">Về chúng tôi</a>
+          </li>
+        </ul>
+      </header>
+      <div className="hero" id="hero">
         <div className="hero_content">
-          <h1>Magic Post</h1>
+          <h1 className="hero_title">Magic Post</h1>
           <p>
             Magic Post là một đơn vị vận chuyển hàng đầu tại Việt Nam, chúng tôi
             cung cấp dịch vụ giao hàng nhanh chóng, đáng tin cậy và tiết kiệm,
@@ -66,19 +74,23 @@ const SearchTransaction = () => {
         />
       </div>
       <div className="search_result">
-        {/* {data && <p>{JSON.stringify(data)}</p>} */}
+        {data?.status?.length > 0 && (
+          <p>
+            Trạng thái đơn hàng: {data?.status[data?.status?.length - 1].status}
+          </p>
+        )}
         {data?.status?.map((status, index) => (
           <div className="search_result_item" key={index}>
             <div className="search_result_item_left">
-              <h3>{status.status}</h3>
-              <p>{new Date(status.date).toLocaleString()}</p>
+              <p>Thời gian: {new Date(status.date).toLocaleString()}</p>
             </div>
             <div className="search_result_item_right">
-              <p>{status.location}</p>
+              <p>Địa điểm: {status.location}</p>
             </div>
           </div>
         ))}
       </div>
+      <div className="about"></div>
       <div className="footer">
         <div className="footer_top">
           <img src={logo} alt="" />
