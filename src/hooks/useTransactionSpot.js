@@ -250,7 +250,7 @@ const useTransactionSpot = (toast) => {
     try {
       setTransactionSpotLoading(true);
       const response = await clientAxios.get(
-        `/transaction_spot/sending_history/` + transaction_spot_id
+        `/transaction_spot/get_sending_history/` + transaction_spot_id
       );
       setListSendingHistory(response?.result);
       console.log(response?.result);
@@ -266,7 +266,7 @@ const useTransactionSpot = (toast) => {
     try {
       setTransactionSpotLoading(true);
       const response = await clientAxios.get(
-        `/transaction_spot/success_history/` + transaction_spot_id
+        `/transaction_spot/get_success_history/` + transaction_spot_id
       );
       setListSuccessHistory(response?.result);
       console.log(response?.result);
@@ -282,7 +282,7 @@ const useTransactionSpot = (toast) => {
     try {
       setTransactionSpotLoading(true);
       const response = await clientAxios.get(
-        `/transaction_spot/fail_history/` + transaction_spot_id
+        `/transaction_spot/get_fail_history/` + transaction_spot_id
       );
       setListFailHistory(response?.result);
       console.log(response?.result);
