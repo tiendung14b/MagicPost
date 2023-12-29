@@ -16,6 +16,7 @@ import arrow from "../../../assets/arrow.svg";
 import filter_icon from "../../../assets/filter.svg";
 
 import default_avatar from "../../../assets/default_avatar.png";
+import { Chart } from "apexcharts";
 
 const WarehousePage = () => {
   const {
