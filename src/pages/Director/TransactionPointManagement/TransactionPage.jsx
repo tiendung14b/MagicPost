@@ -36,10 +36,8 @@ const TransactionPage = () => {
   const {
     //state for transaction
     listWarehouse,
-    warehouseLoading,
     getListWarehouse,
-    setWarehouseManager,
-    deleteWarehouseManager,
+    
   } = useWarehouse(toast);
 
   //state for user
@@ -386,7 +384,13 @@ const TransactionPage = () => {
             id="add_transaction_spot_name_input"
           />
           <div className="choose_location">
-            <select name="province" id="add_transaction_spot_province_input">
+            <select
+              name="province"
+              id="add_transaction_spot_province_input"
+              onChange={(e) => {
+                getDistrict(e.target.value);
+              }}
+            >
               <option value="" disabled>
                 Select Province
               </option>

@@ -61,10 +61,6 @@ const WarehousePage = () => {
     setSearch("");
   };
 
-  const handleChanged = (name, value) => {
-    setNewWarehouse({ ...newWarehouse, [name]: value });
-  };
-
   const getWarehouseInput = () => {
     const name = document.getElementById("add_manager_name_input").value;
     const location = document.getElementById(
@@ -418,7 +414,7 @@ const WarehousePage = () => {
               >
                 <p className="row__item transaction_manager popup__item">
                   <img
-                    src={user?.url_avatar}
+                    src={user?.url_avatar || default_avatar}
                     alt={`Avatar of ${user?.first_name}`}
                   />
                   {user?.first_name + " " + user?.last_name}
