@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Loading from "../../../../ui/Loading/Loading";
 
 import useTransactionSpot from "../../../../hooks/useTransactionSpot";
+import Button from "../../../../ui/Button/Button";
 
 import "../../../CSS/Director.css";
 
@@ -35,6 +36,8 @@ function Stat() {
     series: [],
   });
 
+  const [line, setLine] = useState(false);
+
   const StatClientTransaction = clientTransaction.length;
   const StatClientTransaction_Confirmed = clientTransaction_Confirmed.length;
 
@@ -56,7 +59,58 @@ function Stat() {
       <h1 className="page_title">Thống kê</h1>
       <div className="stat__container">
         <div className="chart__container">
-          {chartState &&
+          <Button
+            className="action"
+            onClick={() => {
+              setLine(!line);
+            }}
+            text={line ? "Biểu đồ cột" : "Biểu đồ đường"}
+          />
+          {line &&
+            chartState &&
+            chartState.series &&
+            Object.keys(statistic).length > 0 && (
+              <Chart
+                options={{
+                  ...chartState.options,
+                  xaxis: {
+                    categories: Array.from(
+                      new Set([
+                        ...Object.keys(statistic?.success_transactions),
+                        ...Object.keys(statistic?.failed_transactions),
+                        ...Object.keys(statistic?.sending_history),
+                      ])
+                    ),
+                  },
+                }}
+                series={[
+                  ...chartState.series,
+                  {
+                    name: "Gửi thất bại",
+                    data: Object.keys(statistic?.failed_transactions).map(
+                      (item) => statistic?.failed_transactions[item].length
+                    ),
+                  },
+                  {
+                    name: "Gửi hàng thành công",
+                    data: Object.keys(statistic?.success_transactions).map(
+                      (item) => statistic?.success_transactions[item].length
+                    ),
+                  },
+                  {
+                    name: "Đơn hàng gửi đi",
+                    data: Object.keys(statistic?.sending_history).map(
+                      (item) => statistic?.sending_history[item].length
+                    ),
+                  },
+                ]}
+                type="line"
+                width="90%"
+                height="400px"
+              />
+            )}
+          {!line &&
+            chartState &&
             chartState.series &&
             Object.keys(statistic).length > 0 && (
               <Chart
