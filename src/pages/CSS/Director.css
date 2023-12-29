@@ -10,6 +10,12 @@
   margin-bottom: 30px;
 }
 
+.statistic__container__title {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 15px;
+}
+
 .page__title__mobile {
   font-size: 23px;
   font-weight: 600;
@@ -526,4 +532,37 @@ th {
 .popup__body__content.pdf {
   padding-top: 5%;
   margin-left: 50px;
+}
+
+.chart__container {
+  border: 1px solid black;
+  padding: 20px;
+}
+
+.statistic__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.statistic__container__left {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid black;
+}
+
+.statistic__container__right {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid black;
 }

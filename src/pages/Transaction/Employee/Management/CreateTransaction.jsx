@@ -191,7 +191,7 @@ const CreateTransaction = () => {
           <Input
             id="receiver_name_input"
             className="form__input"
-            placeholder="Tên người gửi"
+            placeholder="Tên người nhận"
           />
           <Input
             id="receiver_phoneNumber_input"

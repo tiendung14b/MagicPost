@@ -15,6 +15,9 @@ const useWarehouse = (toast) => {
   const [listInWarehouseTransactionToTransactionSpot, setListInWarehouseTransactionToTransactionSpot] = useState([]);
   const [listInWarehouseTransactionToWarehouse, setListInWarehouseTransactionToWarehouse] = useState([]);
 
+  const [sentHistory, setSentHistory] = useState([]);
+  const [receivedHistory, setReceivedHistory] = useState([]);
+
   const getWarehouseInfo = async (id) => {
     try {
       const response = await clientAxios.get(`/warehouse/${id}`);
@@ -249,6 +252,36 @@ const useWarehouse = (toast) => {
     }
   }
 
+  const getListSentHistory = async () => {
+    try {
+      setWarehouseLoading(true);
+      const response = await clientAxios.get(
+        `/warehouse/sent_transactions_history/`
+      );
+      setSentHistory(response?.result);
+      console.log(response?.result);
+      setWarehouseLoading(false);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
+  const getListReceivedHistory = async () => {
+    try {
+      setWarehouseLoading(true);
+      const response = await clientAxios.get(
+        `/warehouse/received_transactions_history/`
+      );
+      setReceivedHistory(response?.result);
+      console.log(response?.result);
+      setWarehouseLoading(false);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
 
   return {
     listWarehouse,
@@ -259,6 +292,8 @@ const useWarehouse = (toast) => {
     listUnconfirmedTransactionfromWarehouse,
     listInWarehouseTransactionToTransactionSpot,
     listInWarehouseTransactionToWarehouse,
+    sentHistory,
+    receivedHistory,
     getWarehouseInfo,
     createWarehouse,
     getListWarehouse,
@@ -276,6 +311,8 @@ const useWarehouse = (toast) => {
     getListUnconfirmedTransactionfromWarehouse,
     getListInWarehouseTransactionToTransactionSpot,
     getListInWarehouseTransactionToWarehouse,
+    getListSentHistory,
+    getListReceivedHistory,
   };
 };
 

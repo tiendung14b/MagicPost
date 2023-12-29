@@ -28,7 +28,7 @@ const DeliveryTransactionMobile = () => {
   const {
     transactionSpotLoading,
     clientTransaction_Confirmed,
-    getFromClientTransaction,
+    getToClientTransaction,
     confirmDelivery,
   } = useTransactionSpot(toast);
 
@@ -94,7 +94,7 @@ const DeliveryTransactionMobile = () => {
 
   //useEffect
   useEffect(() => {
-    getFromClientTransaction(
+    getToClientTransaction(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
   }, []);
