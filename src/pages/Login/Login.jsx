@@ -23,6 +23,8 @@ const Login = () => {
   const [loginInfo, setLoginInfo] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [warning, setWarning] = useState("");
+  const [send_verify_code, setSend_verify_code] = useState(false);
 
   const onSubmit = async (loginInfo) => {
     try {
@@ -97,6 +99,7 @@ const Login = () => {
       if (response?.status == "success") {
         Toast.success(response?.message, toast);
         window["update_password"].close();
+        Toast.success("Đăng nhập lại để tiếp tục", toast);
       } else {
         Toast.warn(response?.message, toast);
       }
@@ -226,6 +229,13 @@ const Login = () => {
         title={"Lấy lại mật khẩu"}
         popup_id={"reset_password"}
         className={"reset_password"}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          fontSize: "10px",
+          minWidth: "300px",
+        }}
       >
         <Input
           labelText={"Số điện thoại"}
@@ -234,16 +244,40 @@ const Login = () => {
           type="tel"
         />
         <p
+          id="send_verify_code"
+          style={{ color: "#fa5a5a", cursor: "pointer", fontSize: "14px" }}
           onClick={async () => {
-            if (!window["reset_password_phone_number"].value) {
-              return Toast.warn("Bạn cần nhập số điện thoại", toast);
+            try {
+              if (!window["reset_password_phone_number"].value) {
+                return Toast.warn("Bạn cần nhập số điện thoại", toast);
+              }
+              await clientAxios.post("/user/send_verify_code", {
+                phone_number: window["reset_password_phone_number"].value,
+              });
+              setSend_verify_code(true);
+            } catch (err) {
+              if (!err.response) {
+                setWarning("Số điện thoại không tồn tại");
+                return;
+              }
+              const res = err.response.data;
+              if (res.status == "fail") {
+                setWarning(res.message);
+              } else {
+                setWarning(res.message);
+              }
             }
-            await clientAxios.post("/user/send_verify_code", {
-              phone_number: window["reset_password_phone_number"].value,
-            });
           }}
         >
-          Gửi mã xác nhận
+          {send_verify_code ? "Gửi lại mã xác nhận" : "Gửi mã xác nhận"}
+          <br></br>
+          {send_verify_code ? (
+            <p style={{ marginTop: "5px", color: "#777" }}>
+              Mã xác nhận đã được gửi qua email của bạn
+            </p>
+          ) : (
+            <></>
+          )}
         </p>
         <Input
           labelText={"Mã xác nhận"}
@@ -269,22 +303,23 @@ const Login = () => {
               Toast.success("Mật khẩu mới được gửi qua email của bạn", toast);
               window["reset_password"].close();
             } catch (err) {
-              window["reset_password"].close();
               if (!err.response) {
-                responseToast(err, toast);
-                console.log(err);
+                setWarning("Mã xác nhận không chính xác");
                 return;
-              }
-              const res = err.response.data;
-              if (res.status == "fail") {
-                Toast.warn(err.response?.data?.message, toast);
-              } else {
-                Toast.error(err.response?.data?.message, toast);
               }
             }
           }}
         />
-        <p>Bạn cần nhập đầy đủ thông tin</p>
+        <p
+          style={{
+            fontSize: "14px",
+            color: "#fa5a5a",
+            display: "inline-block",
+            borderRadius: "5px",
+          }}
+        >
+          {warning}
+        </p>
       </Popup>
     </div>
   );

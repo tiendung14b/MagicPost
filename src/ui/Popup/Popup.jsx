@@ -3,7 +3,16 @@ import { useRef } from "react";
 import "./popup.css";
 import xsymbol from "../../assets/x-symbol.svg";
 
-const Popup = ({ children, title, popup_id, className, ref, onClose, ...props }) => {
+const Popup = ({
+  children,
+  title,
+  popup_id,
+  className,
+  ref,
+  onClose,
+  style,
+  ...props
+}) => {
   const [original, setOriginal] = React.useState("");
 
   return (
@@ -26,7 +35,9 @@ const Popup = ({ children, title, popup_id, className, ref, onClose, ...props })
             }}
           />
         </div>
-        <div className="popup__body">{children}</div>
+        <div className="popup__body" style={style}>
+          {children}
+        </div>
       </div>
     </dialog>
   );
