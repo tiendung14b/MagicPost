@@ -21,14 +21,13 @@
   font-weight: 600;
   margin-bottom: 30px;
   margin-left: 30px;
-
 }
 
 .row__item {
   min-width: 16vw;
 }
 
-.sidebar.close~.container .row__item {
+.sidebar.close ~ .container .row__item {
   min-width: 20vw;
 }
 
@@ -235,7 +234,6 @@
   gap: 10px;
   padding: 20px;
 }
-
 
 .manager__detail__mobile {
   display: flex;

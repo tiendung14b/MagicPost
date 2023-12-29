@@ -6,6 +6,7 @@ import Loading from "../../../../ui/Loading/Loading";
 
 import useTransactionSpot from "../../../../hooks/useTransactionSpot";
 import Button from "../../../../ui/Button/Button";
+import Card from "../../../../ui/Card.js/Card";
 
 import "../../../CSS/Director.css";
 

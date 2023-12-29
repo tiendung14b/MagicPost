@@ -10,6 +10,7 @@ import useWarehouse from "../../../../hooks/useWarehouse";
 import Button from "../../../../ui/Button/Button";
 
 import "../../../CSS/Director.css";
+import Card from "../../../../ui/Card.js/Card";
 
 function Stat() {
   const {
@@ -129,16 +130,6 @@ function Stat() {
                 height="400px"
               />
             )}
-        </div>
-        <div className="statistic__container">
-          <div className="statistic__container__left">
-            <div className="statistic__container__title">Trường số liệu 1</div>
-            <div className="statistic__container__content"></div>
-          </div>
-          <div className="statistic__container__right">
-            <div className="statistic__container__title">Trường số liệu 2</div>
-            <div className="statistic__container__content"></div>
-          </div>
         </div>
       </div>
       <ToastContainer className="toasify" />
