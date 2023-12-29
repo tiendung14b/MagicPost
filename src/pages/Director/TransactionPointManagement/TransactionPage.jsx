@@ -313,7 +313,7 @@ const TransactionPage = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(sortedTransaction.length / ((0.73 * height) / 60))
+            Math.ceil(listTransactionSpot.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
