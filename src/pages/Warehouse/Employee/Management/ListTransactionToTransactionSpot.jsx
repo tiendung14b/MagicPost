@@ -24,9 +24,7 @@ import { useReactToPrint } from "react-to-print";
 import "../../../CSS/Director.css";
 
 const ListTransactionToTransactionSpot = () => {
-  //state to get the transaction employee
-  const { clientTransaction, sendToWarehouse } = useTransactionSpot(toast);
-
+  
   //state for warehouse
   const {
     warehouseLoading,
@@ -187,7 +185,7 @@ const ListTransactionToTransactionSpot = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(clientTransaction.length / ((0.73 * height) / 60))
+            Math.ceil(listInWarehouseTransactionToTransactionSpot.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div

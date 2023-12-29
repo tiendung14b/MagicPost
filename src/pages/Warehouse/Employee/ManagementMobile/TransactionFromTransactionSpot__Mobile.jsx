@@ -24,13 +24,15 @@ import { useReactToPrint } from "react-to-print";
 
 import "../../../CSS/Director.css";
 
-const GetTransactionMobile = () => {
+const TransactionFromTransactionSpot__Mobile = () => {
+
+  //state for warehouse
   const {
-    transactionSpotLoading,
-    listUnconfirmed,
-    getUnconfirmed,
-    confirmTransaction,
-  } = useTransactionSpot(toast);
+    warehouseLoading,
+    listUnconfirmedTransactionfromTransactionSpot,
+    getListUnconfirmedTransactionfromTransactionSpot,
+    receiveTransactionFromTransactionSpot,
+  } = useWarehouse(toast);
 
   //state for transaction choosen
   const [transactionChoosen, setTransactionChoosen] = useState(null);
@@ -76,7 +78,7 @@ const GetTransactionMobile = () => {
   });
 
   //list manager sorted to sortedManager
-  const sortedClientTransactions = listUnconfirmed
+  const sortedClientTransactions = listUnconfirmedTransactionfromTransactionSpot
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -94,14 +96,14 @@ const GetTransactionMobile = () => {
 
   //useEffect
   useEffect(() => {
-    getUnconfirmed(
+    getListUnconfirmedTransactionfromTransactionSpot(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
   }, []);
 
   return (
     <div className="manager__mobile">
-      <h1 className="page__title__mobile">Xác nhận đơn hàng tới người dùng</h1>
+      <h1 className="page__title__mobile">Xác nhận đơn từ điểm giao dịch</h1>
       <DashBoard>
         <Column className="manager__todo__mobile">
           <div className="button__layout__mobile"></div>
@@ -185,7 +187,7 @@ const GetTransactionMobile = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(listUnconfirmed.length / ((0.73 * height) / 60))
+            Math.ceil(listUnconfirmedTransactionfromTransactionSpot.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
@@ -317,10 +319,7 @@ const GetTransactionMobile = () => {
               className={"action"}
               onClick={() => {
                 window["manager_popup"].close();
-                confirmTransaction(
-                  transactionChoosen?.destination_transaction_spot._id,
-                  transactionChoosen?._id
-                );
+                receiveTransactionFromTransactionSpot(transactionChoosen?._id);
               }}
             />
             <Button
@@ -451,10 +450,10 @@ const GetTransactionMobile = () => {
           </div>
         </div>
       </Popup>
-      {transactionSpotLoading ? <Loading /> : <></>}
+      {warehouseLoading ? <Loading /> : <></>}
       <ToastContainer className="toasify" />
     </div>
   );
 };
 
-export default GetTransactionMobile;
+export default TransactionFromTransactionSpot__Mobile;

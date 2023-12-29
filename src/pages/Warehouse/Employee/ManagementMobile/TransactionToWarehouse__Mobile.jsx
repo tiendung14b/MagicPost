@@ -24,13 +24,14 @@ import { useReactToPrint } from "react-to-print";
 
 import "../../../CSS/Director.css";
 
-const GetTransactionMobile = () => {
+const TransactionToWarehouse__Mobile = () => {
+  //state for warehouse
   const {
-    transactionSpotLoading,
-    listUnconfirmed,
-    getUnconfirmed,
-    confirmTransaction,
-  } = useTransactionSpot(toast);
+    warehouseLoading,
+    listInWarehouseTransactionToWarehouse,
+    getListInWarehouseTransactionToWarehouse,
+    sendTransactionToWarehouse,
+  } = useWarehouse(toast);
 
   //state for transaction choosen
   const [transactionChoosen, setTransactionChoosen] = useState(null);
@@ -76,7 +77,7 @@ const GetTransactionMobile = () => {
   });
 
   //list manager sorted to sortedManager
-  const sortedClientTransactions = listUnconfirmed
+  const sortedClientTransactions = listInWarehouseTransactionToWarehouse
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -94,14 +95,14 @@ const GetTransactionMobile = () => {
 
   //useEffect
   useEffect(() => {
-    getUnconfirmed(
+    getListInWarehouseTransactionToWarehouse(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
   }, []);
 
   return (
     <div className="manager__mobile">
-      <h1 className="page__title__mobile">Xác nhận đơn hàng tới người dùng</h1>
+      <h1 className="page__title__mobile">Đơn hàng gửi tới điểm tập kết</h1>
       <DashBoard>
         <Column className="manager__todo__mobile">
           <div className="button__layout__mobile"></div>
@@ -185,7 +186,10 @@ const GetTransactionMobile = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(listUnconfirmed.length / ((0.73 * height) / 60))
+            Math.ceil(
+              listInWarehouseTransactionToWarehouse.length /
+                ((0.73 * height) / 60)
+            )
           ).keys(),
         ].map((i) => (
           <div
@@ -313,14 +317,11 @@ const GetTransactionMobile = () => {
 
           <div className="popup__body__row">
             <Button
-              text={"Xác nhận đơn hàng"}
+              text={"Gửi đơn hàng tới điểm tập kết"}
               className={"action"}
               onClick={() => {
                 window["manager_popup"].close();
-                confirmTransaction(
-                  transactionChoosen?.destination_transaction_spot._id,
-                  transactionChoosen?._id
-                );
+                sendTransactionToWarehouse(transactionChoosen?._id);
               }}
             />
             <Button
@@ -451,10 +452,10 @@ const GetTransactionMobile = () => {
           </div>
         </div>
       </Popup>
-      {transactionSpotLoading ? <Loading /> : <></>}
+      {warehouseLoading ? <Loading /> : <></>}
       <ToastContainer className="toasify" />
     </div>
   );
 };
 
-export default GetTransactionMobile;
+export default TransactionToWarehouse__Mobile;

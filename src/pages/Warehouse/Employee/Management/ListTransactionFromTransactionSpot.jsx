@@ -27,7 +27,6 @@ const ListTransactionFromTransactionSpot = () => {
   //state to get the transaction employee
   const {
     clientTransaction,
-    sendToWarehouse,
   } = useTransactionSpot(toast);
 
   //state for warehouse
@@ -49,7 +48,7 @@ const ListTransactionFromTransactionSpot = () => {
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
   //state for values of dropdown and selected
-  const values = ["_id", "sender", "receiver", "send_date"];
+  const values = ["_id", "send_date"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type

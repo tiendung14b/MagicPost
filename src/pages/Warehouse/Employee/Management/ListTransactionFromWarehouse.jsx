@@ -25,7 +25,6 @@ import "../../../CSS/Director.css";
 
 const ListTransactionFromWarehouse = () => {
   //state to get the transaction employee
-  const { clientTransaction, sendToWarehouse } = useTransactionSpot(toast);
 
   //state for warehouse
   const {
@@ -46,7 +45,7 @@ const ListTransactionFromWarehouse = () => {
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
   //state for values of dropdown and selected
-  const values = ["_id", "sender", "receiver", "send_date"];
+  const values = ["_id", "send_date"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
@@ -187,7 +186,7 @@ const ListTransactionFromWarehouse = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(clientTransaction.length / ((0.73 * height) / 60))
+            Math.ceil(listUnconfirmedTransactionfromWarehouse.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
