@@ -71,47 +71,38 @@ const LogisticPage = () => {
   return (
     <div className="manager">
       <h1 className="page_title">Thống kê</h1>
-      <div className="choose_warehouse">
-        <select name="warehouse" id="add_warehouse_input">
-          <option value={null} disabled>
-            Chọn kho
-          </option>
-          {listWarehouse?.map((warehouse) => (
-            <option value={warehouse._id}>{warehouse.name}</option>
-          ))}
-        </select>
-      </div>
-      <div className="choose_warehouse">
-        <select name="warehouse" id="add_transaction_spot">
-          <option value={null} disabled>
-            Chọn điểm giao dịch
-          </option>
-          {listTransactionSpot?.map((warehouse) => (
-            <option value={warehouse._id}>{warehouse.name}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <Button
-          text={"Cập nhật"}
-          className={"submit"}
-          onClick={() => {
-            getValue();
-          }}
-        />
-      </div>
       <div className="stat__container">
         <div className="chart__container">
-          <div className="chart__name">
-            <h3>Thống kê {warehouseChoice?.name}</h3>
+          <div className="chart__header">
+            <div className="chart__name">
+              <h3>Thống kê {warehouseChoice?.name}</h3>
+            </div>
+            <Button
+              className="action"
+              onClick={() => {
+                setLine(!line);
+              }}
+              text={line ? "Biểu đồ cột" : "Biểu đồ đường"}
+            />
+            <div className="choose_warehouse">
+              <select name="warehouse" id="add_warehouse_input">
+                <option value={null} disabled>
+                  Chọn kho
+                </option>
+                {listWarehouse?.map((warehouse) => (
+                  <option value={warehouse._id}>{warehouse.name}</option>
+                ))}
+              </select>
+            </div>
+            <Button
+              text={"Cập nhật"}
+              className={"submit"}
+              onClick={() => {
+                getValue();
+              }}
+            />
           </div>
-          <Button
-            className="action"
-            onClick={() => {
-              setLine(!line);
-            }}
-            text={line ? "Biểu đồ cột" : "Biểu đồ đường"}
-          />
+
           {line &&
             chartState &&
             chartState.series &&
@@ -202,16 +193,36 @@ const LogisticPage = () => {
             )}
         </div>
         <div className="chart__container">
-          <div className="chart__name">
-            <h3>Thống kê {transactionSpotChoice?.name}</h3>
+          <div className="chart__header">
+            <div className="chart__name">
+              <h3>Thống kê {transactionSpotChoice?.name}</h3>
+            </div>
+            <Button
+              className="action"
+              onClick={() => {
+                setLineTransactionSpot(!lineTransactionSpot);
+              }}
+              text={lineTransactionSpot ? "Biểu đồ cột" : "Biểu đồ đường"}
+            />
+            <div className="choose_transaction">
+              <select name="transaction" id="add_transaction_spot">
+                <option value={null} disabled>
+                  Chọn điểm giao dịch
+                </option>
+                {listTransactionSpot?.map((warehouse) => (
+                  <option value={warehouse._id}>{warehouse.name}</option>
+                ))}
+              </select>
+            </div>
+            <Button
+              text={"Cập nhật"}
+              className={"submit"}
+              onClick={() => {
+                getValue();
+              }}
+            />
           </div>
-          <Button
-            className="action"
-            onClick={() => {
-              setLineTransactionSpot(!lineTransactionSpot);
-            }}
-            text={lineTransactionSpot ? "Biểu đồ cột" : "Biểu đồ đường"}
-          />
+
           {lineTransactionSpot &&
             chartState &&
             chartState.series &&

@@ -19,6 +19,8 @@ import filter_icon from "../../../assets/filter.svg";
 
 import default_avatar from "../../../assets/default_avatar.png";
 
+import logo from "../../../assets/logo.png";
+
 const TransactionPage = () => {
   const {
     //state for transaction spot
@@ -299,7 +301,10 @@ const TransactionPage = () => {
                 <Button
                   text={"Xem chi tiết"}
                   className={"action"}
-                  onClick={() => {}}
+                  onClick={() => {
+                    setCurrentTransactionSpot(transactionSpot);
+                    window["transaction_popup"].showModal();
+                  }}
                 />
               </div>
             </Row>
@@ -534,6 +539,179 @@ const TransactionPage = () => {
               className={"danger"}
               onClick={() => {
                 window["update_manager_popup"].close();
+              }}
+            />
+          </div>
+        </div>
+      </Popup>
+      <Popup
+        className="transaction_popup"
+        popup_id={"transaction_popup"}
+        title={"Thông tin điểm giao dịch"}
+      >
+        <div className="popup__body__content">
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              {/* <img src={logo} className="transaction__order__logo" alt="" /> */}
+            </div>
+          </div>
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Tên điểm giao dịch:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.name}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Địa chỉ:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.location?.detail +
+                  " " +
+                  currentTransactionSpot?.location?.district +
+                  " " +
+                  currentTransactionSpot?.location?.city}
+              </p>
+            </div>
+          </div>
+
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Mã Postal Code:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.postal_code}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">
+                Kết nối tới điểm tập kết:
+              </p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.warehouse?.name}
+              </p>
+            </div>
+          </div>
+
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Số nhân viên:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.transaction_employees?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Đơn tới:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.from_client_transactions?.length}
+              </p>
+            </div>
+          </div>
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Đơn chưa xác nhận:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.unconfirm_transactions?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Đơn tới:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.to_client_transactions?.length}
+              </p>
+            </div>
+          </div>
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Số đơn thành công:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.success_transactions?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Số đơn thất bại:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.failed_transactions?.length}
+              </p>
+            </div>
+          </div>
+          {/* <div className="manager__package__list">
+            <p className="manager_popup__field__title">Thông tin nhân viên:</p>
+            <table>
+              <tr>
+                <th>Tên</th>
+                <th>Mail</th>
+                <th>Phone</th>
+                <th>Ngày tạo tài khoản</th>
+              </tr>
+              {currentTransactionSpot?.transaction_employees?.map((user) => (
+                <tr>
+                  <td>{user?.first_name + " " + user?.last_name}</td>
+                  <td>{user?.email}</td>
+                  <td>{user?.phone_number}</td>
+                  <td>{new Date(user?.create_at).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </table>
+          </div> */}
+          <div className="popup__body__row">
+            <Button
+              text={"Xem nhân viên"}
+              className={"action"}
+              onClick={() => {
+                window["employee_popup"].showModal();
+              }}
+            />
+
+            <Button
+              text={"Đóng"}
+              className={"danger"}
+              onClick={() => {
+                window["transaction_popup"].close();
+              }}
+            />
+          </div>
+        </div>
+      </Popup>
+      <Popup
+        className="employee_popup"
+        popup_id={"employee_popup"}
+        title={"Danh sách nhân viên"}
+      >
+        <div className="popup__body__content">
+          {currentTransactionSpot?.transaction_employees?.map((user) => (
+            <Row
+              key={user.id} // Add a unique key to each row
+              className={`manager__detail popup__item ${
+                selectedRow === user ? "selected" : ""
+              }`}
+            >
+              <div
+                className="choose_list_manager"
+                onClick={() => {
+                  setSelectedRow(user);
+                }}
+              >
+                <p className="row__item transaction_manager popup__item">
+                  <img
+                    src={user?.url_avatar || default_avatar}
+                    alt={`Avatar of ${user?.first_name}`}
+                  />
+                  {user?.first_name + " " + user?.last_name}
+                </p>
+                <p className="row__item transaction_manager popup__item">
+                  {user?.phone_number}
+                </p>
+                <p className="row__item transaction_manager popup__item">
+                  {user?.email}
+                </p>
+              </div>
+            </Row>
+          ))}
+          <div className="close_submit">
+            <Button
+              text={"Hủy"}
+              className={"danger"}
+              onClick={() => {
+                window["employee_popup"].close();
               }}
             />
           </div>
