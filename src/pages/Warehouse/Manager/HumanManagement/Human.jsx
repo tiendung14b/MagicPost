@@ -20,9 +20,7 @@ import default_avatar from "../../../../assets/default_avatar.png";
 import "../../../CSS/Director.css";
 
 const Human = () => {
-  const {
-    listManager,
-  } = useUser(toast);
+  const { listManager } = useUser(toast);
 
   const {
     listWarehouseEmployee,
@@ -49,6 +47,8 @@ const Human = () => {
   const [search, setSearch] = useState("");
   //state for choosen type
   const [searchBy, setSearchBy] = useState("first_name");
+  //state for warning
+  const [warning, setWarning] = useState("");
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
@@ -69,12 +69,23 @@ const Human = () => {
     const email = document.getElementById(
       "add_manager_popup__input__email"
     ).value;
+    setWarning("");
     return {
       first_name,
       last_name,
       phone_number,
       email,
     };
+  };
+
+  const validEmail = (email) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  const validPhoneNumber = (phone_number) => {
+    const re = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+    return re.test(phone_number);
   };
 
   //handle sort
@@ -104,7 +115,9 @@ const Human = () => {
     });
   //useEffect
   useEffect(() => {
-    getListWarehouseEmployee(JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id);
+    getListWarehouseEmployee(
+      JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+    );
   }, []);
 
   return (
@@ -328,19 +341,28 @@ const Human = () => {
               className={"submit"}
               onClick={() => {
                 const input = getAddManagerInput();
+                const { first_name, last_name, phone_number, email } = input;
                 if (
-                  input.first_name &&
-                  input.last_name &&
-                  input.phone_number &&
-                  input.email
+                  first_name === "" ||
+                  last_name === "" ||
+                  phone_number === "" ||
+                  email === ""
                 ) {
-                  setWarehouseLoading(true);
-                  window["add_manager_popup"].close();
-                  addWarehouseEmployee(input);
-                } else {
-                  toast.error("Vui lòng điền đầy đủ thông tin", toast);
+                  setWarning("Vui lòng điền đầy đủ thông tin");
+                  return;
                 }
-                
+                if (!validPhoneNumber(phone_number)) {
+                  setWarning("Số điện thoại không hợp lệ");
+                  return;
+                }
+                if (!validEmail(email)) {
+                  setWarning("Email không hợp lệ");
+                  return;
+                }
+                setWarning("");
+                setWarehouseLoading(true);
+                window["add_manager_popup"].close();
+                addWarehouseEmployee(input);
               }}
             />
             <Button
@@ -351,6 +373,7 @@ const Human = () => {
               }}
             />
           </div>
+          <p>{warning}</p>
         </div>
       </Popup>
       {warehouseLoading ? <Loading /> : <></>}
