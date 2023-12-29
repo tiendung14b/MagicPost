@@ -43,7 +43,7 @@ const ListTransaction = () => {
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
   //state for values of dropdown and selected
-  const values = ["_id", "sender", "receiver", "send_date"];
+  const values = ["_id", "transaction_type", "send_date"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
@@ -147,6 +147,17 @@ const ListTransaction = () => {
               }}
             />
           </div>
+          <div className="row__item sort_item title__workplace">
+            Hình thức vận chuyển
+            <img
+              src={arrow}
+              alt=""
+              onClick={(e) => {
+                handleSort("transaction_type");
+                e.target.classList.toggle("active");
+              }}
+            />
+          </div>
           <div className="row__item title__edit">Chi tiết đơn hàng</div>
         </Row>
         {sortedClientTransactions
@@ -154,6 +165,9 @@ const ListTransaction = () => {
             const searchValue = search.toLowerCase();
             if (searchBy === "_id") {
               return manager?._id.toLowerCase().includes(searchValue);
+            }
+            if (searchBy === "transaction_type") {
+              return manager?.transaction_type.toLowerCase().includes(searchValue);
             }
             if (searchBy === "send_date") {
               const date = new Date(manager?.send_date).toLocaleDateString();
@@ -167,6 +181,9 @@ const ListTransaction = () => {
               </p>
               <p className="row__item manager__workplace">
                 {new Date(manager?.send_date).toLocaleDateString()}
+              </p>
+              <p className="row__item manager__workplace">
+                {manager?.transaction_type}
               </p>
               <div className="row__item manager__edit">
                 <Button

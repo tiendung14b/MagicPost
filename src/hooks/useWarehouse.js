@@ -9,9 +9,15 @@ const useWarehouse = (toast) => {
   const [warehouseLoading, setWarehouseLoading] = useState(false);
   const [listWarehouseEmployee, setListWarehouseEmployee] = useState([]);
 
-  const [listUnconfirmedTransaction, setListUnconfirmedTransaction] = useState([]);
+  const [listUnconfirmedTransactionfromTransactionSpot, setListUnconfirmedTransactionfromTransactionSpot] = useState([]);
+  const [listUnconfirmedTransactionfromWarehouse, setListUnconfirmedTransactionfromWarehouse] = useState([]);
 
-  const [listTransactionfromTransactionSpot, setListTransactionfromTransactionSpot] = useState([]);
+  const [listInWarehouseTransactionToTransactionSpot, setListInWarehouseTransactionToTransactionSpot] = useState([]);
+  const [listInWarehouseTransactionToWarehouse, setListInWarehouseTransactionToWarehouse] = useState([]);
+
+  const [sentHistory, setSentHistory] = useState([]);
+  const [receivedHistory, setReceivedHistory] = useState([]);
+  const [statisticWarehouse, setStatistic] = useState([]);
 
   const getWarehouseInfo = async (id) => {
     try {
@@ -83,8 +89,10 @@ const useWarehouse = (toast) => {
     try {
       setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/transaction_from_warehouse/` + transaction_id);
-      getListWarehouse();
-      Toast.success("Nhận thành công", toast);
+      getListUnconfirmedTransactionfromWarehouse(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
+      Toast.success("Xác nhận đơn hàng thành công", toast);
     } catch (err) {
       setWarehouseLoading(false);
       responseToast(err, toast);
@@ -95,7 +103,9 @@ const useWarehouse = (toast) => {
     try {
       setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/transaction_from_transaction_spot/` + transaction_id);
-      sendTransactionToTransactionSpot(transaction_id);
+      getListUnconfirmedTransactionfromTransactionSpot(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
       Toast.success("Nhận thành công", toast);
     } catch (err) {
       setWarehouseLoading(false);
@@ -107,7 +117,9 @@ const useWarehouse = (toast) => {
     try {
       setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/transaction_to_warehouse/` + transaction_id);
-      getListWarehouse();
+      getListInWarehouseTransactionToWarehouse(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
       Toast.success("Gửi thành công", toast);
     } catch (err) {
       setWarehouseLoading(false);
@@ -119,7 +131,9 @@ const useWarehouse = (toast) => {
     try {
       setWarehouseLoading(true);
       await clientAxios.put(`/warehouse/transaction_to_transaction_spot/` + transaction_id);
-      getListWarehouse();
+      getListInWarehouseTransactionToTransactionSpot(
+        JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+      );
       Toast.success("Gửi thành công", toast);
     } catch (err) {
       setWarehouseLoading(false);
@@ -175,12 +189,127 @@ const useWarehouse = (toast) => {
     }
   }
 
+  const getListUnconfirmedTransactionfromTransactionSpot = async (warehouse_id) => {
+    try {
+      setWarehouseLoading(true);
+      const response = await clientAxios.get(
+        `/warehouse/unconfirm_transactions_from_transaction_spot/` +
+          warehouse_id
+      );
+      setListUnconfirmedTransactionfromTransactionSpot(response?.result);
+      console.log(response?.result);
+      setWarehouseLoading(false);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
+  const getListUnconfirmedTransactionfromWarehouse = async (warehouse_id) => {
+    try {
+      setWarehouseLoading(true);
+      const response = await clientAxios.get(
+        `/warehouse/unconfirm_transactions_from_warehouse/` +
+          warehouse_id
+      );
+      setListUnconfirmedTransactionfromWarehouse(response?.result);
+      console.log(response?.result);
+      setWarehouseLoading(false);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
+  const getListInWarehouseTransactionToTransactionSpot = async (warehouse_id) => {
+    try {
+      setWarehouseLoading(true);
+      const response = await clientAxios.get(
+        `/warehouse/inwarehouse_transactions_to_transaction_spot/` +
+          warehouse_id
+      );
+      setListInWarehouseTransactionToTransactionSpot(response?.result);
+      console.log(response?.result);
+      setWarehouseLoading(false);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
+  const getListInWarehouseTransactionToWarehouse = async (warehouse_id) => {
+    try {
+      setWarehouseLoading(true);
+      const response = await clientAxios.get(
+        `/warehouse/inwarehouse_transactions_to_warehouse/` +
+          warehouse_id
+      );
+      setListInWarehouseTransactionToWarehouse(response?.result);
+      console.log(response?.result);
+      setWarehouseLoading(false);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
+  const getListSentHistory = async () => {
+    try {
+      setWarehouseLoading(true);
+      const response = await clientAxios.get(
+        `/warehouse/sent_transactions_history/`
+      );
+      setSentHistory(response?.result);
+      console.log(response?.result);
+      setWarehouseLoading(false);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
+  const getListReceivedHistory = async () => {
+    try {
+      setWarehouseLoading(true);
+      const response = await clientAxios.get(
+        `/warehouse/received_transactions_history/`
+      );
+      setReceivedHistory(response?.result);
+      console.log(response?.result);
+      setWarehouseLoading(false);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
+  const getStatisticWarehouse = async (id) => {
+    try {
+      setWarehouseLoading(true);
+      const response = await clientAxios.get(
+        `/warehouse/get_statistics/` + id
+      );
+      setStatistic(response?.result);
+      setWarehouseLoading(false);
+    } catch (err) {
+      console.log(err);
+      responseToast(err, toast);
+    }
+  }
+
+
   return {
     listWarehouse,
     warehouseInfo,
     warehouseLoading,
     listWarehouseEmployee,
-    listUnconfirmedTransaction,
+    listUnconfirmedTransactionfromTransactionSpot,
+    listUnconfirmedTransactionfromWarehouse,
+    listInWarehouseTransactionToTransactionSpot,
+    listInWarehouseTransactionToWarehouse,
+    sentHistory,
+    receivedHistory,
+    statisticWarehouse,
     getWarehouseInfo,
     createWarehouse,
     getListWarehouse,
@@ -190,6 +319,17 @@ const useWarehouse = (toast) => {
     addWarehouseEmployee,
     deleteWarehouseEmployee,
     setWarehouseLoading,
+    receiveTransactionFromWarehouse,
+    receiveTransactionFromTransactionSpot,
+    sendTransactionToWarehouse,
+    sendTransactionToTransactionSpot,
+    getListUnconfirmedTransactionfromTransactionSpot,
+    getListUnconfirmedTransactionfromWarehouse,
+    getListInWarehouseTransactionToTransactionSpot,
+    getListInWarehouseTransactionToWarehouse,
+    getListSentHistory,
+    getListReceivedHistory,
+    getStatisticWarehouse,
   };
 };
 

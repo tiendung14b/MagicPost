@@ -37,10 +37,7 @@ const TransactionPageMobile = () => {
   const {
     //state for transaction
     listWarehouse,
-    warehouseLoading,
     getListWarehouse,
-    setWarehouseManager,
-    deleteWarehouseManager,
   } = useWarehouse(toast);
 
   //state for user
@@ -96,6 +93,35 @@ const TransactionPageMobile = () => {
     console.log(column);
   };
 
+  const getTransactionInput = () => {
+    const name = document.getElementById(
+      "add_transaction_spot_name_input"
+    ).value;
+    const provinceInput = document.getElementById(
+      "add_transaction_spot_province_input"
+    );
+    const province = provinceInput.options[provinceInput.selectedIndex].text;
+    const districtInput = document.getElementById(
+      "add_transaction_spot_district_input"
+    );
+    const district = districtInput.options[districtInput.selectedIndex].text;
+    const warehouse = document.getElementById(
+      "add_transaction_spot_warehouse_input"
+    ).value;
+    const transaction_manager = document.getElementById(
+      "add_transaction_spot_transaction_manager_input"
+    ).value;
+    const detail = document.getElementById(
+      "add_transaction_spot_detail_input"
+    ).value;
+    return {
+      name,
+      location: { city: province, district, detail },
+      warehouse,
+      transaction_manager,
+    };
+  };
+
   //get all transaction manager from list user
   const listManagerSpot = listManager?.filter(
     (user) =>
@@ -130,7 +156,7 @@ const TransactionPageMobile = () => {
 
   return (
     <div className="manager__mobile">
-      <h1 className="page__title">Transacsion Dashboard</h1>
+      <h1 className="page__title__mobile">Transacsion Dashboard</h1>
       <DashBoard>
         <Column className="manager__todo__mobile">
           <div className="button__layout__mobile">
@@ -224,22 +250,22 @@ const TransactionPageMobile = () => {
                 <div className="column__item sort_item title__workplace">
                   <p className="column__title">Transaction Manager: </p>
                   {transactionSpot?.transaction_manager?.workplace
-                  ?.workplace_id ? (
-                  <>
-                    <img
-                      src={
-                        transactionSpot.transaction_manager.url_avatar ||
-                        default_avatar
-                      }
-                      alt=""
-                    />
-                    {transactionSpot.transaction_manager.first_name +
-                      " " +
-                      transactionSpot.transaction_manager.last_name}
-                  </>
-                ) : (
-                  "Chưa có"
-                )}
+                    ?.workplace_id ? (
+                    <>
+                      <img
+                        src={
+                          transactionSpot.transaction_manager.url_avatar ||
+                          default_avatar
+                        }
+                        alt=""
+                      />
+                      {transactionSpot.transaction_manager.first_name +
+                        " " +
+                        transactionSpot.transaction_manager.last_name}
+                    </>
+                  ) : (
+                    "Chưa có"
+                  )}
                 </div>
               </p>
               <div className="column__item manager__edit">
@@ -250,13 +276,8 @@ const TransactionPageMobile = () => {
                     onClick={() => {
                       setCurrentTransactionSpot(transactionSpot);
                       setUserChoosen(transactionSpot?.transaction_manager);
-                      window["manager_popup"].showModal();
+                      window["transaction_popup"].showModal();
                     }}
-                  />
-                  <Button
-                    text={"Xoá"}
-                    className={"danger"}
-                    onClick={() => {}}
                   />
                 </div>
               </div>
@@ -298,27 +319,15 @@ const TransactionPageMobile = () => {
             placeholder={"Tên"}
             type="text"
             name="Name"
-            onChange={(e) => {
-              handleChange("name", e.target.value);
-            }}
+            id="add_transaction_spot_name_input"
           />
-          <div className="choose_location">
+          <div className="choose__create">
+            <p className="choose_location_create__title">Địa chỉ</p>
             <select
               name="province"
-              id="province"
+              id="add_transaction_spot_province_input"
               onChange={(e) => {
                 getDistrict(e.target.value);
-                let text = e.target.options[e.target.selectedIndex].text;
-                text = text.replace("Tỉnh ", "");
-                text = text.replace("Thành phố ", "");
-                console.log(text);
-                setNewTransactionSpot({
-                  ...newTransactionSpot,
-                  location: {
-                    ...newTransactionSpot.location,
-                    city: text,
-                  },
-                });
               }}
             >
               <option value="" disabled>
@@ -330,24 +339,7 @@ const TransactionPageMobile = () => {
                 </option>
               ))}
             </select>
-            <select
-              name="district"
-              id="district"
-              onChange={(e) => {
-                console.log(e.target.options[e.target.selectedIndex].text);
-                let text = e.target.options[e.target.selectedIndex].text;
-                text = text.replace("Quận ", "");
-                text = text.replace("Huyện ", "");
-                console.log(text);
-                setNewTransactionSpot({
-                  ...newTransactionSpot,
-                  location: {
-                    ...newTransactionSpot.location,
-                    district: text,
-                  },
-                });
-              }}
-            >
+            <select name="district" id="add_transaction_spot_district_input">
               <option value="" disabled>
                 Select District
               </option>
@@ -358,10 +350,11 @@ const TransactionPageMobile = () => {
               ))}
             </select>
           </div>
-          <div className="choose_warehouse">
+          <div className="choose__create">
+            <p className="choose_warehouse__title">Kho</p>
             <select
               name="warehouse"
-              id="warehouse"
+              id="add_transaction_spot_warehouse_input"
               onChange={(e) => {
                 handleChange("warehouse", e.target.value);
               }}
@@ -371,14 +364,13 @@ const TransactionPageMobile = () => {
               ))}
             </select>
           </div>
-          <div className="choose_transaction_manager">
+          <div className="choose__create">
+            <p className="choose_transaction_manager__title">
+              Người quản lý điểm giao dịch
+            </p>
             <select
               name="transaction_manager"
-              id="transaction_manager"
-              onChange={(e) => {
-                console.log(listManagerSpot);
-                handleChange("transaction_manager", e.target.value);
-              }}
+              id="add_transaction_spot_transaction_manager_input"
             >
               {listManagerSpot?.map((user) => (
                 <option value={user._id}>
@@ -392,15 +384,7 @@ const TransactionPageMobile = () => {
             placeholder={"Chi tiết"}
             type="text"
             name="Detail"
-            onChange={(e) => {
-              setNewTransactionSpot({
-                ...newTransactionSpot,
-                location: {
-                  ...newTransactionSpot.location,
-                  detail: e.target.value,
-                },
-              });
-            }}
+            id="add_transaction_spot_detail_input"
           />
           <p className="warn" id="add_manager_warn">
             Bạn cần nhập đầy đủ thông tin
@@ -410,20 +394,21 @@ const TransactionPageMobile = () => {
               text={"Thêm điểm giao dịch"}
               className={"submit"}
               onClick={() => {
-                console.log(newTransactionSpot);
+                const transactionSpotInput = getTransactionInput();
                 if (
-                  !newTransactionSpot?.name ||
-                  !newTransactionSpot?.location?.city ||
-                  !newTransactionSpot?.location?.district ||
-                  !newTransactionSpot?.warehouse ||
-                  !newTransactionSpot?.transaction_manager
+                  transactionSpotInput.name === "" ||
+                  transactionSpotInput.location.city === "" ||
+                  transactionSpotInput.location.district === "" ||
+                  transactionSpotInput.warehouse === "" ||
+                  transactionSpotInput.transaction_manager === "" ||
+                  transactionSpotInput.detail === ""
                 ) {
-                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
+                  document.getElementById("add_manager_warn").style.display =
+                    "block";
                   return;
                 }
+                createTransactionSpot(transactionSpotInput);
                 window["add_manager_popup"].close();
-                createTransactionSpot(newTransactionSpot);
-                setNewTransactionSpot({});
               }}
             />
             <Button
@@ -536,6 +521,170 @@ const TransactionPageMobile = () => {
               className={"danger"}
               onClick={() => {
                 window["update_manager_popup"].close();
+              }}
+            />
+          </div>
+        </div>
+      </Popup>
+      <Popup
+        className="transaction_popup"
+        popup_id={"transaction_popup"}
+        title={"Thông tin điểm giao dịch"}
+      >
+        <div className="popup__body__content">
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              {/* <img src={logo} className="transaction__order__logo" alt="" /> */}
+            </div>
+          </div>
+          <div className="popup__body__column">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Tên điểm giao dịch:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.name}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Địa chỉ:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.location?.detail +
+                  " " +
+                  currentTransactionSpot?.location?.district +
+                  " " +
+                  currentTransactionSpot?.location?.city}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Mã Postal Code:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.postal_code}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">
+                Kết nối tới điểm tập kết:
+              </p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.warehouse?.name}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Số nhân viên:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.transaction_employees?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Đơn tới:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.from_client_transactions?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Đơn chưa xác nhận:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.unconfirm_transactions?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Đơn tới:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.to_client_transactions?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Số đơn thành công:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.success_transactions?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Số đơn thất bại:</p>
+              <p className="manager_popup__field__value">
+                {currentTransactionSpot?.failed_transactions?.length}
+              </p>
+            </div>
+          </div>
+          <div className="manager__package__list">
+            <p className="manager_popup__field__title">Thông tin nhân viên:</p>
+            <table>
+              <tr>
+                <th>Tên</th>
+                <th>Mail</th>
+                <th>Phone</th>
+                <th>Ngày tạo tài khoản</th>
+              </tr>
+              {currentTransactionSpot?.transaction_employees?.map((user) => (
+                <tr>
+                  <td>{user?.first_name + " " + user?.last_name}</td>
+                  <td>{user?.email}</td>
+                  <td>{user?.phone_number}</td>
+                  <td>{new Date(user?.create_at).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+          <Button
+            text={"Xem nhân viên"}
+            className={"action"}
+            onClick={() => {
+              window["employee_popup"].showModal();
+            }}
+          />
+
+          <Button
+            text={"Đóng"}
+            className={"danger"}
+            onClick={() => {
+              window["transaction_popup"].close();
+            }}
+          />
+        </div>
+      </Popup>
+      <Popup
+        className="employee_popup"
+        popup_id={"employee_popup"}
+        title={"Danh sách nhân viên"}
+      >
+        <div className="popup__body__content">
+          {currentTransactionSpot?.transaction_employees?.map((user) => (
+            <Column
+              key={user.id} // Add a unique key to each row
+              className={`manager__detail popup__item ${
+                selectedColumn === user ? "selected" : ""
+              }`}
+            >
+              <div
+                className="choose_list_manager_mobile"
+                onClick={() => {
+                  setSelectedColumn(user);
+                }}
+              >
+                <div className="column__item sort_item title__name pop__up">
+                  <p className="column__title">Name: </p>
+                  <img
+                    src={user?.url_avatar || default_avatar}
+                    alt={`Avatar of ${user?.first_name}`}
+                  />
+                  {user?.first_name + " " + user?.last_name}
+                </div>
+                <div className="column__item sort_item title__name pop__up">
+                  <p className="column__title">Phone: </p>
+                  {user?.phone_number}
+                </div>
+                <div className="column__item sort_item title__name pop__up">
+                  <p className="column__title">Email: </p>
+                  {user?.email}
+                </div>
+              </div>
+            </Column>
+          ))}
+          <div className="close">
+            <Button
+              text={"Hủy"}
+              className={"danger"}
+              onClick={() => {
+                window["employee_popup"].close();
               }}
             />
           </div>

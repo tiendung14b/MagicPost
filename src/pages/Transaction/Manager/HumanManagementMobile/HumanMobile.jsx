@@ -1,7 +1,9 @@
 import Toast from "../../../../ui/Toast/Toast";
 import DashBoard from "../../../../components/DashBoard/DashBoard";
 import Row from "../../../../components/DashBoard/Row";
+import Column from "../../../../components/DashBoard/Column";
 import useUser from "../../../../hooks/useUser";
+import useTransactionSpot from "../../../../hooks/useTransactionSpot";
 import useWarehouse from "../../../../hooks/useWarehouse";
 import Button from "../../../../ui/Button/Button";
 import Input from "../../../../ui/Input/Input";
@@ -19,19 +21,18 @@ import default_avatar from "../../../../assets/default_avatar.png";
 
 import "../../../CSS/Director.css";
 
-const Human = () => {
-  const {
-    listManager,
-  } = useUser(toast);
+const HumanMobile = () => {
+  const { listManager } = useUser(toast);
 
+  //state to get the transaction employee
   const {
-    listWarehouseEmployee,
-    warehouseLoading,
-    getListWarehouseEmployee,
-    addWarehouseEmployee,
-    deleteWarehouseEmployee,
-    setWarehouseLoading,
-  } = useWarehouse(toast);
+    listTransactionEmployee,
+    transactionSpotLoading,
+    getListTransactionEmployee,
+    addTransactionEmployee,
+    deleteTransactionEmployee,
+    setTransactionSpotLoading,
+  } = useTransactionSpot(toast);
 
   //state for user
   const [userChoosen, setUserChoosen] = useState({});
@@ -43,17 +44,21 @@ const Human = () => {
   const [numPage, setNumPage] = useState(0);
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
-  //state for values of dropdown and selected
-  const values = ["first_name", "phone", "email", "create_at"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
   const [searchBy, setSearchBy] = useState("first_name");
+  //state for selected value to fitler
+  const [selected, setSelected] = useState(null);
+  //state for values of dropdown and selected
+  const values = ["first_name", "phone", "email", "create_at"];
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
+    setSelected(value);
     setSearchBy(value);
     setSearch("");
+    handleSort(value);
   };
 
   const getAddManagerInput = () => {
@@ -77,7 +82,6 @@ const Human = () => {
     };
   };
 
-  //handle sort
   const handleSort = (column) => {
     if (sortedColumn === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -85,9 +89,11 @@ const Human = () => {
       setSortedColumn(column);
       setSortOrder("asc");
     }
+    console.log(column);
   };
-  //list manager sorted to sortedEmployee
-  const sortedEmployee = listWarehouseEmployee
+
+  //list manager sorted to sortedManager
+  const sortedEmployee = listTransactionEmployee
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -102,37 +108,53 @@ const Human = () => {
         return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
       }
     });
+
   //useEffect
   useEffect(() => {
-    getListWarehouseEmployee(JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id);
+    getListTransactionEmployee(
+      JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+    );
   }, []);
 
   return (
-    <div className="manager">
-      <h1 className="page_title">Warehouse Manager Dashboard</h1>
+    <div className="manager__mobile">
+      <h1 className="page__title__mobile">Transaction Manager Dashboard</h1>
       <DashBoard>
-        <Row className="manager__todo">
-          <Button
-            text={"Thêm nhân viên điểm tập kết"}
-            className={"action"}
-            onClick={() => {
-              window["add_manager_popup"].showModal();
-            }}
-          />
-          <div className="input__div">
+        <Column className="manager__todo__mobile">
+          <div className="button__layout__mobile">
+            <Button
+              text={"Thêm nhân viên điểm giao dịch"}
+              className={"action"}
+              onClick={() => {
+                window["add_manager_popup"].showModal();
+              }}
+            />
+          </div>
+          <Row className={"dashboard_rowForColumn"}>
             <Input
               placeholder={`Tìm kiếm theo ${
                 searchBy === "first_name" ? "first name" : searchBy
               }`}
-              className={"manager__search"}
+              className={"manager__search__mobile"}
               onChange={(e) => setSearch(e.target.value)}
-            ></Input>
+            />
             <div className="dropdown__div">
-              <img
-                src={filter_icon}
-                className="search_icon"
-                onClick={() => setIsDropdown((prev) => !prev)}
-              />
+              <div className="dropdown__image">
+                <div className="column__item sort_item title__name">
+                  <img
+                    src={arrow}
+                    onClick={(e) => {
+                      handleSort(selected);
+                      e.target.classList.toggle("active");
+                    }}
+                  />
+                </div>
+                <img
+                  src={filter_icon}
+                  className="search_icon"
+                  onClick={() => setIsDropdown((prev) => !prev)}
+                />
+              </div>
               {isDropdown ? (
                 <Dropdown
                   items={values}
@@ -143,44 +165,8 @@ const Human = () => {
                 <></>
               )}
             </div>
-          </div>
-        </Row>
-        <Row className="title">
-          <div className="row__item sort_item title__name">
-            Họ Tên
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("first_name");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="row__item sort_item title__phone">
-            Số điện thoại
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("phone_number");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="row__item sort_item title__phone">
-            Ngày tạo
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("create_at");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="row__item title__edit">Quản lý tài khoản</div>
-        </Row>
+          </Row>
+        </Column>
         {sortedEmployee
           ?.filter((manager) => {
             const searchValue = search.toLowerCase();
@@ -200,29 +186,40 @@ const Human = () => {
             }
           })
           ?.map((manager) => (
-            <Row className="manager__detail">
-              <p className="manager__name row__item user_management">
-                <img src={manager?.url_avatar || default_avatar} />
-                {" " + manager?.first_name + " " + manager?.last_name}
+            <Column className="manager__detail__mobile">
+              <p className="manager__name column__item">
+                <div className="column__item sort_item title__name">
+                  <p className="column__title">Tên: </p>
+                  <img src={manager?.url_avatar || default_avatar} />
+                  {" " + manager?.first_name + " " + manager?.last_name}
+                </div>
               </p>
-              <p className="row__item manager__phone">
-                {manager?.phone_number}
+              <p className="column__item manager__phone">
+                <div className="column__item sort_item title__phone">
+                  <p className="column__title">Số điện thoại: </p>
+                  {manager?.phone_number}
+                </div>
               </p>
-              <p className="row__item manager__workplace">
-                {new Date(manager?.create_at).toLocaleDateString()}
+              <p className="column__item manager__phone">
+                <div className="column__item sort_item title__phone">
+                  <p className="column__title">Ngày Tạo: </p>
+                  {new Date(manager?.create_at).toLocaleDateString()}
+                </div>
               </p>
-              <div className="row__item manager__edit">
-                <Button
-                  text={"Xem chi tiết"}
-                  className={"action"}
-                  onClick={() => {
-                    setUserChoosen(manager);
-                    console.log(userChoosen);
-                    window["manager_popup"].showModal();
-                  }}
-                />
+              <div className="column__item manager__edit">
+                <div className="manager__edit__button">
+                  <Button
+                    text={"Xem chi tiết"}
+                    className={"action"}
+                    onClick={() => {
+                      setUserChoosen(manager);
+                      console.log(userChoosen);
+                      window["manager_popup"].showModal();
+                    }}
+                  />
+                </div>
               </div>
-            </Row>
+            </Column>
           ))}
       </DashBoard>
       <div className="pagination" id="pagination">
@@ -271,6 +268,12 @@ const Human = () => {
             <p className="manager_popup__field__title">Email:</p>
             <p className="manager_popup__field__value">{userChoosen?.email}</p>
           </div>
+          {/* <div className="manager_popup__field">
+            <p className="manager_popup__field__title">Nơi làm việc:</p>
+            <p className="manager_popup__field__value">
+              {userChoosen?.workplace?.name || "Chưa có"}
+            </p>
+          </div> */}
           <div className="manager_popup__field">
             <p className="manager_popup__field__title">Vai trò:</p>
             <p className="manager_popup__field__value">
@@ -281,9 +284,9 @@ const Human = () => {
             text={"Xoá người dùng này"}
             className={"danger"}
             onClick={() => {
-              setWarehouseLoading(true);
+              setTransactionSpotLoading(true);
               window["manager_popup"].close();
-              deleteWarehouseEmployee(userChoosen?._id);
+              deleteTransactionEmployee(userChoosen?._id);
             }}
           />
         </div>
@@ -334,13 +337,12 @@ const Human = () => {
                   input.phone_number &&
                   input.email
                 ) {
-                  setWarehouseLoading(true);
+                  setTransactionSpotLoading(true);
                   window["add_manager_popup"].close();
-                  addWarehouseEmployee(input);
+                  addTransactionEmployee(input);
                 } else {
                   toast.error("Vui lòng điền đầy đủ thông tin", toast);
                 }
-                
               }}
             />
             <Button
@@ -353,10 +355,10 @@ const Human = () => {
           </div>
         </div>
       </Popup>
-      {warehouseLoading ? <Loading /> : <></>}
+      {transactionSpotLoading ? <Loading /> : <></>}
       <ToastContainer className="toasify" />
     </div>
   );
 };
 
-export default Human;
+export default HumanMobile;

@@ -66,6 +66,17 @@ const WarehousePageMobile = () => {
     handleSort(value);
   };
 
+  const getWarehouseInput = () => {
+    const name = document.getElementById("add_manager_name_input").value;
+    const location = document.getElementById(
+      "add_manager_location_input"
+    ).value;
+    const warehouse_manager = document.getElementById(
+      "add_manager_warehouse_manager_input"
+    ).value;
+    return { name, location, warehouse_manager };
+  };
+
   const handleSort = (column) => {
     if (sortedColumn === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -74,10 +85,6 @@ const WarehousePageMobile = () => {
       setSortOrder("asc");
     }
     console.log(column);
-  };
-
-  const handleChanged = (name, value) => {
-    setNewWarehouse({ ...newWarehouse, [name]: value });
   };
 
   //get all transaction manager from list user
@@ -111,7 +118,7 @@ const WarehousePageMobile = () => {
 
   return (
     <div className="manager__mobile">
-      <h1 className="page__title">Warehouse Dashboard</h1>
+      <h1 className="page__title__mobile">Warehouse Dashboard</h1>
       <DashBoard>
         <Column className="manager__todo__mobile">
           <div className="button__layout__mobile">
@@ -211,15 +218,10 @@ const WarehousePageMobile = () => {
                     text={"Xem chi tiết"}
                     className={"action"}
                     onClick={() => {
-                      window["manager_popup"].showModal();
+                      window["warehouse_popup"].showModal();
                       setUserChoosen(warehouse?.warehouse_manager);
                       setcurrentWarehouse(warehouse);
                     }}
-                  />
-                  <Button
-                    text={"Xoá"}
-                    className={"danger"}
-                    onClick={() => {}}
                   />
                 </div>
               </div>
@@ -302,22 +304,19 @@ const WarehousePageMobile = () => {
             placeholder={"Tên"}
             type="text"
             name="name"
-            onChange={(e) => handleChanged("name", e.target.value)}
+            id="add_manager_name_input"
           />
           <Input
             className="add_manager_popup__input"
             placeholder={"location"}
             type="text"
             name="location"
-            onChange={(e) => handleChanged("location", e.target.value)}
+            id="add_manager_location_input"
           />
           <div className="choose_warehouse_manager">
             <select
               name="warehouse_manager"
-              id="warehouse_manager"
-              onChange={(e) => {
-                handleChanged("warehouse_manager", e.target.value);
-              }}
+              id="add_manager_warehouse_manager_input"
             >
               {listWareHouseManager?.map((user) => (
                 <option value={user._id}>
@@ -334,18 +333,18 @@ const WarehousePageMobile = () => {
               text={"Thêm kho mới"}
               className={"submit"}
               onClick={() => {
-                console.log(newWarehouse);
+                const warehouse = getWarehouseInput();
                 if (
-                  !newWarehouse.name ||
-                  !newWarehouse.location ||
-                  !newWarehouse.warehouse_manager
+                  !warehouse.name ||
+                  !warehouse.location ||
+                  !warehouse.warehouse_manager
                 ) {
-                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
+                  document.getElementById("add_manager_warn").style.display =
+                    "block";
                   return;
                 }
+                createWarehouse(warehouse);
                 window["add_manager_popup"].close();
-                createWarehouse(newWarehouse);
-                setNewWarehouse({});
               }}
             />
             <Button
@@ -413,6 +412,212 @@ const WarehousePageMobile = () => {
               className={"danger"}
               onClick={() => {
                 window["update_manager_popup"].close();
+              }}
+            />
+          </div>
+        </div>
+      </Popup>
+      <Popup
+        className="warehouse_popup"
+        popup_id={"warehouse_popup"}
+        title={"Thông tin điểm tập kết"}
+      >
+        <div className="popup__body__content">
+          <div className="popup__body__row">
+            <div className="manager_popup__field">
+              {/* <img src={logo} className="transaction__order__logo" alt="" /> */}
+            </div>
+          </div>
+          <div className="popup__body__column">
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Tên điểm tập kết:</p>
+              <p className="manager_popup__field__value">
+                {currentWarehouse?.name}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Địa chỉ:</p>
+              <p className="manager_popup__field__value">
+                {currentWarehouse?.location}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Tổng số nhân viên:</p>
+              <p className="manager_popup__field__value">
+                {currentWarehouse?.warehouse_employees?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">
+                Kết nối tới số điểm giao dịch:
+              </p>
+              <p className="manager_popup__field__value">
+                {currentWarehouse?.transaction_spots?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">
+                Số đơn nhận từ điểm giao dịch:
+              </p>
+              <p className="manager_popup__field__value">
+                {
+                  currentWarehouse?.unconfirm_transactions_from_transaction_spot
+                    ?.length
+                }
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">
+                Số đơn nhận từ điểm tập kết:
+              </p>
+              <p className="manager_popup__field__value">
+                {
+                  currentWarehouse?.unconfirm_transactions_from_warehouse
+                    ?.length
+                }
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">
+                Số đơn gửi đi điểm giao dịch:
+              </p>
+              <p className="manager_popup__field__value">
+                {
+                  currentWarehouse?.inwarehouse_transactions_to_transaction_spot
+                    ?.length
+                }
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">
+                Số đơn gửi đi điểm tập kết:
+              </p>
+              <p className="manager_popup__field__value">
+                {
+                  currentWarehouse?.inwarehouse_transactions_to_warehouse
+                    ?.length
+                }
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Số đơn gửi:</p>
+              <p className="manager_popup__field__value">
+                {currentWarehouse?.sent_transactions_history?.length}
+              </p>
+            </div>
+            <div className="manager_popup__field">
+              <p className="manager_popup__field__title">Số đơn nhận:</p>
+              <p className="manager_popup__field__value">
+                {currentWarehouse?.received_transactions_history?.length}
+              </p>
+            </div>
+          </div>
+
+          <div className="manager__package__list">
+            <p className="manager_popup__field__title">Thông tin nhân viên:</p>
+            {/* <table>
+              <tr>
+                <th>Tên</th>
+                <th>Mail</th>
+                <th>Phone</th>
+                <th>Ngày tạo tài khoản</th>
+              </tr>
+              {currentWarehouse?.warehouse_employees?.map((user) => (
+                <tr>
+                  <td>{user?.first_name + " " + user?.last_name}</td>
+                  <td>{user?.email}</td>
+                  <td>{user?.phone_number}</td>
+                  <td>{new Date(user?.create_at).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </table> */}
+          </div>
+          <div className="manager__package__list">
+            <p className="manager_popup__field__title">
+              Thông tin điểm giao dịch:
+            </p>
+            <table>
+              <tr>
+                <th>Tên</th>
+                <th>Địa chỉ</th>
+                <th>Postal Code</th>
+              </tr>
+              {currentWarehouse?.transaction_spots?.map((spot) => (
+                <tr>
+                  <td>{spot?.name}</td>
+                  <td>
+                    {spot?.location?.detail +
+                      " " +
+                      spot?.location?.district +
+                      " " +
+                      spot?.location?.city}
+                  </td>
+                  <td>{spot?.postal_code}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+          <Button
+            text={"Xem chi tiết danh sách nhân viên"}
+            className={"action"}
+            onClick={() => {
+              window["employee_popup"].showModal();
+            }}
+          />
+
+          <Button
+            text={"Đóng"}
+            className={"danger"}
+            onClick={() => {
+              window["warehouse_popup"].close();
+            }}
+          />
+        </div>
+      </Popup>
+      <Popup
+        className="employee_popup"
+        popup_id={"employee_popup"}
+        title={"Danh sách nhân viên"}
+      >
+        <div className="popup__body__content">
+          {currentWarehouse?.warehouse_employees?.map((user) => (
+            <Column
+              key={user.id} // Add a unique key to each row
+              className={`manager__detail popup__item ${
+                selectedColumn === user ? "selected" : ""
+              }`}
+            >
+              <div
+                className="choose_list_manager_mobile"
+                onClick={() => {
+                  setSelectedColumn(user);
+                }}
+              >
+                <div className="column__item sort_item title__name pop__up">
+                  <p className="column__title">Name: </p>
+                  <img
+                    src={user?.url_avatar || default_avatar}
+                    alt={`Avatar of ${user?.first_name}`}
+                  />
+                  {user?.first_name + " " + user?.last_name}
+                </div>
+                <div className="column__item sort_item title__name pop__up">
+                  <p className="column__title">Phone: </p>
+                  {user?.phone_number}
+                </div>
+                <div className="column__item sort_item title__name pop__up">
+                  <p className="column__title">Email: </p>
+                  {user?.email}
+                </div>
+              </div>
+            </Column>
+          ))}
+          <div className="close">
+            <Button
+              text={"Hủy"}
+              className={"danger"}
+              onClick={() => {
+                window["employee_popup"].close();
               }}
             />
           </div>

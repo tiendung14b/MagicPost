@@ -1,7 +1,10 @@
 import { useRef } from "react";
+import Toast from "../../../../ui/Toast/Toast";
 import DashBoard from "../../../../components/DashBoard/DashBoard";
 import Row from "../../../../components/DashBoard/Row";
+import useUser from "../../../../hooks/useUser";
 import useTransactionSpot from "../../../../hooks/useTransactionSpot";
+import useWarehouse from "../../../../hooks/useWarehouse";
 import Button from "../../../../ui/Button/Button";
 import Input from "../../../../ui/Input/Input";
 import Popup from "../../../../ui/Popup/Popup";
@@ -20,14 +23,16 @@ import { useReactToPrint } from "react-to-print";
 
 import "../../../CSS/Director.css";
 
-const DeliveryTransaction = () => {
+const ListTransactionFromWarehouse = () => {
   //state to get the transaction employee
+
+  //state for warehouse
   const {
-    transactionSpotLoading,
-    clientTransaction_Confirmed,
-    getToClientTransaction,
-    confirmDelivery,
-  } = useTransactionSpot(toast);
+    warehouseLoading,
+    listUnconfirmedTransactionfromWarehouse,
+    getListUnconfirmedTransactionfromWarehouse,
+    receiveTransactionFromWarehouse,
+  } = useWarehouse(toast);
 
   //state for transaction choosen
   const [transactionChoosen, setTransactionChoosen] = useState(null);
@@ -68,7 +73,7 @@ const DeliveryTransaction = () => {
     }
   };
   //list manager sorted to sortedClientTransactions
-  const sortedClientTransactions = clientTransaction_Confirmed
+  const sortedClientTransactions = listUnconfirmedTransactionfromWarehouse
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -85,14 +90,14 @@ const DeliveryTransaction = () => {
     });
   //useEffect
   useEffect(() => {
-    getToClientTransaction(
+    getListUnconfirmedTransactionfromWarehouse(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
   }, []);
 
   return (
     <div className="manager">
-      <h1 className="page_title">Đơn hàng tới người nhận</h1>
+      <h1 className="page_title">Xác nhận đơn hàng từ điểm tập kết</h1>
       <DashBoard>
         <Row className="manager__todo">
           <div className="input__div">
@@ -144,17 +149,6 @@ const DeliveryTransaction = () => {
               }}
             />
           </div>
-          <div className="row__item sort_item title__workplace">
-            Trạng thái
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("send_date");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
           <div className="row__item title__edit">Chi tiết đơn hàng</div>
         </Row>
         {sortedClientTransactions
@@ -176,9 +170,6 @@ const DeliveryTransaction = () => {
               <p className="row__item manager__workplace">
                 {new Date(manager?.send_date).toLocaleDateString()}
               </p>
-              <p className="row__item manager__workplace">
-                {manager?.status[manager?.status.length - 1]?.status}
-              </p>
               <div className="row__item manager__edit">
                 <Button
                   text={"Xem chi tiết"}
@@ -195,9 +186,7 @@ const DeliveryTransaction = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(
-              clientTransaction_Confirmed.length / ((0.73 * height) / 60)
-            )
+            Math.ceil(listUnconfirmedTransactionfromWarehouse.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
@@ -341,28 +330,18 @@ const DeliveryTransaction = () => {
           </div>
           <div className="popup__body__row">
             <Button
-              text={"Xác nhận đơn hàng thành công"}
+              text={"Xác nhận đơn hàng"}
               className={"action"}
               onClick={() => {
                 window["manager_popup"].close();
-                confirmDelivery(
-                  transactionChoosen?.destination_transaction_spot._id,
-                  transactionChoosen?._id,
-                  "SUCCESS"
-                );
-                console.log(transactionChoosen?._id);
+                receiveTransactionFromWarehouse(transactionChoosen?._id);
               }}
             />
             <Button
-              text={"Xác nhận đơn hàng thất bại"}
+              text={"Xuất Ra PDF"}
               className={"danger"}
               onClick={() => {
-                window["manager_popup"].close();
-                confirmDelivery(
-                  transactionChoosen?.destination_transaction_spot._id,
-                  transactionChoosen?._id,
-                  "FAILED"
-                );
+                handlePrint();
               }}
             />
           </div>
@@ -486,11 +465,11 @@ const DeliveryTransaction = () => {
           </div>
         </div>
       </Popup>
-      {transactionSpotLoading ? <Loading /> : <></>}
+      {warehouseLoading ? <Loading /> : <></>}
 
       <ToastContainer className="toasify" />
     </div>
   );
 };
 
-export default DeliveryTransaction;
+export default ListTransactionFromWarehouse;

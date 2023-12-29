@@ -11,6 +11,13 @@ const useTransactionSpot = (toast) => {
 
   const [clientTransaction, setClientTransaction] = useState([]);
 
+  const [clientTransaction_Confirmed, setClientTransaction_Confirmed] = useState([]);
+
+  const [listUnconfirmed, setListUnconfirmed] = useState([]);
+
+
+  const [statistic, setStatistic] = useState([]);
+
   const getTransactionSpotInfo = async (id) => {
     try {
       const response = await clientAxios.get(
@@ -126,20 +133,6 @@ const useTransactionSpot = (toast) => {
     }
   }
 
-  const delivery = async (id) => {
-    try {
-      setTransactionSpotLoading(true);
-      await clientAxios.post(`/transaction_spot/delivery`, {
-        transaction_spot_id: id,
-      });
-      getListTransactionSpot();
-      Toast.success("Giao thành công", toast);
-    } catch (err) {
-      setTransactionSpotLoading(false);
-      responseToast(err, toast);
-    }
-  };
-
   const createTransactionSpot = async (data) => {
     try {
       setTransactionSpotLoading(true);
@@ -174,7 +167,7 @@ const useTransactionSpot = (toast) => {
       const response = await clientAxios.get(
         `/transaction_spot/get_to_client_transactions/` + id
       );
-      setClientTransaction(response?.result);
+      setClientTransaction_Confirmed(response?.result);
       console.log(response?.result);
       setTransactionSpotLoading(false);
       return response?.result;
@@ -184,12 +177,82 @@ const useTransactionSpot = (toast) => {
     }
   };
 
+  const getUnconfirmed = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(
+        `/transaction_spot/get_unconfirmed/` + transaction_spot_id
+      );
+      setListUnconfirmed(response?.result);
+      console.log(response?.result);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  };
+
+  const confirmTransaction = async (transaction_spot_id, transaction_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/transaction_spot/confirm_transaction`, {
+        transaction_spot_id: transaction_spot_id,
+        transaction_id: transaction_id,
+      });
+      getUnconfirmed(transaction_spot_id);
+      Toast.success("Xác nhận thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const confirmDelivery = async (transaction_spot_id, transaction_id, status) => {
+    try {
+      setTransactionSpotLoading(true);
+      await clientAxios.post(`/transaction_spot/confirm_delivery`, {
+        transaction_spot_id: transaction_spot_id,
+        transaction_id: transaction_id,
+        status: status,
+      });
+      getToClientTransaction(transaction_spot_id);
+      Toast.success("Xác nhận thành công", toast);
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const getStatistic = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(
+        `/transaction_spot/get_statistic/` + transaction_spot_id
+      );
+      setStatistic(response?.result);
+      console.log(response?.result);
+      console.log(Object.keys(response?.result.success_transactions).map(
+        (key) => response?.result.success_transactions[key].length
+      ));
+
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
   return {
     transactionSpotInfo,
     clientTransaction,
     transactionSpotLoading,
     listTransactionEmployee,
     listTransactionSpot,
+    listUnconfirmed,
+    clientTransaction_Confirmed,
+    statistic,
     getTransactionSpotInfo,
     setTransactionManager,
     deleteTransactionManager,
@@ -198,11 +261,14 @@ const useTransactionSpot = (toast) => {
     deleteTransactionEmployee,
     addTransactionEmployee,
     sendToWarehouse,
-    delivery,
     setTransactionSpotLoading,
     createTransactionSpot,
     getFromClientTransaction,
     getToClientTransaction,
+    getUnconfirmed,
+    confirmTransaction,
+    confirmDelivery,
+    getStatistic,
   };
 }
 
