@@ -37,10 +37,7 @@ const TransactionPageMobile = () => {
   const {
     //state for transaction
     listWarehouse,
-    warehouseLoading,
     getListWarehouse,
-    setWarehouseManager,
-    deleteWarehouseManager,
   } = useWarehouse(toast);
 
   //state for user
@@ -94,6 +91,35 @@ const TransactionPageMobile = () => {
       setSortOrder("asc");
     }
     console.log(column);
+  };
+
+  const getTransactionInput = () => {
+    const name = document.getElementById(
+      "add_transaction_spot_name_input"
+    ).value;
+    const provinceInput = document.getElementById(
+      "add_transaction_spot_province_input"
+    );
+    const province = provinceInput.options[provinceInput.selectedIndex].text;
+    const districtInput = document.getElementById(
+      "add_transaction_spot_district_input"
+    );
+    const district = districtInput.options[districtInput.selectedIndex].text;
+    const warehouse = document.getElementById(
+      "add_transaction_spot_warehouse_input"
+    ).value;
+    const transaction_manager = document.getElementById(
+      "add_transaction_spot_transaction_manager_input"
+    ).value;
+    const detail = document.getElementById(
+      "add_transaction_spot_detail_input"
+    ).value;
+    return {
+      name,
+      location: { city: province, district, detail },
+      warehouse,
+      transaction_manager,
+    };
   };
 
   //get all transaction manager from list user
@@ -224,22 +250,22 @@ const TransactionPageMobile = () => {
                 <div className="column__item sort_item title__workplace">
                   <p className="column__title">Transaction Manager: </p>
                   {transactionSpot?.transaction_manager?.workplace
-                  ?.workplace_id ? (
-                  <>
-                    <img
-                      src={
-                        transactionSpot.transaction_manager.url_avatar ||
-                        default_avatar
-                      }
-                      alt=""
-                    />
-                    {transactionSpot.transaction_manager.first_name +
-                      " " +
-                      transactionSpot.transaction_manager.last_name}
-                  </>
-                ) : (
-                  "Chưa có"
-                )}
+                    ?.workplace_id ? (
+                    <>
+                      <img
+                        src={
+                          transactionSpot.transaction_manager.url_avatar ||
+                          default_avatar
+                        }
+                        alt=""
+                      />
+                      {transactionSpot.transaction_manager.first_name +
+                        " " +
+                        transactionSpot.transaction_manager.last_name}
+                    </>
+                  ) : (
+                    "Chưa có"
+                  )}
                 </div>
               </p>
               <div className="column__item manager__edit">
@@ -252,11 +278,6 @@ const TransactionPageMobile = () => {
                       setUserChoosen(transactionSpot?.transaction_manager);
                       window["manager_popup"].showModal();
                     }}
-                  />
-                  <Button
-                    text={"Xoá"}
-                    className={"danger"}
-                    onClick={() => {}}
                   />
                 </div>
               </div>
@@ -298,27 +319,15 @@ const TransactionPageMobile = () => {
             placeholder={"Tên"}
             type="text"
             name="Name"
-            onChange={(e) => {
-              handleChange("name", e.target.value);
-            }}
+            id="add_transaction_spot_name_input"
           />
-          <div className="choose_location">
+          <div className="choose__create">
+            <p className="choose_location_create__title">Địa chỉ</p>
             <select
               name="province"
-              id="province"
+              id="add_transaction_spot_province_input"
               onChange={(e) => {
                 getDistrict(e.target.value);
-                let text = e.target.options[e.target.selectedIndex].text;
-                text = text.replace("Tỉnh ", "");
-                text = text.replace("Thành phố ", "");
-                console.log(text);
-                setNewTransactionSpot({
-                  ...newTransactionSpot,
-                  location: {
-                    ...newTransactionSpot.location,
-                    city: text,
-                  },
-                });
               }}
             >
               <option value="" disabled>
@@ -330,24 +339,7 @@ const TransactionPageMobile = () => {
                 </option>
               ))}
             </select>
-            <select
-              name="district"
-              id="district"
-              onChange={(e) => {
-                console.log(e.target.options[e.target.selectedIndex].text);
-                let text = e.target.options[e.target.selectedIndex].text;
-                text = text.replace("Quận ", "");
-                text = text.replace("Huyện ", "");
-                console.log(text);
-                setNewTransactionSpot({
-                  ...newTransactionSpot,
-                  location: {
-                    ...newTransactionSpot.location,
-                    district: text,
-                  },
-                });
-              }}
-            >
+            <select name="district" id="add_transaction_spot_district_input">
               <option value="" disabled>
                 Select District
               </option>
@@ -358,10 +350,11 @@ const TransactionPageMobile = () => {
               ))}
             </select>
           </div>
-          <div className="choose_warehouse">
+          <div className="choose__create">
+            <p className="choose_warehouse__title">Kho</p>
             <select
               name="warehouse"
-              id="warehouse"
+              id="add_transaction_spot_warehouse_input"
               onChange={(e) => {
                 handleChange("warehouse", e.target.value);
               }}
@@ -371,14 +364,13 @@ const TransactionPageMobile = () => {
               ))}
             </select>
           </div>
-          <div className="choose_transaction_manager">
+          <div className="choose__create">
+            <p className="choose_transaction_manager__title">
+              Người quản lý điểm giao dịch
+            </p>
             <select
               name="transaction_manager"
-              id="transaction_manager"
-              onChange={(e) => {
-                console.log(listManagerSpot);
-                handleChange("transaction_manager", e.target.value);
-              }}
+              id="add_transaction_spot_transaction_manager_input"
             >
               {listManagerSpot?.map((user) => (
                 <option value={user._id}>
@@ -392,15 +384,7 @@ const TransactionPageMobile = () => {
             placeholder={"Chi tiết"}
             type="text"
             name="Detail"
-            onChange={(e) => {
-              setNewTransactionSpot({
-                ...newTransactionSpot,
-                location: {
-                  ...newTransactionSpot.location,
-                  detail: e.target.value,
-                },
-              });
-            }}
+            id="add_transaction_spot_detail_input"
           />
           <p className="warn" id="add_manager_warn">
             Bạn cần nhập đầy đủ thông tin
@@ -410,20 +394,21 @@ const TransactionPageMobile = () => {
               text={"Thêm điểm giao dịch"}
               className={"submit"}
               onClick={() => {
-                console.log(newTransactionSpot);
+                const transactionSpotInput = getTransactionInput();
                 if (
-                  !newTransactionSpot?.name ||
-                  !newTransactionSpot?.location?.city ||
-                  !newTransactionSpot?.location?.district ||
-                  !newTransactionSpot?.warehouse ||
-                  !newTransactionSpot?.transaction_manager
+                  transactionSpotInput.name === "" ||
+                  transactionSpotInput.location.city === "" ||
+                  transactionSpotInput.location.district === "" ||
+                  transactionSpotInput.warehouse === "" ||
+                  transactionSpotInput.transaction_manager === "" ||
+                  transactionSpotInput.detail === ""
                 ) {
-                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
+                  document.getElementById("add_manager_warn").style.display =
+                    "block";
                   return;
                 }
+                createTransactionSpot(transactionSpotInput);
                 window["add_manager_popup"].close();
-                createTransactionSpot(newTransactionSpot);
-                setNewTransactionSpot({});
               }}
             />
             <Button

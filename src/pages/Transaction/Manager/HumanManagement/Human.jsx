@@ -35,10 +35,7 @@ const Human = () => {
     setTransactionSpotLoading,
   } = useTransactionSpot(toast);
 
-  
-
   //state for user
-  const [newUser, setNewUser] = useState({});
   const [userChoosen, setUserChoosen] = useState({});
   //state for sort
   const [sortedColumn, setSortedColumn] = useState(null);
@@ -61,10 +58,27 @@ const Human = () => {
     setSearch("");
   };
 
-  //handle change
-  const handleChange = (e) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  const getAddManagerInput = () => {
+    const first_name = document.getElementById(
+      "add_manager_popup__input__first_name"
+    ).value;
+    const last_name = document.getElementById(
+      "add_manager_popup__input__last_name"
+    ).value;
+    const phone_number = document.getElementById(
+      "add_manager_popup__input__phone_number"
+    ).value;
+    const email = document.getElementById(
+      "add_manager_popup__input__email"
+    ).value;
+    return {
+      first_name,
+      last_name,
+      phone_number,
+      email,
+    };
   };
+
   //handle sort
   const handleSort = (column) => {
     if (sortedColumn === column) {
@@ -303,52 +317,51 @@ const Human = () => {
       >
         <div className="popup__body__content">
           <Input
+            id="add_manager_popup__input__first_name"
             className="add_manager_popup__input"
             placeholder={"Họ"}
             type="text"
             name="first_name"
-            onChange={handleChange}
           />
           <Input
+            id="add_manager_popup__input__last_name"
             className="add_manager_popup__input"
             placeholder={"Tên"}
             type="text"
             name="last_name"
-            onChange={handleChange}
           />
           <Input
+            id="add_manager_popup__input__phone_number"
             className="add_manager_popup__input"
             placeholder={"Số điện thoại"}
             type="tel"
             name="phone_number"
-            onChange={handleChange}
           />
           <Input
+            id="add_manager_popup__input__email"
             className="add_manager_popup__input"
             placeholder="Email"
             type="email"
             name="email"
-            onChange={handleChange}
           />
           <div className="add_manager_submit">
             <Button
               text={"Thêm quản lý"}
               className={"submit"}
               onClick={() => {
-                console.log(newUser.workplace);
+                const input = getAddManagerInput();
                 if (
-                  !newUser?.phone_number ||
-                  !newUser?.first_name ||
-                  !newUser?.last_name ||
-                  !newUser?.email
+                  input.first_name &&
+                  input.last_name &&
+                  input.phone_number &&
+                  input.email
                 ) {
-                  Toast.warn("Bạn cần nhập đầy đủ thông tin", toast);
-                  return;
+                  setTransactionSpotLoading(true);
+                  window["add_manager_popup"].close();
+                  addTransactionEmployee(input);      
+                } else {
+                  toast.error("Vui lòng điền đầy đủ thông tin", toast);
                 }
-                setTransactionSpotLoading(true);
-                window["add_manager_popup"].close();
-                addTransactionEmployee(newUser);
-                setNewUser({});
               }}
             />
             <Button
@@ -356,7 +369,6 @@ const Human = () => {
               className={"danger"}
               onClick={() => {
                 window["add_manager_popup"].close();
-                setNewUser({});
               }}
             />
           </div>

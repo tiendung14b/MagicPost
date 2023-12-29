@@ -49,10 +49,7 @@ const ManagerPage = () => {
     setSearch("");
   };
 
-  //handle change
-  const handleChange = (e) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
-  };
+
   //handle sort
   const handleSort = (column) => {
     if (sortedColumn === column) {

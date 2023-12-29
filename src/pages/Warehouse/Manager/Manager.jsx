@@ -5,8 +5,12 @@ import React from "react";
 import human from "../../../assets/human.svg";
 import transaction from "../../../assets/transaction.svg";
 
+import useWindowDimensions from "../../../hooks/useWindowScreen";
+
 import Human from "./HumanManagement/Human";
 import Stat from "./HumanManagement/Stat";
+
+import HumanMobile from "./HumanManagementMobile/HumanMobile";
 
 const Manager = () => {
   const [itemChoosen, setItemChoosen] = React.useState("warehouse_human");
@@ -16,6 +20,10 @@ const Manager = () => {
     setItemChoosen(id);
     document.getElementById(id).classList.add("clicked");
   };
+
+  const { width } = useWindowDimensions();
+
+  const containerClassName = width < 768 ? "container__mobile" : "container";
 
   return (
     <Layout>
@@ -39,9 +47,10 @@ const Manager = () => {
           <p className="sidebar__item__text">Thống Kê</p>
         </div>
       </SideBar>
-      <div className="container">
+      <div className={containerClassName}>
         <div className="director__content">
-          {itemChoosen === "warehouse_human" && <Human />}
+          {itemChoosen === "warehouse_human" &&
+            (width < 768 ? <HumanMobile /> : <Human />)}
           {itemChoosen === "warehouse_stat" && <Stat />}
         </div>
       </div>

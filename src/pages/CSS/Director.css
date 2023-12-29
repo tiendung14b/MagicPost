@@ -566,3 +566,10 @@ th {
   flex-direction: column;
   border: 1px solid black;
 }
+
+.choose__create {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 80%;
+}
