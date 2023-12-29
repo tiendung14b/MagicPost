@@ -10,6 +10,14 @@
   margin-bottom: 30px;
 }
 
+.page__title__mobile {
+  font-size: 23px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  margin-left: 30px;
+
+}
+
 .row__item {
   min-width: 16vw;
 }
@@ -209,8 +217,8 @@
 .manager__mobile {
   display: flex;
   flex-direction: column;
-  padding: 28px;
-  margin-left: -15px;
+  padding: 30px;
+  margin-left: -20px;
 }
 
 .manager__todo__mobile {
@@ -252,6 +260,15 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+}
+
+.popup__body__column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 20px;
 }
 
 .manager_popup__field :first-child:not(img, button) {
@@ -320,6 +337,16 @@
   padding: 30px;
 }
 
+.main__form__input__mobile {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  gap: 30px;
+  justify-content: space-around;
+  padding: 30px;
+  align-items: center;
+}
+
 .sender__input {
   display: flex;
   width: 45%;
@@ -330,9 +357,29 @@
   padding: 30px;
 }
 
+.sender__input__mobile {
+  display: flex;
+  width: 90%;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  gap: 20px;
+  padding: 30px;
+}
+
 .receiver__output {
   display: flex;
   width: 45%;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  gap: 20px;
+  padding: 30px;
+}
+
+.receiver__output__mobile {
+  display: flex;
+  width: 90%;
   flex-direction: column;
   background-color: white;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
@@ -354,6 +401,17 @@
   padding: 30px;
 }
 
+.extra__form__input__mobile {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-top: 0px;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 30px;
+  align-items: center;
+}
+
 .extra__form__input__left {
   display: flex;
   width: 50%;
@@ -361,9 +419,23 @@
   gap: 20px;
 }
 
+.extra__form__input__left__mobile {
+  display: flex;
+  width: 90%;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .extra__form__input__right {
   display: flex;
   width: 45%;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.extra__form__input__right__mobile {
+  display: flex;
+  width: 90%;
   flex-direction: column;
   gap: 20px;
 }
@@ -395,6 +467,13 @@
   display: flex;
   flex-direction: row;
   gap: 15px;
+}
+
+.choose__location__mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 80%;
 }
 
 .transaction__form {

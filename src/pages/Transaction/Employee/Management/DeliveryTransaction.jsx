@@ -24,9 +24,9 @@ const DeliveryTransaction = () => {
   //state to get the transaction employee
   const {
     transactionSpotLoading,
-    listUnconfirmed,
-    getUnconfirmed,
-    confirmTransaction,
+    clientTransaction_Confirmed,
+    getToClientTransaction,
+    confirmDelivery,
   } = useTransactionSpot(toast);
 
   //state for transaction choosen
@@ -40,7 +40,7 @@ const DeliveryTransaction = () => {
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
   //state for values of dropdown and selected
-  const values = ["_id", "sender", "receiver", "send_date"];
+  const values = ["_id", "send_date"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
@@ -68,7 +68,7 @@ const DeliveryTransaction = () => {
     }
   };
   //list manager sorted to sortedClientTransactions
-  const sortedClientTransactions = listUnconfirmed
+  const sortedClientTransactions = clientTransaction_Confirmed
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -85,7 +85,7 @@ const DeliveryTransaction = () => {
     });
   //useEffect
   useEffect(() => {
-    getUnconfirmed(
+    getToClientTransaction(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
   }, []);
@@ -195,7 +195,9 @@ const DeliveryTransaction = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(listUnconfirmed.length / ((0.73 * height) / 60))
+            Math.ceil(
+              clientTransaction_Confirmed.length / ((0.73 * height) / 60)
+            )
           ).keys(),
         ].map((i) => (
           <div
@@ -339,21 +341,28 @@ const DeliveryTransaction = () => {
           </div>
           <div className="popup__body__row">
             <Button
-              text={"Xác nhận đơn hàng"}
+              text={"Xác nhận đơn hàng thành công"}
               className={"action"}
               onClick={() => {
                 window["manager_popup"].close();
-                confirmTransaction(
+                confirmDelivery(
                   transactionChoosen?.destination_transaction_spot._id,
-                  transactionChoosen?._id
+                  transactionChoosen?._id,
+                  "SUCCESS"
                 );
+                console.log(transactionChoosen?._id);
               }}
             />
             <Button
-              text={"Xuất Ra PDF"}
+              text={"Xác nhận đơn hàng thất bại"}
               className={"danger"}
               onClick={() => {
-                handlePrint();
+                window["manager_popup"].close();
+                confirmDelivery(
+                  transactionChoosen?.destination_transaction_spot._id,
+                  transactionChoosen?._id,
+                  "FAILED"
+                );
               }}
             />
           </div>

@@ -111,7 +111,7 @@ const WarehousePageMobile = () => {
 
   return (
     <div className="manager__mobile">
-      <h1 className="page__title">Warehouse Dashboard</h1>
+      <h1 className="page__title__mobile">Warehouse Dashboard</h1>
       <DashBoard>
         <Column className="manager__todo__mobile">
           <div className="button__layout__mobile">

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import Toast from "../../../../ui/Toast/Toast";
 import DashBoard from "../../../../components/DashBoard/DashBoard";
 import Row from "../../../../components/DashBoard/Row";
+import Column from "../../../../components/DashBoard/Column";
 import useUser from "../../../../hooks/useUser";
 import useTransactionSpot from "../../../../hooks/useTransactionSpot";
 import useWarehouse from "../../../../hooks/useWarehouse";
@@ -23,15 +24,14 @@ import { useReactToPrint } from "react-to-print";
 
 import "../../../CSS/Director.css";
 
-const ListTransactionFromWarehouse = () => {
-  //state to get the transaction employee
+const TransactionToTransactionSpot__Mobile = () => {
 
   //state for warehouse
   const {
     warehouseLoading,
-    listUnconfirmedTransactionfromWarehouse,
-    getListUnconfirmedTransactionfromWarehouse,
-    receiveTransactionFromWarehouse,
+    listInWarehouseTransactionToTransactionSpot,
+    getListInWarehouseTransactionToTransactionSpot,
+    sendTransactionToTransactionSpot,
   } = useWarehouse(toast);
 
   //state for transaction choosen
@@ -44,17 +44,31 @@ const ListTransactionFromWarehouse = () => {
   const [numPage, setNumPage] = useState(0);
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
-  //state for values of dropdown and selected
-  const values = ["_id", "send_date"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
   const [searchBy, setSearchBy] = useState("_id");
+  //state for selected value to fitler
+  const [selected, setSelected] = useState(null);
+  //state for values of dropdown and selected
+  const values = ["_id", "send_date"];
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
+    setSelected(value);
     setSearchBy(value);
     setSearch("");
+    handleSort(value);
+  };
+
+  const handleSort = (column) => {
+    if (sortedColumn === column) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortedColumn(column);
+      setSortOrder("asc");
+    }
+    console.log(column);
   };
 
   const componentRef = useRef();
@@ -63,17 +77,8 @@ const ListTransactionFromWarehouse = () => {
     content: () => componentRef.current,
   });
 
-  //handle sort
-  const handleSort = (column) => {
-    if (sortedColumn === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortedColumn(column);
-      setSortOrder("asc");
-    }
-  };
-  //list manager sorted to sortedClientTransactions
-  const sortedClientTransactions = listUnconfirmedTransactionfromWarehouse
+  //list manager sorted to sortedManager
+  const sortedClientTransactions = listInWarehouseTransactionToTransactionSpot
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -88,32 +93,45 @@ const ListTransactionFromWarehouse = () => {
         return columnA > columnB ? -1 : columnA < columnB ? 1 : 0;
       }
     });
+
   //useEffect
   useEffect(() => {
-    getListUnconfirmedTransactionfromWarehouse(
+    getListInWarehouseTransactionToTransactionSpot(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
   }, []);
 
   return (
-    <div className="manager">
-      <h1 className="page_title">Xác nhận đơn hàng từ điểm tập kết</h1>
+    <div className="manager__mobile">
+      <h1 className="page__title__mobile">Đơn hàng gửi tới điểm giao dịch</h1>
       <DashBoard>
-        <Row className="manager__todo">
-          <div className="input__div">
+        <Column className="manager__todo__mobile">
+          <div className="button__layout__mobile"></div>
+          <Row className={"dashboard_rowForColumn"}>
             <Input
               placeholder={`Tìm kiếm theo ${
-                searchBy === "_id" ? "_id" : searchBy
+                searchBy === "first_name" ? "first name" : searchBy
               }`}
-              className={"manager__search"}
+              className={"manager__search__mobile"}
               onChange={(e) => setSearch(e.target.value)}
-            ></Input>
+            />
             <div className="dropdown__div">
-              <img
-                src={filter_icon}
-                className="search_icon"
-                onClick={() => setIsDropdown((prev) => !prev)}
-              />
+              <div className="dropdown__image">
+                <div className="column__item sort_item title__name">
+                  <img
+                    src={arrow}
+                    onClick={(e) => {
+                      handleSort(selected);
+                      e.target.classList.toggle("active");
+                    }}
+                  />
+                </div>
+                <img
+                  src={filter_icon}
+                  className="search_icon"
+                  onClick={() => setIsDropdown((prev) => !prev)}
+                />
+              </div>
               {isDropdown ? (
                 <Dropdown
                   items={values}
@@ -124,33 +142,8 @@ const ListTransactionFromWarehouse = () => {
                 <></>
               )}
             </div>
-          </div>
-        </Row>
-        <Row className="title">
-          <div className="row__item sort_item title__name">
-            Mã đơn hàng
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("_id");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="row__item sort_item title__workplace">
-            Ngày gửi
-            <img
-              src={arrow}
-              alt=""
-              onClick={(e) => {
-                handleSort("send_date");
-                e.target.classList.toggle("active");
-              }}
-            />
-          </div>
-          <div className="row__item title__edit">Chi tiết đơn hàng</div>
-        </Row>
+          </Row>
+        </Column>
         {sortedClientTransactions
           ?.filter((manager) => {
             const searchValue = search.toLowerCase();
@@ -163,30 +156,41 @@ const ListTransactionFromWarehouse = () => {
             }
           })
           ?.map((manager) => (
-            <Row className="manager__detail">
-              <p className="manager__name row__item user_management">
-                {manager._id}
+            <Column className="manager__detail__mobile">
+              <p className="manager__name column__item">
+                <div className="column__item sort_item title__name">
+                  <p className="column__title">ID: </p>
+                  {manager._id}
+                </div>
               </p>
-              <p className="row__item manager__workplace">
-                {new Date(manager?.send_date).toLocaleDateString()}
+              <p className="column__item manager__phone">
+                <div className="column__item sort_item title__phone">
+                  <p className="column__title">Ngày tháng năm: </p>
+                  {new Date(manager?.send_date).toLocaleDateString()}
+                </div>
               </p>
-              <div className="row__item manager__edit">
-                <Button
-                  text={"Xem chi tiết"}
-                  className={"action"}
-                  onClick={() => {
-                    window["manager_popup"].showModal();
-                    setTransactionChoosen(manager);
-                  }}
-                />
+              <div className="column__item manager__edit">
+                <div className="manager__edit__button">
+                  <Button
+                    text={"Xem chi tiết"}
+                    className={"action"}
+                    onClick={() => {
+                      window["manager_popup"].showModal();
+                      setTransactionChoosen(manager);
+                    }}
+                  />
+                </div>
               </div>
-            </Row>
+            </Column>
           ))}
       </DashBoard>
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(listUnconfirmedTransactionfromWarehouse.length / ((0.73 * height) / 60))
+            Math.ceil(
+              listInWarehouseTransactionToTransactionSpot.length /
+                ((0.73 * height) / 60)
+            )
           ).keys(),
         ].map((i) => (
           <div
@@ -207,7 +211,6 @@ const ListTransactionFromWarehouse = () => {
           </div>
         ))}
       </div>
-
       <Popup
         className="manager_popup"
         popup_id={"manager_popup"}
@@ -215,14 +218,9 @@ const ListTransactionFromWarehouse = () => {
       >
         <div className="popup__body__content">
           <div className="popup__body__row">
-            <div className="manager_popup__field">
-              <img src={logo} className="transaction__order__logo" alt="" />
-            </div>
-            <div className="manager_popup__field">
-              <img src={transactionChoosen?.transaction_qr_tracker} alt="" />
-            </div>
+            <img src={transactionChoosen?.transaction_qr_tracker} alt="" />
           </div>
-          <div className="popup__body__row">
+          <div className="popup__body__column">
             <div className="manager_popup__field">
               <p className="manager_popup__field__title">Mã đơn hàng:</p>
               <p className="manager_popup__field__value">
@@ -237,9 +235,6 @@ const ListTransactionFromWarehouse = () => {
                 {transactionChoosen?.transaction_type}
               </p>
             </div>
-          </div>
-
-          <div className="popup__body__row">
             <div className="manager_popup__field">
               <p className="manager_popup__field__title">Địa chỉ bên gửi:</p>
               <p className="manager_popup__field__value">
@@ -260,9 +255,6 @@ const ListTransactionFromWarehouse = () => {
                   transactionChoosen?.receiver?.address?.city}
               </p>
             </div>
-          </div>
-
-          <div className="popup__body__row">
             <div className="manager_popup__field">
               <p className="manager_popup__field__title">Người gửi:</p>
               <p className="manager_popup__field__value">
@@ -275,8 +267,6 @@ const ListTransactionFromWarehouse = () => {
                 {transactionChoosen?.receiver?.name}
               </p>
             </div>
-          </div>
-          <div className="popup__body__row">
             <div className="manager_popup__field">
               <p className="manager_popup__field__title">Ngày tạo:</p>
               <p className="manager_popup__field__value">
@@ -289,8 +279,6 @@ const ListTransactionFromWarehouse = () => {
                 {Math.round(transactionChoosen?.shipping_cost / 1000) * 100}
               </p>
             </div>
-          </div>
-          <div className="popup__body__row">
             <div className="manager_popup__field">
               <p className="manager_popup__field__title">Tổng số gói hàng:</p>
               <p className="manager_popup__field__value">
@@ -303,38 +291,38 @@ const ListTransactionFromWarehouse = () => {
                 {transactionChoosen?.prepaid}
               </p>
             </div>
+            <div className="manager__package__list">
+              <p className="manager_popup__field__title">Chi tiết gói hàng:</p>
+              <table>
+                <tr>
+                  <th>Tên</th>
+                  <th>Mô tả</th>
+                  <th>Phân loại</th>
+                  <th>Số lượng</th>
+                  <th>Khối lượng</th>
+                  <th>Giá trị</th>
+                </tr>
+                {transactionChoosen?.list_package?.map((packageItem) => (
+                  <tr>
+                    <td>{packageItem.name}</td>
+                    <td>{packageItem.description}</td>
+                    <td>{packageItem.type}</td>
+                    <td>{packageItem.quantity}</td>
+                    <td>{packageItem.weight}</td>
+                    <td>{packageItem.postage}</td>
+                  </tr>
+                ))}
+              </table>
+            </div>
           </div>
 
-          <div className="manager__package__list">
-            <p className="manager_popup__field__title">Chi tiết gói hàng:</p>
-            <table>
-              <tr>
-                <th>Tên</th>
-                <th>Mô tả</th>
-                <th>Phân loại</th>
-                <th>Số lượng</th>
-                <th>Khối lượng</th>
-                <th>Giá trị</th>
-              </tr>
-              {transactionChoosen?.list_package?.map((packageItem) => (
-                <tr>
-                  <td>{packageItem.name}</td>
-                  <td>{packageItem.description}</td>
-                  <td>{packageItem.type}</td>
-                  <td>{packageItem.quantity}</td>
-                  <td>{packageItem.weight}</td>
-                  <td>{packageItem.postage}</td>
-                </tr>
-              ))}
-            </table>
-          </div>
           <div className="popup__body__row">
             <Button
-              text={"Xác nhận đơn hàng"}
+              text={"Gủi đơn hàng tới điểm giao dịch"}
               className={"action"}
               onClick={() => {
                 window["manager_popup"].close();
-                receiveTransactionFromWarehouse(transactionChoosen?._id);
+                sendTransactionToTransactionSpot(transactionChoosen?._id);
               }}
             />
             <Button
@@ -466,10 +454,9 @@ const ListTransactionFromWarehouse = () => {
         </div>
       </Popup>
       {warehouseLoading ? <Loading /> : <></>}
-
       <ToastContainer className="toasify" />
     </div>
   );
 };
 
-export default ListTransactionFromWarehouse;
+export default TransactionToTransactionSpot__Mobile;
