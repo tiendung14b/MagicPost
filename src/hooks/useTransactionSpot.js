@@ -18,6 +18,10 @@ const useTransactionSpot = (toast) => {
 
   const [statistic, setStatistic] = useState([]);
 
+  const [listSendingHistory, setListSendingHistory] = useState([]);
+  const [listSuccessHistory, setListSuccessHistory] = useState([]);
+  const [listFailHistory, setListFailHistory] = useState([]);
+
   const getTransactionSpotInfo = async (id) => {
     try {
       const response = await clientAxios.get(
@@ -231,11 +235,57 @@ const useTransactionSpot = (toast) => {
         `/transaction_spot/get_statistic/` + transaction_spot_id
       );
       setStatistic(response?.result);
-      console.log(response?.result);
-      console.log(Object.keys(response?.result.success_transactions).map(
-        (key) => response?.result.success_transactions[key].length
-      ));
+      console.log(Object.values(response?.result.success_transactions));
+      // merge array
 
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const getSendingHistory = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(
+        `/transaction_spot/get_sending_history/` + transaction_spot_id
+      );
+      setListSendingHistory(response?.result);
+      console.log(response?.result);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const getSuccessHistory = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(
+        `/transaction_spot/get_success_history/` + transaction_spot_id
+      );
+      setListSuccessHistory(response?.result);
+      console.log(response?.result);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const getFailHistory = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(
+        `/transaction_spot/get_fail_history/` + transaction_spot_id
+      );
+      setListFailHistory(response?.result);
+      console.log(response?.result);
       setTransactionSpotLoading(false);
       return response?.result;
     } catch (err) {
@@ -253,6 +303,9 @@ const useTransactionSpot = (toast) => {
     listUnconfirmed,
     clientTransaction_Confirmed,
     statistic,
+    listSendingHistory,
+    listSuccessHistory,
+    listFailHistory,
     getTransactionSpotInfo,
     setTransactionManager,
     deleteTransactionManager,
@@ -269,6 +322,9 @@ const useTransactionSpot = (toast) => {
     confirmTransaction,
     confirmDelivery,
     getStatistic,
+    getSendingHistory,
+    getSuccessHistory,
+    getFailHistory,
   };
 }
 

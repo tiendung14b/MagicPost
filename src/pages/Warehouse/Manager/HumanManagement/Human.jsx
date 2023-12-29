@@ -20,9 +20,7 @@ import default_avatar from "../../../../assets/default_avatar.png";
 import "../../../CSS/Director.css";
 
 const Human = () => {
-  const {
-    listManager,
-  } = useUser(toast);
+  const { listManager } = useUser(toast);
 
   const {
     listWarehouseEmployee,
@@ -49,11 +47,27 @@ const Human = () => {
   const [search, setSearch] = useState("");
   //state for choosen type
   const [searchBy, setSearchBy] = useState("first_name");
+  //state for warning
+  const [warning, setWarning] = useState("");
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
     setSearchBy(value);
     setSearch("");
+  };
+
+  const [warningText, setWarningText] = useState("");
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    return String(phoneNumber).match(/^[0-9]{10}$/);
   };
 
   const getAddManagerInput = () => {
@@ -69,6 +83,7 @@ const Human = () => {
     const email = document.getElementById(
       "add_manager_popup__input__email"
     ).value;
+    setWarning("");
     return {
       first_name,
       last_name,
@@ -104,7 +119,9 @@ const Human = () => {
     });
   //useEffect
   useEffect(() => {
-    getListWarehouseEmployee(JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id);
+    getListWarehouseEmployee(
+      JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
+    );
   }, []);
 
   return (
@@ -322,11 +339,33 @@ const Human = () => {
             type="email"
             name="email"
           />
+          <p className="warn" id="add_manager_warn">
+            {warningText}
+          </p>
           <div className="add_manager_submit">
             <Button
               text={"Thêm quản lý"}
               className={"submit"}
               onClick={() => {
+                if (
+                  !validateEmail(
+                    document.getElementById("add_manager_popup__input__email")
+                      .value
+                  )
+                ) {
+                  setWarningText("Email không hợp lệ");
+                  return;
+                }
+                if (
+                  !validatePhoneNumber(
+                    document.getElementById(
+                      "add_manager_popup__input__phone_number"
+                    ).value
+                  )
+                ) {
+                  setWarningText("Số điện thoại không hợp lệ");
+                  return;
+                }
                 const input = getAddManagerInput();
                 if (
                   input.first_name &&
@@ -340,7 +379,6 @@ const Human = () => {
                 } else {
                   toast.error("Vui lòng điền đầy đủ thông tin", toast);
                 }
-                
               }}
             />
             <Button
@@ -351,6 +389,7 @@ const Human = () => {
               }}
             />
           </div>
+          <p>{warning}</p>
         </div>
       </Popup>
       {warehouseLoading ? <Loading /> : <></>}

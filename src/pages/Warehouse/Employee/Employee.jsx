@@ -17,6 +17,7 @@ import TransactionFromWarehouse__Mobile from "./ManagementMobile/TransactionFrom
 import TransactionToTransactionSpot__Mobile from "./ManagementMobile/TransactionToTransactionSpot__Mobile";
 import TransactionToWarehouse__Mobile from "./ManagementMobile/TransactionToWarehouse__Mobile";
 
+
 const Employee = () => {
   const [itemChoosen, setItemChoosen] = React.useState("warehouse_list_transaction_from_transaction_spot");
 
@@ -84,18 +85,30 @@ const Employee = () => {
       </SideBar>
       <div className={containerClassName}>
         <div className="director__content">
-          {itemChoosen === "warehouse_list_transaction_from_transaction_spot" && (
-            width > 768 ? <ListTransactionFromTransactionSpot /> : <TransactionFromTransactionSpot__Mobile />
-          )}
-          {itemChoosen === "warehouse_list_transaction_from_warehouse" && (
-            width > 768 ? <ListTransactionFromWarehouse /> : <TransactionFromWarehouse__Mobile />
-          )}
-          {itemChoosen === "warehouse_list_transaction_to_warehouse" && (
-            width > 768 ? <ListTransactionToWarehouse /> : <TransactionToWarehouse__Mobile />
-          )}
-          {itemChoosen === "warehouse_list_transaction_to_transaction_spot" && (
-            width > 768 ? <ListTransactionToTransactionSpot /> : <TransactionToTransactionSpot__Mobile />
-          )}
+          {itemChoosen === "warehouse_list_transaction_from_transaction_spot" &&
+            (width > 768 ? (
+              <ListTransactionFromTransactionSpot />
+            ) : (
+              <TransactionFromTransactionSpot__Mobile />
+            ))}
+          {itemChoosen === "warehouse_list_transaction_from_warehouse" &&
+            (width > 768 ? (
+              <ListTransactionFromWarehouse />
+            ) : (
+              <TransactionFromWarehouse__Mobile />
+            ))}
+          {itemChoosen === "warehouse_list_transaction_to_warehouse" &&
+            (width > 768 ? (
+              <ListTransactionToWarehouse />
+            ) : (
+              <TransactionToWarehouse__Mobile />
+            ))}
+          {itemChoosen === "warehouse_list_transaction_to_transaction_spot" &&
+            (width > 768 ? (
+              <ListTransactionToTransactionSpot />
+            ) : (
+              <TransactionToTransactionSpot__Mobile />
+            ))}
         </div>
       </div>
     </Layout>
