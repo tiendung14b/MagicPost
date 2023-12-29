@@ -56,6 +56,20 @@ const Human = () => {
     setSearch("");
   };
 
+  const [warningText, setWarningText] = useState("");
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    return String(phoneNumber).match(/^[0-9]{10}$/);
+  };
+
   const getAddManagerInput = () => {
     const first_name = document.getElementById(
       "add_manager_popup__input__first_name"
@@ -76,16 +90,6 @@ const Human = () => {
       phone_number,
       email,
     };
-  };
-
-  const validEmail = (email) => {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
-  };
-
-  const validPhoneNumber = (phone_number) => {
-    const re = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
-    return re.test(phone_number);
   };
 
   //handle sort
@@ -335,34 +339,46 @@ const Human = () => {
             type="email"
             name="email"
           />
+          <p className="warn" id="add_manager_warn">
+            {warningText}
+          </p>
           <div className="add_manager_submit">
             <Button
               text={"Thêm quản lý"}
               className={"submit"}
               onClick={() => {
-                const input = getAddManagerInput();
-                const { first_name, last_name, phone_number, email } = input;
                 if (
-                  first_name === "" ||
-                  last_name === "" ||
-                  phone_number === "" ||
-                  email === ""
+                  !validateEmail(
+                    document.getElementById("add_manager_popup__input__email")
+                      .value
+                  )
                 ) {
-                  setWarning("Vui lòng điền đầy đủ thông tin");
+                  setWarningText("Email không hợp lệ");
                   return;
                 }
-                if (!validPhoneNumber(phone_number)) {
-                  setWarning("Số điện thoại không hợp lệ");
+                if (
+                  !validatePhoneNumber(
+                    document.getElementById(
+                      "add_manager_popup__input__phone_number"
+                    ).value
+                  )
+                ) {
+                  setWarningText("Số điện thoại không hợp lệ");
                   return;
                 }
-                if (!validEmail(email)) {
-                  setWarning("Email không hợp lệ");
-                  return;
+                const input = getAddManagerInput();
+                if (
+                  input.first_name &&
+                  input.last_name &&
+                  input.phone_number &&
+                  input.email
+                ) {
+                  setWarehouseLoading(true);
+                  window["add_manager_popup"].close();
+                  addWarehouseEmployee(input);
+                } else {
+                  toast.error("Vui lòng điền đầy đủ thông tin", toast);
                 }
-                setWarning("");
-                setWarehouseLoading(true);
-                window["add_manager_popup"].close();
-                addWarehouseEmployee(input);
               }}
             />
             <Button

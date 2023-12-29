@@ -49,7 +49,19 @@ const ManagerPage = () => {
     setSearch("");
   };
 
-  
+  const [warningText, setWarningText] = useState("");
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    return String(phoneNumber).match(/^[0-9]{10}$/);
+  };
 
   //handle sort
   const handleSort = (column) => {
@@ -345,13 +357,42 @@ const ManagerPage = () => {
             </div>
           </div>
           <p className="warn" id="add_manager_warn">
-            Bạn cần nhập đầy đủ thông tin
+            {warningText}
           </p>
           <div className="add_manager_submit">
             <Button
               text={"Thêm quản lý"}
               className={"submit"}
               onClick={() => {
+                if (
+                  !validateEmail(
+                    document.getElementById("add_manager_popup__input__email")
+                      .value
+                  )
+                ) {
+                  setWarningText("Email không hợp lệ");
+                  return;
+                }
+
+                if (
+                  document.getElementById("warehouse_role").checked === false &&
+                  document.getElementById("transaction_role").checked === false
+                ) {
+                  setWarningText("Bạn chưa chọn vai trò");
+                  return;
+                }
+
+                if (
+                  !validatePhoneNumber(
+                    document.getElementById(
+                      "add_manager_popup__input__phone_number"
+                    ).value
+                  )
+                ) {
+                  setWarningText("Số điện thoại không hợp lệ");
+                  return;
+                }
+
                 const input = getAddManagerInput();
                 if (
                   input.first_name &&
