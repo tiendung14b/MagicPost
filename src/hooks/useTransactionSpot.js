@@ -15,6 +15,9 @@ const useTransactionSpot = (toast) => {
 
   const [listUnconfirmed, setListUnconfirmed] = useState([]);
 
+
+  const [statistic, setStatistic] = useState([]);
+
   const getTransactionSpotInfo = async (id) => {
     try {
       const response = await clientAxios.get(
@@ -221,6 +224,22 @@ const useTransactionSpot = (toast) => {
     }
   }
 
+  const getStatistic = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(
+        `/transaction_spot/get_statistic/` + transaction_spot_id
+      );
+      setStatistic(response?.result);
+      console.log(response?.result);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
   return {
     transactionSpotInfo,
     clientTransaction,
@@ -229,6 +248,7 @@ const useTransactionSpot = (toast) => {
     listTransactionSpot,
     listUnconfirmed,
     clientTransaction_Confirmed,
+    statistic,
     getTransactionSpotInfo,
     setTransactionManager,
     deleteTransactionManager,
@@ -244,6 +264,7 @@ const useTransactionSpot = (toast) => {
     getUnconfirmed,
     confirmTransaction,
     confirmDelivery,
+    getStatistic,
   };
 }
 
