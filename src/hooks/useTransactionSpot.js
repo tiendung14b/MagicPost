@@ -18,6 +18,10 @@ const useTransactionSpot = (toast) => {
 
   const [statistic, setStatistic] = useState([]);
 
+  const [listSendingHistory, setListSendingHistory] = useState([]);
+  const [listSuccessHistory, setListSuccessHistory] = useState([]);
+  const [listFailHistory, setListFailHistory] = useState([]);
+
   const getTransactionSpotInfo = async (id) => {
     try {
       const response = await clientAxios.get(
@@ -242,6 +246,54 @@ const useTransactionSpot = (toast) => {
     }
   }
 
+  const getSendingHistory = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(
+        `/transaction_spot/sending_history/` + transaction_spot_id
+      );
+      setListSendingHistory(response?.result);
+      console.log(response?.result);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const getSuccessHistory = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(
+        `/transaction_spot/success_history/` + transaction_spot_id
+      );
+      setListSuccessHistory(response?.result);
+      console.log(response?.result);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
+  const getFailHistory = async (transaction_spot_id) => {
+    try {
+      setTransactionSpotLoading(true);
+      const response = await clientAxios.get(
+        `/transaction_spot/fail_history/` + transaction_spot_id
+      );
+      setListFailHistory(response?.result);
+      console.log(response?.result);
+      setTransactionSpotLoading(false);
+      return response?.result;
+    } catch (err) {
+      setTransactionSpotLoading(false);
+      responseToast(err, toast);
+    }
+  }
+
   return {
     transactionSpotInfo,
     clientTransaction,
@@ -251,6 +303,9 @@ const useTransactionSpot = (toast) => {
     listUnconfirmed,
     clientTransaction_Confirmed,
     statistic,
+    listSendingHistory,
+    listSuccessHistory,
+    listFailHistory,
     getTransactionSpotInfo,
     setTransactionManager,
     deleteTransactionManager,
@@ -267,6 +322,9 @@ const useTransactionSpot = (toast) => {
     confirmTransaction,
     confirmDelivery,
     getStatistic,
+    getSendingHistory,
+    getSuccessHistory,
+    getFailHistory,
   };
 }
 
