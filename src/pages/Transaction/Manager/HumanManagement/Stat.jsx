@@ -101,7 +101,6 @@ function Stat() {
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
     console.log(statistic?.success_transactions);
-    console.log(Object.keys(statistic?.failed_transactions));
   }, []);
 
 

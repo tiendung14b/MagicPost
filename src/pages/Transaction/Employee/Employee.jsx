@@ -5,10 +5,17 @@ import React from "react";
 import human from "../../../assets/human.svg";
 import transaction from "../../../assets/transaction.svg";
 
+import useWindowDimensions from "../../../hooks/useWindowScreen";
+
 import GetTransaction from "./Management/GetTransaction";
 import ListTransaction from "./Management/ListTransaction";
 import CreateTransaction from "./Management/CreateTransaction";
 import DeliveryTransaction from "./Management/DeliveryTransaction";
+
+import CreateTransactionMobile from "./ManagementMobile/CreateTransactionMobile";
+import ListTransactionMobile from "./ManagementMobile/ListTransactionMobile";
+import DeliveryTransactionMobile from "./ManagementMobile/DeliveryTransactionMobile";
+import GetTransactionMobile from "./ManagementMobile/GetTransactionMobile";
 
 const Employee = () => {
   const [itemChoosen, setItemChoosen] = React.useState("create_transaction");
@@ -18,6 +25,10 @@ const Employee = () => {
     setItemChoosen(id);
     document.getElementById(id).classList.add("clicked");
   };
+
+  const { width } = useWindowDimensions();
+
+  const containerClassName = width < 950 ? "container__mobile" : "container";
 
   return (
     <Layout>
@@ -47,9 +58,7 @@ const Employee = () => {
           onClick={() => handleChooseItem("delivery_transaction")}
         >
           <img className="sidebar__icon" src={transaction} alt="" />
-          <p className="sidebar__item__text">
-            Xác nhận đơn hàng từ điểm tập kết
-          </p>
+          <p className="sidebar__item__text">Đơn hàng tới người nhận</p>
         </div>
         <div
           className="sidebar__item__content box"
@@ -58,15 +67,25 @@ const Employee = () => {
           onClick={() => handleChooseItem("get_transaction")}
         >
           <img className="sidebar__icon" src={transaction} alt="" />
-          <p className="sidebar__item__text">Đơn hàng tới người nhận</p>
+          <p className="sidebar__item__text">
+            Xác nhận đơn hàng từ điểm tập kết
+          </p>
         </div>
       </SideBar>
-      <div className="container">
+      <div className={containerClassName}>
         <div className="director__content">
-          {itemChoosen === "create_transaction" && <CreateTransaction />}
-          {itemChoosen === "get_transaction" && <GetTransaction />}
-          {itemChoosen === "manage_transaction" && <ListTransaction />}
-          {itemChoosen === "delivery_transaction" && <DeliveryTransaction />}
+          {itemChoosen === "create_transaction" &&
+            (width > 920 ? <CreateTransaction /> : <CreateTransactionMobile />)}
+          {itemChoosen === "get_transaction" &&
+            (width > 768 ? <GetTransaction /> : <GetTransactionMobile />)}
+          {itemChoosen === "manage_transaction" &&
+            (width > 768 ? <ListTransaction /> : <ListTransactionMobile />)}
+          {itemChoosen === "delivery_transaction" &&
+            (width > 768 ? (
+              <DeliveryTransaction />
+            ) : (
+              <DeliveryTransactionMobile />
+            ))}
         </div>
       </div>
     </Layout>

@@ -130,7 +130,7 @@ const TransactionPageMobile = () => {
 
   return (
     <div className="manager__mobile">
-      <h1 className="page__title">Transacsion Dashboard</h1>
+      <h1 className="page__title__mobile">Transacsion Dashboard</h1>
       <DashBoard>
         <Column className="manager__todo__mobile">
           <div className="button__layout__mobile">

@@ -24,9 +24,9 @@ const GetTransaction = () => {
   //state to get the transaction employee
   const {
     transactionSpotLoading,
-    clientTransaction_Confirmed,
-    getToClientTransaction,
-    confirmDelivery,
+    listUnconfirmed,
+    getUnconfirmed,
+    confirmTransaction,
   } = useTransactionSpot(toast);
 
   //state for transaction choosen
@@ -40,7 +40,7 @@ const GetTransaction = () => {
   //state for dropdown
   const [isDropdown, setIsDropdown] = useState(false);
   //state for values of dropdown and selected
-  const values = ["_id", "sender", "receiver", "send_date"];
+  const values = ["_id", "send_date"];
   //state for search
   const [search, setSearch] = useState("");
   //state for choosen type
@@ -68,7 +68,7 @@ const GetTransaction = () => {
     }
   };
   //list manager sorted to sortedClientTransactions
-  const sortedClientTransactions = clientTransaction_Confirmed
+  const sortedClientTransactions = listUnconfirmed
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -85,14 +85,14 @@ const GetTransaction = () => {
     });
   //useEffect
   useEffect(() => {
-    getToClientTransaction(
+    getUnconfirmed(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
   }, []);
 
   return (
     <div className="manager">
-      <h1 className="page_title">Đơn hàng tới người nhận</h1>
+      <h1 className="page_title">Xác nhận đơn hàng tới điểm tập kết</h1>
       <DashBoard>
         <Row className="manager__todo">
           <div className="input__div">
@@ -195,7 +195,7 @@ const GetTransaction = () => {
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(clientTransaction_Confirmed.length / ((0.73 * height) / 60))
+            Math.ceil(listUnconfirmed.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
@@ -339,28 +339,21 @@ const GetTransaction = () => {
           </div>
           <div className="popup__body__row">
             <Button
-              text={"Xác nhận đơn hàng thành công"}
+              text={"Xác nhận đơn hàng"}
               className={"action"}
               onClick={() => {
                 window["manager_popup"].close();
-                confirmDelivery(
+                confirmTransaction(
                   transactionChoosen?.destination_transaction_spot._id,
-                  transactionChoosen?._id,
-                  "SUCCESS"
+                  transactionChoosen?._id
                 );
-                console.log(transactionChoosen?._id);
               }}
             />
             <Button
-              text={"Xác nhận đơn hàng thất bại"}
+              text={"Xuất Ra PDF"}
               className={"danger"}
               onClick={() => {
-                window["manager_popup"].close();
-                confirmDelivery(
-                  transactionChoosen?.destination_transaction_spot._id,
-                  transactionChoosen?._id,
-                  "FAILED"
-                );
+                handlePrint();
               }}
             />
           </div>
