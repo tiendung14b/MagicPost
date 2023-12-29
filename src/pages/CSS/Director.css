@@ -573,3 +573,13 @@ th {
   gap: 15px;
   width: 80%;
 }
+
+.chart__header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30%;
+  gap: 20px;
+  width: 100%;
+  margin-top: 30px;
+}

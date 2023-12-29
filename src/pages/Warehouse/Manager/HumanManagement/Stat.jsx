@@ -13,12 +13,11 @@ import "../../../CSS/Director.css";
 
 function Stat() {
   const {
-    sentHistory,
-    receivedHistory,
     warehouseLoading,
-    getStatistic,
-    statistic,
+    statisticWarehouse,
+    getStatisticWarehouse,
   } = useWarehouse(toast);
+  
 
   const [chartState, setChartState] = useState({
     options: {
@@ -40,7 +39,7 @@ function Stat() {
 
   //useEffect
   useEffect(() => {
-    getStatistic(
+    getStatisticWarehouse(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
   }, []);
@@ -60,15 +59,17 @@ function Stat() {
           {line &&
             chartState &&
             chartState.series &&
-            Object.keys(statistic).length > 0 && (
+            Object.keys(statisticWarehouse).length > 0 && (
               <Chart
                 options={{
                   ...chartState.options,
                   xaxis: {
                     categories: Array.from(
                       new Set([
-                        ...Object.keys(statistic?.received_transactions),
-                        ...Object.keys(statistic?.sent_transactions),
+                        ...Object.keys(
+                          statisticWarehouse?.received_transactions
+                        ),
+                        ...Object.keys(statisticWarehouse?.sent_transactions),
                       ])
                     ),
                   },
@@ -77,14 +78,20 @@ function Stat() {
                   ...chartState.series,
                   {
                     name: "Đơn hàng nhận về",
-                    data: Object.keys(statistic?.received_transactions).map(
-                      (item) => statistic?.received_transactions[item].length
+                    data: Object.keys(
+                      statisticWarehouse?.received_transactions
+                    ).map(
+                      (item) =>
+                        statisticWarehouse?.received_transactions[item].length
                     ),
                   },
                   {
                     name: "Đơn hàng gửi đi",
-                    data: Object.keys(statistic?.sent_transactions).map(
-                      (item) => statistic?.sent_transactions[item].length
+                    data: Object.keys(
+                      statisticWarehouse?.sent_transactions
+                    ).map(
+                      (item) =>
+                        statisticWarehouse?.sent_transactions[item].length
                     ),
                   },
                 ]}
@@ -96,15 +103,17 @@ function Stat() {
           {!line &&
             chartState &&
             chartState.series &&
-            Object.keys(statistic).length > 0 && (
+            Object.keys(statisticWarehouse).length > 0 && (
               <Chart
                 options={{
                   ...chartState.options,
                   xaxis: {
                     categories: Array.from(
                       new Set([
-                        ...Object.keys(statistic?.received_transactions),
-                        ...Object.keys(statistic?.sent_transactions),
+                        ...Object.keys(
+                          statisticWarehouse?.received_transactions
+                        ),
+                        ...Object.keys(statisticWarehouse?.sent_transactions),
                       ])
                     ),
                   },
@@ -113,14 +122,20 @@ function Stat() {
                   ...chartState.series,
                   {
                     name: "Đơn hàng nhận về",
-                    data: Object.keys(statistic?.received_transactions).map(
-                      (item) => statistic?.received_transactions[item].length
+                    data: Object.keys(
+                      statisticWarehouse?.received_transactions
+                    ).map(
+                      (item) =>
+                        statisticWarehouse?.received_transactions[item].length
                     ),
                   },
                   {
                     name: "Đơn hàng gửi đi",
-                    data: Object.keys(statistic?.sent_transactions).map(
-                      (item) => statistic?.sent_transactions[item].length
+                    data: Object.keys(
+                      statisticWarehouse?.sent_transactions
+                    ).map(
+                      (item) =>
+                        statisticWarehouse?.sent_transactions[item].length
                     ),
                   },
                 ]}
