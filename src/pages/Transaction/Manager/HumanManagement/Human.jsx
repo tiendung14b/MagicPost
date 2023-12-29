@@ -58,6 +58,20 @@ const Human = () => {
     setSearch("");
   };
 
+  const [warningText, setWarningText] = useState("");
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    return String(phoneNumber).match(/^[0-9]{10}$/);
+  };
+
   const getAddManagerInput = () => {
     const first_name = document.getElementById(
       "add_manager_popup__input__first_name"
@@ -344,11 +358,33 @@ const Human = () => {
             type="email"
             name="email"
           />
+          <p className="warn" id="add_manager_warn">
+            {warningText}
+          </p>
           <div className="add_manager_submit">
             <Button
               text={"Thêm quản lý"}
               className={"submit"}
               onClick={() => {
+                if (
+                  !validateEmail(
+                    document.getElementById("add_manager_popup__input__email")
+                      .value
+                  )
+                ) {
+                  setWarningText("Email không hợp lệ");
+                  return;
+                }
+                if (
+                  !validatePhoneNumber(
+                    document.getElementById(
+                      "add_manager_popup__input__phone_number"
+                    ).value
+                  )
+                ) {
+                  setWarningText("Số điện thoại không hợp lệ");
+                  return;
+                }
                 const input = getAddManagerInput();
                 if (
                   input.first_name &&
@@ -358,7 +394,7 @@ const Human = () => {
                 ) {
                   setTransactionSpotLoading(true);
                   window["add_manager_popup"].close();
-                  addTransactionEmployee(input);      
+                  addTransactionEmployee(input);
                 } else {
                   toast.error("Vui lòng điền đầy đủ thông tin", toast);
                 }
