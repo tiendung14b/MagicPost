@@ -17,6 +17,8 @@ import TransactionFromWarehouse__Mobile from "./ManagementMobile/TransactionFrom
 import TransactionToTransactionSpot__Mobile from "./ManagementMobile/TransactionToTransactionSpot__Mobile";
 import TransactionToWarehouse__Mobile from "./ManagementMobile/TransactionToWarehouse__Mobile";
 
+import History from "./Management/History";
+
 const Employee = () => {
   const [itemChoosen, setItemChoosen] = React.useState("warehouse_list_transaction_from_transaction_spot");
 
@@ -81,21 +83,45 @@ const Employee = () => {
           <img className="sidebar__icon" src={transaction} alt="" />
           <p className="sidebar__item__text">Đơn hàng gửi tới điểm giao dịch</p>
         </div>
+        <div
+          className="sidebar__item__content box"
+          title="Lịch sử đơn hàng"
+          id="history"
+          onClick={() =>
+            handleChooseItem("history")
+          }
+        >
+          <img className="sidebar__icon" src={transaction} alt="" />
+          <p className="sidebar__item__text">Lịch sử đơn hàng</p>
+        </div>
       </SideBar>
       <div className={containerClassName}>
         <div className="director__content">
-          {itemChoosen === "warehouse_list_transaction_from_transaction_spot" && (
-            width > 768 ? <ListTransactionFromTransactionSpot /> : <TransactionFromTransactionSpot__Mobile />
-          )}
-          {itemChoosen === "warehouse_list_transaction_from_warehouse" && (
-            width > 768 ? <ListTransactionFromWarehouse /> : <TransactionFromWarehouse__Mobile />
-          )}
-          {itemChoosen === "warehouse_list_transaction_to_warehouse" && (
-            width > 768 ? <ListTransactionToWarehouse /> : <TransactionToWarehouse__Mobile />
-          )}
-          {itemChoosen === "warehouse_list_transaction_to_transaction_spot" && (
-            width > 768 ? <ListTransactionToTransactionSpot /> : <TransactionToTransactionSpot__Mobile />
-          )}
+          {itemChoosen === "warehouse_list_transaction_from_transaction_spot" &&
+            (width > 768 ? (
+              <ListTransactionFromTransactionSpot />
+            ) : (
+              <TransactionFromTransactionSpot__Mobile />
+            ))}
+          {itemChoosen === "warehouse_list_transaction_from_warehouse" &&
+            (width > 768 ? (
+              <ListTransactionFromWarehouse />
+            ) : (
+              <TransactionFromWarehouse__Mobile />
+            ))}
+          {itemChoosen === "warehouse_list_transaction_to_warehouse" &&
+            (width > 768 ? (
+              <ListTransactionToWarehouse />
+            ) : (
+              <TransactionToWarehouse__Mobile />
+            ))}
+          {itemChoosen === "warehouse_list_transaction_to_transaction_spot" &&
+            (width > 768 ? (
+              <ListTransactionToTransactionSpot />
+            ) : (
+              <TransactionToTransactionSpot__Mobile />
+            ))}
+          {itemChoosen === "history" && <History />}
         </div>
       </div>
     </Layout>

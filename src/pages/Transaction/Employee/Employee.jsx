@@ -17,6 +17,8 @@ import ListTransactionMobile from "./ManagementMobile/ListTransactionMobile";
 import DeliveryTransactionMobile from "./ManagementMobile/DeliveryTransactionMobile";
 import GetTransactionMobile from "./ManagementMobile/GetTransactionMobile";
 
+import History from "./Management/History";
+
 const Employee = () => {
   const [itemChoosen, setItemChoosen] = React.useState("create_transaction");
 
@@ -71,6 +73,17 @@ const Employee = () => {
             Xác nhận đơn hàng từ điểm tập kết
           </p>
         </div>
+        <div
+          className="sidebar__item__content box"
+          title="Lịch sử đơn hàng"
+          id="history"
+          onClick={() => handleChooseItem("history")}
+        >
+          <img className="sidebar__icon" src={transaction} alt="" />
+          <p className="sidebar__item__text">
+            Lịch sử đơn hàng
+          </p>
+        </div>
       </SideBar>
       <div className={containerClassName}>
         <div className="director__content">
@@ -86,6 +99,7 @@ const Employee = () => {
             ) : (
               <DeliveryTransactionMobile />
             ))}
+          {itemChoosen === "history" && <History />}
         </div>
       </div>
     </Layout>
