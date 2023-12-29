@@ -50,6 +50,8 @@ const History = () => {
   const [search, setSearch] = useState("");
   //state for choosen type
   const [searchBy, setSearchBy] = useState("_id");
+  const [data, setData] = useState([]);
+
   //handle search type change
   const handleSearchTypeChange = (value) => {
     setIsDropdown(false);
@@ -73,7 +75,13 @@ const History = () => {
     }
   };
   //list manager sorted to sortedClientTransactions
-  const sortedClientTransactions = clientTransaction
+  const sortedClientTransactions = (
+    statistic?.sending_history
+      ? Object.keys(statistic?.sending_history).map(
+          (key) => statistic?.sending_history[key]
+        )
+      : []
+  )
     ?.slice(
       numPage * ((0.67 * height) / 60),
       numPage * ((0.67 * height) / 60) + (0.67 * height) / 60
@@ -170,7 +178,7 @@ const History = () => {
           ?.filter((manager) => {
             const searchValue = search.toLowerCase();
             if (searchBy === "_id") {
-              return manager?._id.toLowerCase().includes(searchValue);
+              return manager?._id?.toLowerCase()?.includes(searchValue);
             }
             if (searchBy === "transaction_type") {
               return manager?.transaction_type

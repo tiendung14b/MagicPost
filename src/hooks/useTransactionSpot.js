@@ -231,10 +231,8 @@ const useTransactionSpot = (toast) => {
         `/transaction_spot/get_statistic/` + transaction_spot_id
       );
       setStatistic(response?.result);
-      console.log(response?.result);
-      console.log(Object.keys(response?.result.success_transactions).map(
-        (key) => response?.result.success_transactions[key].length
-      ));
+      console.log(Object.values(response?.result.success_transactions));
+      // merge array
 
       setTransactionSpotLoading(false);
       return response?.result;
