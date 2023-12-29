@@ -21,6 +21,7 @@ const LocationInput = ({ id }) => {
 
   useEffect(() => {
     getProvince();
+    getDistrict("01");
   }, []);
 
   return (
@@ -82,6 +83,18 @@ const CreateTransactionMobile = () => {
     const updatedForms = forms.filter((form) => form.id !== formId);
     setForms(updatedForms);
     setPackageCount(packageCount - 1);
+  };
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    return String(phoneNumber).match(/^[0-9]{10}$/);
   };
 
   const getSenderInput = () => {
@@ -327,6 +340,48 @@ const CreateTransactionMobile = () => {
             className={"action"}
             text={"Tạo đơn hàng"}
             onClick={() => {
+              if (
+                !validateEmail(getSenderInput().email) ||
+                !validateEmail(getReceiverInput().email)
+              ) {
+                Toast.error("Email không hợp lệ", toast);
+                return;
+              }
+
+              if (
+                getSenderInput().phoneNumber.length !== 10 ||
+                getReceiverInput().phoneNumber.length !== 10 ||
+                !validatePhoneNumber(getSenderInput().phoneNumber) ||
+                !validatePhoneNumber(getReceiverInput().phoneNumber)
+              ) {
+                Toast.error("Số điện thoại không hợp lệ", toast);
+                return;
+              }
+
+              if (
+                getSenderInput().name === "" ||
+                getSenderInput().phoneNumber === "" ||
+                getSenderInput().email === "" ||
+                getSenderInput().address.city === "" ||
+                getSenderInput().address.district === "" ||
+                getSenderInput().address.detail === "" ||
+                getReceiverInput().name === "" ||
+                getReceiverInput().phoneNumber === "" ||
+                getReceiverInput().email === "" ||
+                getReceiverInput().address.city === "" ||
+                getReceiverInput().address.district === "" ||
+                getReceiverInput().address.detail === "" ||
+                getPackageInput().name === "" ||
+                getPackageInput().description === "" ||
+                getPackageInput().type === "" ||
+                getPackageInput().weight === "" ||
+                getPackageInput().quantity === "" ||
+                getDeliveryInput().transaction_type === "" ||
+                getDeliveryInput().prepaid === ""
+              ) {
+                Toast.error("Vui lòng nhập đầy đủ thông tin", toast);
+                return;
+              }
               createTransaction({
                 transaction_qr_tracker:
                   "http://localhost:3000/view/transaction/?transaction=",
