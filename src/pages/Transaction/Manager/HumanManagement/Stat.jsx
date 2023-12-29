@@ -36,41 +36,8 @@ function Stat() {
     options: {
       chart: {
         type: "basic-bar",
-        events: {
-          click(event, chartContext, config) {
-            setData({
-              seriesName: config.config.series[config.seriesIndex].name,
-              dataPoint:
-                config.config.series[config.seriesIndex].data[
-                  config.dataPointIndex
-                ],
-            });
-            console.log(config);
-            console.log(config.config.series[config.seriesIndex].name);
-            console.log(
-              config.config.series[config.seriesIndex].data[
-                config.dataPointIndex
-              ]
-            );
-          },
-        },
       },
-      xaxis: {
-        categories: [
-          "01/2023",
-          "02/2023",
-          "03/2023",
-          "04/2023",
-          "05/2023",
-          "06/2023",
-          "07/2023",
-          "08/2023",
-          "09/2023",
-          "10/2023",
-          "11/2023",
-          "12/2023",
-        ],
-      },
+      xaxis: {},
       dataLabels: {
         enabled: false,
       },
@@ -78,21 +45,7 @@ function Stat() {
         curve: "smooth",
       },
     },
-    series: [
-      {
-        name: "Failed",
-        data: [10, 20, 30, 40, 50, 60, 70, 80, 90],
-        
-      },
-      {
-        name: "Success",
-        data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
-      },
-      {
-        name: "Sending History",
-        data: [50, 40, 30, 20, 10, 90, 80, 70, 60],
-      },
-    ],
+    series: [],
   });
 
   //useEffect
@@ -100,28 +53,52 @@ function Stat() {
     getStatistic(
       JSON.parse(sessionStorage.getItem("user")).workplace.workplace_id
     );
-    console.log(statistic?.success_transactions);
-    console.log(Object.keys(statistic?.failed_transactions));
   }, []);
-
-
 
   return (
     <div className="manager">
-      <h1>Chart Test</h1>
-      {chartState && chartState.series && (
+      <h3>Thống kê hàng ra / vào</h3>
+      {chartState && chartState.series && Object.keys(statistic).length > 0 && (
         <Chart
-          options={chartState.options}
-          series={chartState.series}
+          options={{
+            ...chartState.options,
+            xaxis: {
+              categories: Array.from(
+                new Set([
+                  ...Object.keys(statistic?.success_transactions),
+                  ...Object.keys(statistic?.failed_transactions),
+                  ...Object.keys(statistic?.sending_history),
+                ])
+              ),
+            },
+          }}
+          series={[
+            ...chartState.series,
+            {
+              name: "Gửi thất bại",
+              data: Object.keys(statistic?.failed_transactions).map(
+                (item) => statistic?.failed_transactions[item].length
+              ),
+            },
+            {
+              name: "Gửi hàng thành công",
+              data: Object.keys(statistic?.success_transactions).map(
+                (item) => statistic?.success_transactions[item].length
+              ),
+            },
+            {
+              name: "Đơn hàng gửi đi",
+              data: Object.keys(statistic?.sending_history).map(
+                (item) => statistic?.sending_history[item].length
+              ),
+            },
+          ]}
           type="line"
           width="100%"
           height="400px"
         />
       )}
-      <div className="showData">
-        <h2>Series Name: {data?.seriesName}</h2>
-        <h2>Data Point: {data?.dataPoint}</h2>
-      </div>
+      {transactionSpotLoading && <Loading />}
     </div>
   );
 }

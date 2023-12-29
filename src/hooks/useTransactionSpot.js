@@ -232,6 +232,10 @@ const useTransactionSpot = (toast) => {
       );
       setStatistic(response?.result);
       console.log(response?.result);
+      console.log(Object.keys(response?.result.success_transactions).map(
+        (key) => response?.result.success_transactions[key].length
+      ));
+
       setTransactionSpotLoading(false);
       return response?.result;
     } catch (err) {
