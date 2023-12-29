@@ -17,7 +17,7 @@ const useWarehouse = (toast) => {
 
   const [sentHistory, setSentHistory] = useState([]);
   const [receivedHistory, setReceivedHistory] = useState([]);
-  const [statistic, setStatistic] = useState([]);
+  const [statisticWarehouse, setStatistic] = useState([]);
 
   const getWarehouseInfo = async (id) => {
     try {
@@ -283,7 +283,7 @@ const useWarehouse = (toast) => {
     }
   }
 
-  const getStatistic = async (id) => {
+  const getStatisticWarehouse = async (id) => {
     try {
       setWarehouseLoading(true);
       const response = await clientAxios.get(
@@ -309,6 +309,7 @@ const useWarehouse = (toast) => {
     listInWarehouseTransactionToWarehouse,
     sentHistory,
     receivedHistory,
+    statisticWarehouse,
     getWarehouseInfo,
     createWarehouse,
     getListWarehouse,
@@ -328,8 +329,7 @@ const useWarehouse = (toast) => {
     getListInWarehouseTransactionToWarehouse,
     getListSentHistory,
     getListReceivedHistory,
-    getStatistic,
-    statistic,
+    getStatisticWarehouse,
   };
 };
 
