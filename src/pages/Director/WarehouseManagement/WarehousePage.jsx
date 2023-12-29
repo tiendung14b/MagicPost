@@ -264,12 +264,12 @@ const WarehousePage = () => {
                 />
               </div>
             </Row>
-          ))}
+          ))} 
       </DashBoard>
       <div className="pagination" id="pagination">
         {[
           ...Array(
-            Math.ceil(sortedWarehouse.length / ((0.73 * height) / 60))
+            Math.ceil(listWarehouse.length / ((0.73 * height) / 60))
           ).keys(),
         ].map((i) => (
           <div
